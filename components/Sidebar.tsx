@@ -128,11 +128,6 @@ export default function Sidebar() {
                     {!isCollapsed && (
                       <span className="ml-3 truncate">{item.name}</span>
                     )}
-                    {isActive && !isCollapsed && (
-                      <Badge variant="secondary" className="ml-auto text-xs">
-                        Active
-                      </Badge>
-                    )}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent
@@ -155,7 +150,7 @@ export default function Sidebar() {
         <div className="p-2 border-t border-border">
           <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
             <div className="w-8 h-8 bg-primary bg-opacity-10 rounded-lg flex items-center justify-center flex-shrink-0">
-              <Leaf className="h-4 w-4 text-primary" />
+              <Leaf className="h-4 w-4 text-white" />
             </div>
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
