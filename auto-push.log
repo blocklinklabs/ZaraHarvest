@@ -1,0 +1,85 @@
+[2025-09-30 11:59:56] \033[0;34m=== Auto-push Status ===\033[0m
+[2025-09-30 11:59:56] Repository: /Users/mendsalbert/Documents/agri-yield
+[2025-09-30 11:59:56] Interval: 25 minutes
+[2025-09-30 11:59:56] Max files per commit: 5
+[2025-09-30 11:59:56] Current changes: 5 file(s)
+[2025-09-30 11:59:56] \033[1;33mChanged files:\033[0m
+[2025-09-30 11:59:57]   - app/dashboard/page.tsx
+[2025-09-30 11:59:57]   - app/page.tsx
+[2025-09-30 11:59:57]   - app/submit-data/page.tsx
+[2025-09-30 11:59:57]   - auto-push.log
+[2025-09-30 11:59:57]   - auto-push.sh
+[2025-09-30 11:59:57] Remote repositories configured:
+[2025-09-30 11:59:57]   origin	git@github.com-blocklinklabs:blocklinklabs/AgriYield.git (fetch)
+[2025-09-30 11:59:57]   origin	git@github.com-blocklinklabs:blocklinklabs/AgriYield.git (push)
+[2025-09-30 12:01:28] \033[0;34m=== Auto-push Status ===\033[0m
+[2025-09-30 12:01:28] Repository: /Users/mendsalbert/Documents/agri-yield
+[2025-09-30 12:01:28] Interval: 25 minutes
+[2025-09-30 12:01:28] Max files per commit: 5
+[2025-09-30 12:01:28] Git user: blocklinklabs <blocklinklabs@gmail.com>
+[2025-09-30 12:01:29] Current changes: 52 file(s)
+[2025-09-30 12:01:29] \033[1;33mChanged files:\033[0m
+[2025-09-30 12:01:29]   - .gitignore
+[2025-09-30 12:01:29]   - README.md
+[2025-09-30 12:01:29]   - app/dashboard/page.tsx
+[2025-09-30 12:01:29]   - app/favicon.ico
+[2025-09-30 12:01:29]   - app/globals.css
+[2025-09-30 12:01:29]   - app/layout.tsx
+[2025-09-30 12:01:29]   - app/lending/page.tsx
+[2025-09-30 12:01:29]   - app/page.tsx
+[2025-09-30 12:01:29]   - app/prediction/page.tsx
+[2025-09-30 12:01:29]   - app/submit-data/page.tsx
+[2025-09-30 12:01:29]   - app/tracker/page.tsx
+[2025-09-30 12:01:29]   - auto-push.log
+[2025-09-30 12:01:29]   - auto-push.sh
+[2025-09-30 12:01:29]   - components.json
+[2025-09-30 12:01:29]   - components/Footer.tsx
+[2025-09-30 12:01:29]   - components/Header.tsx
+[2025-09-30 12:01:29]   - components/MobileNav.tsx
+[2025-09-30 12:01:29]   - components/OfflineIndicator.tsx
+[2025-09-30 12:01:29]   - components/Sidebar.tsx
+[2025-09-30 12:01:29]   - components/ui/accordion.tsx
+[2025-09-30 12:01:29]   - components/ui/alert.tsx
+[2025-09-30 12:01:29]   - components/ui/avatar.tsx
+[2025-09-30 12:01:29]   - components/ui/badge.tsx
+[2025-09-30 12:01:29]   - components/ui/button.tsx
+[2025-09-30 12:01:29]   - components/ui/card.tsx
+[2025-09-30 12:01:29]   - components/ui/dialog.tsx
+[2025-09-30 12:01:29]   - components/ui/dropdown-menu.tsx
+[2025-09-30 12:01:29]   - components/ui/form.tsx
+[2025-09-30 12:01:29]   - components/ui/input.tsx
+[2025-09-30 12:01:29]   - components/ui/label.tsx
+[2025-09-30 12:01:29]   - components/ui/progress.tsx
+[2025-09-30 12:01:29]   - components/ui/select.tsx
+[2025-09-30 12:01:29]   - components/ui/separator.tsx
+[2025-09-30 12:01:29]   - components/ui/skeleton.tsx
+[2025-09-30 12:01:29]   - components/ui/sonner.tsx
+[2025-09-30 12:01:29]   - components/ui/tabs.tsx
+[2025-09-30 12:01:29]   - components/ui/textarea.tsx
+[2025-09-30 12:01:29]   - components/ui/tooltip.tsx
+[2025-09-30 12:01:29]   - eslint.config.mjs
+[2025-09-30 12:01:29]   - lib/hedera.ts
+[2025-09-30 12:01:29]   - lib/store.ts
+[2025-09-30 12:01:29]   - lib/utils.ts
+[2025-09-30 12:01:29]   - next.config.ts
+[2025-09-30 12:01:29]   - package-lock.json
+[2025-09-30 12:01:29]   - package.json
+[2025-09-30 12:01:29]   - postcss.config.mjs
+[2025-09-30 12:01:29]   - public/file.svg
+[2025-09-30 12:01:29]   - public/globe.svg
+[2025-09-30 12:01:29]   - public/next.svg
+[2025-09-30 12:01:29]   - public/vercel.svg
+[2025-09-30 12:01:29]   - public/window.svg
+[2025-09-30 12:01:29]   - tsconfig.json
+[2025-09-30 12:01:29] Remote repositories configured:
+[2025-09-30 12:01:29]   origin	git@github.com-blocklinklabs:blocklinklabs/AgriYield.git (fetch)
+[2025-09-30 12:01:29]   origin	git@github.com-blocklinklabs:blocklinklabs/AgriYield.git (push)
+[2025-09-30 12:01:29] \033[1;33mThis appears to be a new repository (no commits yet)\033[0m
+[2025-09-30 12:01:33] \033[0;34mRunning in test mode\033[0m
+[2025-09-30 12:01:33] \033[0;34mDetected 52 file(s) with changes\033[0m
+[2025-09-30 12:01:33] \033[1;33mToo many changes (52 > 5). Skipping this push.\033[0m
+[2025-09-30 12:01:33] \033[1;33mPlease commit manually or increase MAX_FILES limit\033[0m
+[2025-09-30 12:01:47] \033[0;34mRunning in test mode\033[0m
+[2025-09-30 12:01:47] \033[0;34mDetected 52 file(s) with changes\033[0m
+[2025-09-30 12:01:47] \033[0;34mFirst commit detected, committing all files regardless of limit\033[0m
+[2025-09-30 12:01:47] \033[0;34mDetected new repository, performing initial commit...\033[0m
