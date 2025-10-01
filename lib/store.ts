@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { safeDate } from "./utils";
 
 export interface WalletState {
   accountId: string | null;
@@ -204,7 +205,7 @@ export const useAppStore = create<AppState>()(
         })),
 
       // Offline
-      isOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
+      isOnline: true, // Default to true, will be updated on client
       setOnlineStatus: (status) => set({ isOnline: status }),
     }),
     {
@@ -217,6 +218,33 @@ export const useAppStore = create<AppState>()(
         harvestTokens: state.harvestTokens,
         badges: state.badges,
       }),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          // Convert string dates back to Date objects
+          state.farmData = state.farmData.map((data) => ({
+            ...data,
+            timestamp: safeDate(data.timestamp),
+          }));
+
+          state.yieldPredictions = state.yieldPredictions.map((pred) => ({
+            ...pred,
+            timestamp: safeDate(pred.timestamp),
+          }));
+
+          state.loans = state.loans.map((loan) => ({
+            ...loan,
+            startDate: safeDate(loan.startDate),
+            endDate: safeDate(loan.endDate),
+          }));
+
+          state.badges = state.badges.map((badge) => ({
+            ...badge,
+            earnedDate: badge.earnedDate
+              ? safeDate(badge.earnedDate)
+              : undefined,
+          }));
+        }
+      },
     }
   )
 );

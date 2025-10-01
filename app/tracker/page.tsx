@@ -43,21 +43,23 @@ export default function Tracker() {
   const supplyChainStages = [
     {
       id: "farm",
-      name: "Farm",
-      description: "Harvest collected from farm",
+      name: "Farm Harvest",
+      description: "Harvest collected from farm in Kumasi, Ghana",
       icon: Leaf,
       status: "completed",
-      date: "2024-01-15",
-      location: "Kisumu, Kenya",
+      date: "2024-09-25",
+      location: "Kumasi, Ghana",
+      details: "4.2 tons of Maize harvested and quality tested",
     },
     {
       id: "processing",
       name: "Processing",
-      description: "Crop processed and packaged",
+      description: "Crop processed, cleaned, and packaged",
       icon: Package,
       status: "completed",
-      date: "2024-01-16",
-      location: "Nairobi Processing Center",
+      date: "2024-09-26",
+      location: "Kumasi Processing Center",
+      details: "Grain cleaned, sorted, and packaged in 50kg bags",
     },
     {
       id: "tokenized",
@@ -65,8 +67,9 @@ export default function Tracker() {
       description: "Harvest converted to blockchain tokens",
       icon: QrCode,
       status: "completed",
-      date: "2024-01-17",
+      date: "2024-09-27",
       location: "Hedera Network",
+      details: "42 tokens minted on Hedera (1 ton = 10 tokens)",
     },
     {
       id: "transport",
@@ -74,17 +77,19 @@ export default function Tracker() {
       description: "Goods in transit to market",
       icon: Truck,
       status: "in-progress",
-      date: "2024-01-18",
-      location: "En route to Mombasa",
+      date: "2024-09-28",
+      location: "En route to Accra",
+      details: "ETA: 2 hours • GPS tracking active",
     },
     {
       id: "market",
-      name: "Market",
+      name: "Market Delivery",
       description: "Goods delivered to market",
       icon: Store,
       status: "pending",
-      date: "2024-01-20",
-      location: "Mombasa Port",
+      date: "2024-09-30",
+      location: "Accra Central Market",
+      details: "Scheduled for delivery to wholesale market",
     },
   ];
 
@@ -302,6 +307,9 @@ export default function Tracker() {
                       <p className="text-gray-600 dark:text-gray-300 mb-3">
                         {stage.description}
                       </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                        {stage.details}
+                      </p>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         <div className="flex items-center gap-2">
                           <Calendar className="h-4 w-4 text-gray-400" />
@@ -318,6 +326,16 @@ export default function Tracker() {
                           <span className="font-medium">{stage.location}</span>
                         </div>
                       </div>
+                      {isInProgress && (
+                        <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-950 rounded-lg">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                            <span className="text-sm text-blue-700 dark:text-blue-300 font-medium">
+                              Live tracking active
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

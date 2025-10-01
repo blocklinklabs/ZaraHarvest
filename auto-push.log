@@ -83,3 +83,16 @@
 [2025-09-30 12:01:47] \033[0;34mDetected 52 file(s) with changes\033[0m
 [2025-09-30 12:01:47] \033[0;34mFirst commit detected, committing all files regardless of limit\033[0m
 [2025-09-30 12:01:47] \033[0;34mDetected new repository, performing initial commit...\033[0m
+[2025-09-30 12:01:48] \033[0;32mInitial commit created\033[0m
+[2025-09-30 12:01:51] \033[0;31mFailed to push initial commit\033[0m
+[2025-09-30 12:02:36] \033[0;34m=== Auto-push Status ===\033[0m
+[2025-09-30 12:02:36] Repository: /Users/mendsalbert/Documents/agri-yield
+[2025-09-30 12:02:36] Interval: 25 minutes
+[2025-09-30 12:02:36] Max files per commit: 5
+[2025-09-30 12:02:36] Git user: blocklinklabs <blocklinklabs@gmail.com>
+[2025-09-30 12:02:36] Current changes: 1 file(s)
+[2025-09-30 12:02:36] \033[1;33mChanged files:\033[0m
+[2025-09-30 12:02:36]   - auto-push.log
+[2025-09-30 12:02:36] Remote repositories configured:
+[2025-09-30 12:02:36]   origin	git@github.com-blocklinklabs:blocklinklabs/AgriYield.git (fetch)
+[2025-09-30 12:02:36]   origin	git@github.com-blocklinklabs:blocklinklabs/AgriYield.git (push)

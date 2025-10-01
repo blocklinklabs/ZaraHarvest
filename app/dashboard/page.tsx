@@ -144,6 +144,34 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
+        {/* Welcome Message */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="mb-6"
+        >
+          <Card className="dashboard-card bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950 dark:to-emerald-950 border-green-200 dark:border-green-800">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-green-800 dark:text-green-200 mb-2">
+                    Welcome back, Kwame! 👋
+                  </h2>
+                  <p className="text-green-700 dark:text-green-300">
+                    Your farm is performing excellently with 4.2 tons of Maize
+                    harvested this week
+                  </p>
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-green-600">4.2</div>
+                  <div className="text-sm text-green-600">tons harvested</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
         {/* Stats Grid */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -493,7 +521,9 @@ export default function Dashboard() {
                             Due Date
                           </span>
                           <span className="font-semibold">
-                            {formatDate(activeLoan.endDate)}
+                            {activeLoan.endDate
+                              ? formatDate(activeLoan.endDate)
+                              : "N/A"}
                           </span>
                         </div>
                       </div>
@@ -666,6 +696,60 @@ export default function Dashboard() {
                   </motion.div>
                 </div>
               )}
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Market Prices */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+        >
+          <Card className="dashboard-card">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-primary">
+                <TrendingUp className="h-5 w-5" />
+                Market Prices
+                <Badge variant="secondary" className="ml-auto">
+                  Live
+                </Badge>
+              </CardTitle>
+              <CardDescription>
+                Current crop prices in Ghana Cedis (GHS)
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                {[
+                  { crop: "Maize", price: 450, change: 5.2, color: "green" },
+                  { crop: "Cocoa", price: 1200, change: -2.1, color: "orange" },
+                  { crop: "Rice", price: 380, change: 3.8, color: "blue" },
+                  { crop: "Wheat", price: 520, change: 1.5, color: "purple" },
+                  { crop: "Cassava", price: 280, change: 4.3, color: "red" },
+                ].map((item, index) => (
+                  <motion.div
+                    key={item.crop}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg text-center"
+                  >
+                    <h3 className="font-semibold text-lg">{item.crop}</h3>
+                    <p className="text-2xl font-bold text-primary">
+                      GHS {item.price}
+                    </p>
+                    <p
+                      className={`text-sm ${
+                        item.change > 0 ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
+                      {item.change > 0 ? "+" : ""}
+                      {item.change}%
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
             </CardContent>
           </Card>
         </motion.div>

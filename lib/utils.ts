@@ -12,12 +12,27 @@ export function formatCurrency(amount: number, currency = "USD") {
   }).format(amount);
 }
 
-export function formatDate(date: Date) {
+export function safeDate(date: any): Date {
+  if (date instanceof Date) {
+    return date;
+  }
+
+  if (typeof date === "string" || typeof date === "number") {
+    const parsed = new Date(date);
+    return isNaN(parsed.getTime()) ? new Date() : parsed;
+  }
+
+  return new Date();
+}
+
+export function formatDate(date: Date | string | number) {
+  const dateObj = safeDate(date);
+
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
-  }).format(date);
+  }).format(dateObj);
 }
 
 export function generateMockYieldPrediction(cropType: string): {

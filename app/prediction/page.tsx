@@ -296,7 +296,9 @@ export default function Prediction() {
                         </Badge>
                       </div>
                       <span className="text-sm text-gray-500">
-                        {formatDate(prediction.timestamp)}
+                        {prediction.timestamp
+                          ? formatDate(prediction.timestamp)
+                          : "N/A"}
                       </span>
                     </div>
 

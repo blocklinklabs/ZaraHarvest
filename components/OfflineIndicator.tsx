@@ -8,8 +8,15 @@ import { Wifi, WifiOff } from "lucide-react";
 export default function OfflineIndicator() {
   const { isOnline, setOnlineStatus } = useAppStore();
   const [showIndicator, setShowIndicator] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+
     const handleOnline = () => {
       setOnlineStatus(true);
       setShowIndicator(true);
@@ -31,9 +38,9 @@ export default function OfflineIndicator() {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
-  }, [setOnlineStatus]);
+  }, [setOnlineStatus, isClient]);
 
-  if (!showIndicator && isOnline) {
+  if (!isClient || (!showIndicator && isOnline)) {
     return null;
   }
 

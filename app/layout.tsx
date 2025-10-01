@@ -6,7 +6,9 @@ import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import Footer from "@/components/Footer";
 import OfflineIndicator from "@/components/OfflineIndicator";
-import { Toaster } from "@/components/ui/sonner";
+import SimulationProvider from "@/components/SimulationProvider";
+import ClientToaster from "@/components/ClientToaster";
+import ClientOnly from "@/components/ClientOnly";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,20 +35,25 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
-        <div className="min-h-screen dashboard-bg">
-          <Header />
-          <div className="flex">
-            <Sidebar />
-            <main className="flex-1 pt-16 md:ml-64 min-h-screen">
-              <div className="container-dashboard py-6">{children}</div>
-              <Footer />
-            </main>
-          </div>
-          <MobileNav />
-          <OfflineIndicator />
-          <Toaster />
-        </div>
+        <ClientOnly>
+          <SimulationProvider>
+            <div className="min-h-screen dashboard-bg">
+              <Header />
+              <div className="flex">
+                <Sidebar />
+                <main className="flex-1 pt-16 md:ml-64 min-h-screen">
+                  <div className="container-dashboard py-6">{children}</div>
+                  <Footer />
+                </main>
+              </div>
+              <MobileNav />
+              <OfflineIndicator />
+              <ClientToaster />
+            </div>
+          </SimulationProvider>
+        </ClientOnly>
       </body>
     </html>
   );

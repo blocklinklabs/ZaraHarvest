@@ -351,6 +351,60 @@ export default function SubmitData() {
         </CardContent>
       </Card>
 
+      {/* Recent Submissions */}
+      <Card className="dashboard-card">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CheckCircle className="h-5 w-5" />
+            Your Recent Submissions
+          </CardTitle>
+          <CardDescription>
+            Track your data contributions and rewards
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {farmData
+              .slice(-3)
+              .reverse()
+              .map((data, index) => (
+                <div
+                  key={data.id}
+                  className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                      <Leaf className="h-5 w-5 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="font-semibold">{data.cropType}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {data.location}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-semibold text-green-600">
+                      +2.5 HBAR
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {data.timestamp.toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            {farmData.length === 0 && (
+              <div className="text-center py-8">
+                <Leaf className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">
+                  No submissions yet. Submit your first farm data above!
+                </p>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Info Card */}
       <Card className="dashboard-card">
         <CardContent className="pt-6">

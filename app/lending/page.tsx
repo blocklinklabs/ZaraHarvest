@@ -205,13 +205,17 @@ export default function Lending() {
                 <div>
                   <p className="text-gray-600 dark:text-gray-300">Start Date</p>
                   <p className="font-semibold">
-                    {formatDate(activeLoan.startDate)}
+                    {activeLoan.startDate
+                      ? formatDate(activeLoan.startDate)
+                      : "N/A"}
                   </p>
                 </div>
                 <div>
                   <p className="text-gray-600 dark:text-gray-300">Due Date</p>
                   <p className="font-semibold">
-                    {formatDate(activeLoan.endDate)}
+                    {activeLoan.endDate
+                      ? formatDate(activeLoan.endDate)
+                      : "N/A"}
                   </p>
                 </div>
               </div>
