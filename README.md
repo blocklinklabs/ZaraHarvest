@@ -1,198 +1,198 @@
-# AgriYield - AI-Powered Yield Prediction for African Farmers
+# 🌾 AgriYield - AI-Powered Yield Prediction for African Farmers
 
-A decentralized AI-powered yield prediction and RWA financing dApp for African smallholder farmers, built on Hedera.
+A comprehensive agricultural platform that combines AI-powered yield prediction, DeFi lending, and blockchain tokenization to empower African farmers.
 
-## Features
+## ✨ Features
 
-### 🌱 Core Functionality
+- **🤖 AI Yield Prediction**: Machine learning models predict crop yields with confidence scores
+- **💰 DeFi Lending**: Access to agricultural loans with tokenized harvest as collateral
+- **🪙 Tokenization**: Convert harvests into tradeable digital tokens
+- **📊 Analytics Dashboard**: Comprehensive farm data visualization
+- **🏆 Gamification**: Badges and rewards for data contribution
+- **🌍 Supply Chain Tracking**: End-to-end harvest traceability
+- **📱 Mobile-First**: Responsive design optimized for mobile devices
 
-- **AI Yield Prediction**: Get accurate crop yield predictions using AI and satellite data
-- **DeFi Lending**: Access loans using your future harvest as collateral on Hedera
-- **Supply Chain Tracking**: Track your harvest from farm to market with blockchain transparency
-- **Tokenization**: Convert your harvest into tradeable tokens for collateral
+## 🚀 Quick Start
 
-### 📱 Mobile-First Design
-
-- Responsive design optimized for mobile devices
-- Offline capability with local storage
-- Simple interface for low-literacy users in rural areas
-- Bottom navigation for easy mobile access
-
-### 🔗 Blockchain Integration
-
-- Hedera wallet connection (HashPack)
-- HBAR token rewards for data contribution
-- HTS (Hedera Token Service) integration for harvest tokenization
-- Mock blockchain interactions for MVP
-
-### 🎮 Gamification
-
-- Achievement badges for various activities
-- Data contribution rewards
-- Progress tracking
-- Community engagement
-
-## Tech Stack
-
-- **Frontend**: Next.js 15 with App Router
-- **UI Components**: Shadcn UI with Tailwind CSS
-- **State Management**: Zustand with persistence
-- **Charts**: Recharts for data visualization
-- **QR Codes**: qrcode.react for supply chain tracking
-- **Blockchain**: Hedera JavaScript SDK (mocked for MVP)
-- **Icons**: Lucide React
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- npm or yarn
-
-### Installation
-
-1. Clone the repository:
+### Option 1: Demo Mode (No Database Required)
 
 ```bash
+# Clone the repository
 git clone <repository-url>
 cd agri-yield
-```
 
-2. Install dependencies:
-
-```bash
+# Install dependencies
 npm install
+
+# Start demo mode
+./demo-without-db.sh
 ```
 
-3. Run the development server:
+Visit `http://localhost:3000` to see the demo with simulated data.
+
+### Option 2: Full Database Setup
 
 ```bash
+# Clone the repository
+git clone <repository-url>
+cd agri-yield
+
+# Install dependencies
+npm install
+
+# Set up database
+./setup-database.sh
+
+# Follow the instructions to configure your Neon database
+# Then run:
+npm run db:push
+npm run db:seed
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+## 🗄️ Database Setup
 
-## Project Structure
+### Prerequisites
 
+1. **Neon Account**: Sign up at [neon.tech](https://neon.tech) (free tier available)
+2. **Node.js**: Version 18+ recommended
+3. **npm**: Package manager
+
+### Step-by-Step Setup
+
+1. **Create Neon Database**:
+
+   - Go to [console.neon.tech](https://console.neon.tech)
+   - Create a new project
+   - Copy the connection string
+
+2. **Configure Environment**:
+
+   ```bash
+   ./setup-database.sh
+   # Edit .env.local with your DATABASE_URL
+   ```
+
+3. **Initialize Database**:
+
+   ```bash
+   npm run db:push      # Create tables
+   npm run db:seed      # Add sample data
+   npm run db:studio    # View database (optional)
+   ```
+
+4. **Start Development**:
+   ```bash
+   npm run dev
+   ```
+
+## 📊 Database Schema
+
+The application uses PostgreSQL with the following tables:
+
+- **users**: User profiles and wallet information
+- **farm_data**: Soil moisture, weather, crop data
+- **yield_predictions**: AI-generated yield predictions
+- **loans**: DeFi loan records with collateral
+- **harvest_tokens**: Tokenized harvest records
+- **badges**: User achievements and gamification
+- **market_prices**: Real-time crop pricing
+- **supply_chain_events**: Harvest tracking
+
+## 🛠️ Available Scripts
+
+```bash
+# Development
+npm run dev              # Start development server
+npm run build           # Build for production
+npm run start           # Start production server
+
+# Database
+npm run db:generate     # Generate migration files
+npm run db:push         # Push schema to database
+npm run db:migrate      # Run migrations
+npm run db:studio       # Open Drizzle Studio
+npm run db:seed         # Seed database with sample data
+
+# Utilities
+npm run lint            # Run ESLint
 ```
-agri-yield/
-├── app/                    # Next.js App Router pages
-│   ├── dashboard/         # Dashboard page
-│   ├── submit-data/       # Data submission form
-│   ├── prediction/        # Yield prediction view
-│   ├── lending/          # Lending interface
-│   ├── tracker/          # Supply chain tracker
-│   ├── layout.tsx        # Root layout
-│   └── page.tsx          # Home/wallet connection
-├── components/            # Reusable components
-│   ├── ui/               # Shadcn UI components
-│   ├── MobileNav.tsx     # Mobile navigation
-│   └── OfflineIndicator.tsx # Offline status indicator
-├── lib/                   # Utilities and configurations
-│   ├── store.ts          # Zustand state management
-│   ├── utils.ts          # Utility functions
-│   └── hedera.ts         # Hedera SDK integration
-└── public/               # Static assets
-```
 
-## Key Features
+## 🏗️ Architecture
 
-### 1. Wallet Connection
+### Frontend
 
-- Connect to Hedera wallet (HashPack)
-- Mock wallet integration for MVP
-- Account ID display and management
+- **Next.js 15**: React framework with App Router
+- **TypeScript**: Type-safe development
+- **Tailwind CSS**: Utility-first styling
+- **Framer Motion**: Smooth animations
+- **Recharts**: Data visualization
 
-### 2. Dashboard
+### State Management
 
-- Overview of farm data, predictions, loans, and tokens
-- Real-time statistics
-- Quick access to all features
-- Achievement badges
+- **Zustand**: Lightweight state management
+- **Hybrid Storage**: Local + Database persistence
+- **Real-time Sync**: Automatic data synchronization
 
-### 3. Data Submission
+### Database
 
-- DePIN data collection form
-- Crop type, location, soil moisture, weather notes
-- Photo upload capability
-- HBAR token rewards for contributions
+- **Drizzle ORM**: Type-safe database queries
+- **Neon PostgreSQL**: Serverless database
+- **Migrations**: Version-controlled schema changes
 
-### 4. Yield Prediction
+### Blockchain
 
-- AI-powered yield predictions
-- Interactive charts and analytics
-- Risk assessment
-- Confidence levels
+- **Hedera Hashgraph**: Sustainable blockchain
+- **HBAR**: Native cryptocurrency
+- **Smart Contracts**: DeFi lending protocols
 
-### 5. Lending Interface
+## 🌍 Ghana-Specific Features
 
-- Tokenize harvest for collateral
-- Apply for loans using harvest tokens
-- Interest rate calculation based on risk
-- Loan management
+- **Local Crops**: Maize, Cocoa, Rice, Cassava, Wheat
+- **Ghana Cedis (GHS)**: Local currency pricing
+- **Regional Data**: Kumasi, Takoradi, Tamale, Accra
+- **Local Weather**: Ghana-specific climate data
+- **Mobile Optimization**: Low-bandwidth friendly
 
-### 6. Supply Chain Tracker
+## 📱 Mobile-First Design
 
-- Timeline of harvest journey
-- QR code generation for verification
-- Blockchain verification
-- Location tracking
+- **Responsive Layout**: Works on all screen sizes
+- **Touch-Friendly**: Optimized for mobile interaction
+- **Offline Support**: Works without internet connection
+- **Progressive Web App**: Installable on mobile devices
 
-## Offline Capability
+## 🔒 Security & Privacy
 
-The app is designed to work offline:
+- **Wallet Integration**: Secure blockchain authentication
+- **Data Encryption**: All sensitive data encrypted
+- **GDPR Compliant**: Privacy-first data handling
+- **Local Storage**: Data stored locally when offline
 
-- Data is stored locally using Zustand persistence
-- Offline indicator shows connection status
-- Cached data available when offline
-- Automatic sync when connection is restored
-
-## Mobile Navigation
-
-Bottom navigation bar with 6 main sections:
-
-- Home (wallet connection)
-- Dashboard
-- Submit Data
-- Predictions
-- Lending
-- Tracker
-
-## Development
-
-### Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-
-### Adding New Features
-
-1. Create new pages in the `app/` directory
-2. Add components in the `components/` directory
-3. Update the mobile navigation in `components/MobileNav.tsx`
-4. Add new state management in `lib/store.ts`
-
-## Deployment
-
-The app is ready for deployment on Vercel:
-
-1. Push to GitHub
-2. Connect to Vercel
-3. Deploy automatically
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Submit a pull request
+4. Add tests if applicable
+5. Submit a pull request
 
-## License
+## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Support
+## 🆘 Support
 
-For support and questions, please open an issue in the repository.
+- **Documentation**: See `DATABASE_SETUP.md` for detailed setup
+- **Issues**: Create an issue in the repository
+- **Discord**: Join our community for support
+
+## 🌟 Acknowledgments
+
+- **Neon**: Serverless PostgreSQL database
+- **Drizzle**: Type-safe ORM
+- **Hedera**: Sustainable blockchain platform
+- **African Farmers**: The inspiration for this project
+
+---
+
+**Built with ❤️ for African Farmers**

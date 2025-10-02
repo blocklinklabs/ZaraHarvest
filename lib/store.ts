@@ -2,6 +2,9 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { safeDate } from "./utils";
 
+// Re-export the hybrid store as the main store
+export { useHybridStore as useAppStore } from "./hybrid-store";
+
 export interface WalletState {
   accountId: string | null;
   isConnected: boolean;
