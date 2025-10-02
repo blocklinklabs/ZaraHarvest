@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { useAppStore } from "@/lib/store";
+import { useWalletStore } from "@/lib/wallet-provider";
 import { formatCurrency, formatDate, calculateLoanInterest } from "@/lib/utils";
 import { toast } from "sonner";
 import {
@@ -35,15 +35,53 @@ import {
 
 export default function Lending() {
   const router = useRouter();
-  const {
-    wallet,
-    yieldPredictions,
-    loans,
-    harvestTokens,
-    addLoan,
-    addHarvestToken,
-    earnBadge,
-  } = useAppStore();
+  const { isConnected, account } = useWalletStore();
+
+  // Simulation data - in the future this will come from the database
+  const yieldPredictions = [
+    {
+      cropType: "Maize",
+      predictedYield: 4.2,
+      riskLevel: 2,
+      confidence: 0.87,
+      timestamp: new Date(),
+    },
+  ];
+
+  const loans = [
+    {
+      id: "1",
+      amount: 5000,
+      interestRate: 8.5,
+      status: "active" as const,
+      collateral: ["Maize Harvest Token #1"],
+      startDate: new Date(),
+      endDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+    },
+  ];
+
+  const harvestTokens = [
+    {
+      id: "1",
+      cropType: "Maize",
+      amount: 1000,
+      tokenizedAmount: 1000,
+      status: "tokenized" as const,
+      qrCode: "QR_CODE_DATA_HERE",
+    },
+  ];
+
+  const addLoan = (loan: any) => {
+    console.log("Adding loan:", loan);
+  };
+
+  const addHarvestToken = (token: any) => {
+    console.log("Adding harvest token:", token);
+  };
+
+  const earnBadge = (badgeId: string) => {
+    console.log("Earning badge:", badgeId);
+  };
 
   const [loanAmount, setLoanAmount] = useState("");
   const [selectedCrop, setSelectedCrop] = useState("");
@@ -51,10 +89,10 @@ export default function Lending() {
   const [isTokenizing, setIsTokenizing] = useState(false);
 
   useEffect(() => {
-    if (!wallet.isConnected) {
+    if (!isConnected) {
       router.push("/");
     }
-  }, [wallet.isConnected, router]);
+  }, [isConnected, router]);
 
   const availableLoans = [
     {
@@ -153,7 +191,7 @@ export default function Lending() {
   const latestPrediction =
     userYieldPredictions[userYieldPredictions.length - 1];
 
-  if (!wallet.isConnected) {
+  if (!isConnected) {
     return null;
   }
 

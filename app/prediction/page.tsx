@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useAppStore } from "@/lib/store";
+import { useWalletStore } from "@/lib/wallet-provider";
 import { formatDate, generateMockYieldPrediction } from "@/lib/utils";
 import { toast } from "sonner";
 import {
@@ -37,17 +37,42 @@ import {
 
 export default function Prediction() {
   const router = useRouter();
-  const { wallet, farmData, yieldPredictions, addYieldPrediction } =
-    useAppStore();
+  const { isConnected, account } = useWalletStore();
+
+  // Simulation data - in the future this will come from the database
+  const farmData = [
+    {
+      id: "1",
+      cropType: "Maize",
+      location: "Kumasi, Ghana",
+      soilMoisture: 75,
+      weatherNotes: "Sunny with light rain expected",
+      timestamp: new Date(),
+    },
+  ];
+
+  const yieldPredictions = [
+    {
+      cropType: "Maize",
+      predictedYield: 4.2,
+      riskLevel: 2,
+      confidence: 0.87,
+      timestamp: new Date(),
+    },
+  ];
+
+  const addYieldPrediction = (prediction: any) => {
+    console.log("Adding yield prediction:", prediction);
+  };
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedCrop, setSelectedCrop] = useState("");
 
   useEffect(() => {
-    if (!wallet.isConnected) {
+    if (!isConnected) {
       router.push("/");
     }
-  }, [wallet.isConnected, router]);
+  }, [isConnected, router]);
 
   const handleGeneratePrediction = async () => {
     if (!selectedCrop) {
@@ -107,7 +132,7 @@ export default function Prediction() {
 
   const cropTypes = ["Maize", "Cocoa", "Rice", "Wheat", "Cassava"];
 
-  if (!wallet.isConnected) {
+  if (!isConnected) {
     return null;
   }
 

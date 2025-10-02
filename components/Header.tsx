@@ -20,8 +20,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAppStore } from "@/lib/store";
+import { useWalletStore, walletProvider } from "@/lib/wallet-provider";
 import { hederaWallet } from "@/lib/hedera";
+import { toast } from "sonner";
 import {
   Leaf,
   Search,
@@ -32,12 +33,16 @@ import {
   LogOut,
   User,
   Wallet,
+  CheckCircle,
+  AlertCircle,
 } from "lucide-react";
 
 export default function Header() {
   const router = useRouter();
-  const { wallet, isOnline } = useAppStore();
+  const { isConnected, account, connect, setConnecting, setError } =
+    useWalletStore();
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false);
 
   useEffect(() => {
     // Check for saved theme preference or default to light mode
@@ -59,9 +64,49 @@ export default function Header() {
     localStorage.setItem("theme", isDarkMode ? "light" : "dark");
   };
 
+  const handleConnectWallet = async () => {
+    try {
+      setIsConnectingWallet(true);
+      setConnecting(true);
+      setError(null);
+
+      if (!window.ethereum) {
+        throw new Error(
+          "MetaMask or another Web3 wallet is not installed. Please install one to continue."
+        );
+      }
+
+      const walletAccount = await walletProvider.connectWallet();
+      connect(walletAccount);
+
+      toast.success("Wallet Connected!", {
+        description: `Connected to ${walletAccount.address.slice(
+          0,
+          6
+        )}...${walletAccount.address.slice(-4)}`,
+        icon: <CheckCircle className="h-4 w-4 text-green-500" />,
+      });
+    } catch (err: any) {
+      const errorMessage =
+        err.message || "Failed to connect wallet. Please try again.";
+      setError(errorMessage);
+      toast.error("Connection Failed", {
+        description: errorMessage,
+        icon: <AlertCircle className="h-4 w-4 text-red-500" />,
+      });
+    } finally {
+      setIsConnectingWallet(false);
+      setConnecting(false);
+    }
+  };
+
   const handleDisconnect = () => {
-    wallet.disconnect();
+    useWalletStore.getState().disconnect();
     hederaWallet.disconnect();
+    toast.success("Wallet Disconnected", {
+      description: "You have been successfully disconnected.",
+      icon: <CheckCircle className="h-4 w-4 text-green-500" />,
+    });
     router.push("/");
   };
 
@@ -140,20 +185,13 @@ export default function Header() {
             </Tooltip>
 
             {/* Wallet Status */}
-            {wallet.isConnected ? (
+            {isConnected ? (
               <div className="flex items-center gap-2">
-                <Badge
-                  variant={isOnline ? "default" : "secondary"}
-                  className="flex items-center gap-1"
-                >
-                  <div
-                    className={`w-2 h-2 rounded-full ${
-                      isOnline ? "bg-green-500" : "bg-gray-400"
-                    }`}
-                  />
+                <Badge variant="default" className="flex items-center gap-1">
+                  <div className={`w-2 h-2 rounded-full ${"bg-green-500"}`} />
                   <Wallet className="h-3 w-3" />
                   <span className="text-xs">
-                    {wallet.accountId?.slice(0, 6)}...
+                    {account?.address?.slice(0, 6)}...
                   </span>
                 </Badge>
 
@@ -180,7 +218,7 @@ export default function Header() {
                           Farmer Account
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
-                          {wallet.accountId}
+                          {account?.address}
                         </p>
                       </div>
                     </DropdownMenuLabel>
@@ -208,14 +246,22 @@ export default function Header() {
                 </DropdownMenu>
               </div>
             ) : (
-              <Button
-                onClick={() => router.push("/")}
-                className="btn-primary"
-                aria-label="Connect wallet"
-              >
-                <Wallet className="mr-2 h-4 w-4" />
-                Connect Wallet
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={handleConnectWallet}
+                    disabled={isConnectingWallet}
+                    className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-lg shadow-green-600/30"
+                    aria-label="Connect wallet"
+                  >
+                    <Wallet className="mr-2 h-4 w-4" />
+                    {isConnectingWallet ? "Connecting..." : "Connect Wallet"}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Connect your Web3 wallet to access all features</p>
+                </TooltipContent>
+              </Tooltip>
             )}
           </div>
         </div>

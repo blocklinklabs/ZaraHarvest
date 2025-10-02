@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useAppStore } from "@/lib/store";
+import { useWalletStore } from "@/lib/wallet-provider";
 import { formatDate } from "@/lib/utils";
 import { QRCodeCanvas } from "qrcode.react";
 import {
@@ -30,15 +30,27 @@ import {
 
 export default function Tracker() {
   const router = useRouter();
-  const { wallet, harvestTokens } = useAppStore();
+  const { isConnected, account } = useWalletStore();
+
+  // Simulation data - in the future this will come from the database
+  const harvestTokens = [
+    {
+      id: "1",
+      cropType: "Maize",
+      amount: 1000,
+      tokenizedAmount: 1000,
+      status: "tokenized" as const,
+      qrCode: "QR_CODE_DATA_HERE",
+    },
+  ];
 
   const [selectedToken, setSelectedToken] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!wallet.isConnected) {
+    if (!isConnected) {
       router.push("/");
     }
-  }, [wallet.isConnected, router]);
+  }, [isConnected, router]);
 
   const supplyChainStages = [
     {
@@ -109,7 +121,7 @@ export default function Tracker() {
     (token) => token.id === selectedToken
   );
 
-  if (!wallet.isConnected) {
+  if (!isConnected) {
     return null;
   }
 

@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAppStore } from "@/lib/store";
+import { useWalletStore } from "@/lib/wallet-provider";
 import {
   Home,
   LayoutDashboard,
@@ -17,6 +17,7 @@ import {
   BarChart3,
   DollarSign,
   Clock,
+  UserPlus,
 } from "lucide-react";
 
 const navigation = [
@@ -29,6 +30,11 @@ const navigation = [
     name: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    name: "Onboard",
+    href: "/onboarding",
+    icon: UserPlus,
   },
   {
     name: "Submit",
@@ -45,23 +51,18 @@ const navigation = [
     href: "/lending",
     icon: DollarSign,
   },
-  {
-    name: "Tracker",
-    href: "/tracker",
-    icon: Clock,
-  },
 ];
 
 export default function MobileNav() {
   const router = useRouter();
   const pathname = usePathname();
-  const { wallet } = useAppStore();
+  const { isConnected } = useWalletStore();
 
   const handleNavigation = (href: string) => {
     router.push(href);
   };
 
-  if (!wallet.isConnected) {
+  if (!isConnected) {
     return null;
   }
 

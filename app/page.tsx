@@ -12,491 +12,435 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAppStore } from "@/lib/store";
-import { hederaWallet } from "@/lib/hedera";
+import { useWalletStore, walletProvider } from "@/lib/wallet-provider";
 import {
   Wallet,
   Leaf,
   TrendingUp,
   Shield,
   Globe,
-  Info,
   ArrowRight,
   CheckCircle,
   Users,
   BarChart3,
-  Upload,
   DollarSign,
   Clock,
+  Sprout,
+  Lock,
+  Zap,
+  Award,
+  AlertCircle,
 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Home() {
   const router = useRouter();
-  const { wallet, isOnline } = useAppStore();
-  const [isConnecting, setIsConnecting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    account,
+    isConnected,
+    isConnecting,
+    error,
+    connect,
+    setConnecting,
+    setError,
+  } = useWalletStore();
+
+  const [isClient, setIsClient] = useState(false);
   const [hasWeb3, setHasWeb3] = useState(false);
 
-  // Check for Web3 availability
   useEffect(() => {
-    setHasWeb3(typeof window !== "undefined" && !!window.ethereum);
+    setIsClient(true);
+    // Check if Web3 provider is available
+    if (typeof window !== "undefined" && window.ethereum) {
+      setHasWeb3(true);
+    }
   }, []);
 
   const handleConnectWallet = async () => {
-    setIsConnecting(true);
-    setError(null);
-
     try {
-      const account = await hederaWallet.connect();
-      wallet.connect(account.accountId);
-      router.push("/dashboard");
-    } catch (error) {
-      console.error("Failed to connect wallet:", error);
-      setError(
-        error instanceof Error ? error.message : "Failed to connect wallet"
-      );
+      setConnecting(true);
+      setError(null);
+
+      if (!window.ethereum) {
+        throw new Error(
+          "MetaMask or another Web3 wallet is not installed. Please install one to continue."
+        );
+      }
+
+      const account = await walletProvider.connectWallet();
+      connect(account);
+
+      toast.success("Wallet Connected!", {
+        description: `Connected to ${account.address.slice(
+          0,
+          6
+        )}...${account.address.slice(-4)}`,
+        icon: <CheckCircle className="h-4 w-4 text-green-500" />,
+      });
+    } catch (err: any) {
+      const errorMessage =
+        err.message || "Failed to connect wallet. Please try again.";
+      setError(errorMessage);
+      toast.error("Connection Failed", {
+        description: errorMessage,
+        icon: <AlertCircle className="h-4 w-4 text-red-500" />,
+      });
     } finally {
-      setIsConnecting(false);
+      setConnecting(false);
     }
   };
 
-  const handleDemoMode = () => {
-    // Use a demo wallet address for demo mode
-    wallet.connect("0x1234567890123456789012345678901234567890");
-    router.push("/dashboard");
+  const handleGetStarted = () => {
+    if (isConnected) {
+      router.push("/dashboard");
+    } else {
+      router.push("/onboarding");
+    }
   };
 
-  if (wallet.isConnected) {
-    return (
-      <TooltipProvider>
-        <div className="fixed inset-0 bg-background z-50 overflow-auto">
-          <div className="min-h-screen w-full">
-            <div className="max-w-6xl mx-auto px-4 py-8">
-              <div className="space-y-8">
-                {/* Welcome Section */}
-                <div className="text-center">
-                  <div className="flex items-center justify-center mb-6">
-                    <Leaf className="h-12 w-12 text-primary mr-4" />
-                    <div>
-                      <h1 className="text-4xl font-bold text-foreground mb-2">
-                        Welcome to AgriYield
-                      </h1>
-                      <p className="text-lg text-muted-foreground">
-                        Your agricultural dashboard is ready
-                      </p>
-                    </div>
-                  </div>
-                </div>
+  const features = [
+    {
+      icon: BarChart3,
+      title: "AI Yield Predictions",
+      description:
+        "Get accurate crop yield forecasts powered by machine learning",
+      color: "text-green-600 dark:text-green-400",
+    },
+    {
+      icon: DollarSign,
+      title: "DeFi Lending",
+      description: "Access agricultural loans secured by tokenized harvests",
+      color: "text-green-600 dark:text-green-400",
+    },
+    {
+      icon: Shield,
+      title: "Blockchain Security",
+      description: "Your data and transactions secured on the blockchain",
+      color: "text-green-600 dark:text-green-400",
+    },
+    {
+      icon: Clock,
+      title: "Supply Chain Tracking",
+      description: "Track your harvest from farm to market with transparency",
+      color: "text-green-600 dark:text-green-400",
+    },
+    {
+      icon: Sprout,
+      title: "Farm Data Analytics",
+      description: "Monitor soil health, weather, and optimize your farming",
+      color: "text-green-600 dark:text-green-400",
+    },
+    {
+      icon: Award,
+      title: "Earn Rewards",
+      description: "Get rewarded for data contributions and platform usage",
+      color: "text-green-600 dark:text-green-400",
+    },
+  ];
 
-                {/* Quick Actions Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-                  <Card
-                    className=" hover:shadow-lg transition-shadow cursor-pointer"
-                    onClick={() => router.push("/dashboard")}
-                  >
-                    <CardContent className="p-6 text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-primary bg-opacity-10 rounded-full flex items-center justify-center">
-                        <BarChart3 className="h-8 w-8 text-white" />
-                      </div>
-                      <h3 className="font-semibold text-lg mb-2">Dashboard</h3>
-                      <p className="text-sm text-muted-foreground">
-                        View your farm overview and analytics
-                      </p>
-                    </CardContent>
-                  </Card>
+  const stats = [
+    { label: "Active Farmers", value: "10,000+", icon: Users },
+    { label: "Loans Disbursed", value: "$2M+", icon: DollarSign },
+    { label: "Predictions Made", value: "50,000+", icon: TrendingUp },
+    { label: "Countries", value: "12", icon: Globe },
+  ];
 
-                  <Card
-                    className=" hover:shadow-lg transition-shadow cursor-pointer"
-                    onClick={() => router.push("/submit-data")}
-                  >
-                    <CardContent className="p-6 text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-primary bg-opacity-10 rounded-full flex items-center justify-center">
-                        <Upload className="h-8 w-8 text-white" />
-                      </div>
-                      <h3 className="font-semibold text-lg mb-2">
-                        Submit Data
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Share farm information and earn rewards
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  <Card
-                    className=" hover:shadow-lg transition-shadow cursor-pointer"
-                    onClick={() => router.push("/prediction")}
-                  >
-                    <CardContent className="p-6 text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-primary bg-opacity-10 rounded-full flex items-center justify-center">
-                        <TrendingUp className="h-8 w-8 text-white" />
-                      </div>
-                      <h3 className="font-semibold text-lg mb-2">
-                        Predictions
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        AI-powered yield forecasts
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  <Card
-                    className=" hover:shadow-lg transition-shadow cursor-pointer"
-                    onClick={() => router.push("/lending")}
-                  >
-                    <CardContent className="p-6 text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-primary bg-opacity-10 rounded-full flex items-center justify-center">
-                        <DollarSign className="h-8 w-8 text-white" />
-                      </div>
-                      <h3 className="font-semibold text-lg mb-2">Lending</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Access DeFi loans with your harvest
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  <Card
-                    className=" hover:shadow-lg transition-shadow cursor-pointer"
-                    onClick={() => router.push("/tracker")}
-                  >
-                    <CardContent className="p-6 text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-primary bg-opacity-10 rounded-full flex items-center justify-center">
-                        <Clock className="h-8 w-8 text-white" />
-                      </div>
-                      <h3 className="font-semibold text-lg mb-2">Tracker</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Track your harvest from farm to market
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  <Card
-                    className=" hover:shadow-lg transition-shadow cursor-pointer"
-                    onClick={() => router.push("/dashboard")}
-                  >
-                    <CardContent className="p-6 text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-primary bg-opacity-10 rounded-full flex items-center justify-center">
-                        <Shield className="h-8 w-8 text-white" />
-                      </div>
-                      <h3 className="font-semibold text-lg mb-2">Security</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Blockchain-powered transparency
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </TooltipProvider>
-    );
+  if (!isClient) {
+    return null; // Prevent SSR mismatch
   }
 
   return (
     <TooltipProvider>
-      <div className="fixed inset-0 bg-background z-50 overflow-auto">
-        <div className="min-h-screen w-full">
-          <div className="max-w-6xl mx-auto text-center px-4 py-8">
-            {/* Hero Section */}
-            <div className="text-center mb-16">
-              <div className="flex items-center justify-center mb-8">
-                <Leaf className="h-16 w-16 text-primary mr-4" />
-                <div>
-                  <h1 className="text-5xl font-bold text-foreground mb-2">
-                    AgriYield
-                  </h1>
-                  <p className="text-lg text-primary font-medium">
-                    AI-Powered Yield Prediction for African Farmers
-                  </p>
-                </div>
-              </div>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 dark:from-gray-950 dark:via-black dark:to-gray-950">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden pt-20 pb-16 px-4 sm:px-6 lg:px-8">
+          {/* Background decorative elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-500/10 dark:bg-green-500/5 rounded-full blur-3xl"></div>
+            <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-green-500/10 dark:bg-green-500/5 rounded-full blur-3xl"></div>
+          </div>
 
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Predict your crop yields, get loans, and track your harvest on
-                blockchain. Empowering African smallholder farmers with AI and
-                decentralized financing.
-              </p>
+          <div className="relative max-w-7xl mx-auto">
+            <div className="text-center space-y-8">
+              {/* Badge */}
+              <Badge
+                variant="outline"
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border-green-500/50 bg-green-50 dark:bg-green-950/30"
+              >
+                <Zap className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <span className="text-green-700 dark:text-green-300">
+                  Powered by Blockchain & AI
+                </span>
+              </Badge>
 
-              <div className="flex items-center justify-center gap-6 mb-12">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span>No fees to start</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span>Earn rewards</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span>Mobile-friendly</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Stats Section */}
-            <div className="mb-16">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-                <Card className="text-center">
-                  <CardContent className="p-6">
-                    <div className="text-3xl font-bold text-primary mb-2">
-                      500+
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      Active Farmers
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="text-center">
-                  <CardContent className="p-6">
-                    <div className="text-3xl font-bold text-primary mb-2">
-                      $2.5M
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      Loans Disbursed
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="text-center">
-                  <CardContent className="p-6">
-                    <div className="text-3xl font-bold text-primary mb-2">
-                      95%
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      Prediction Accuracy
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-
-            {/* Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 w-full">
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <TrendingUp className="h-12 w-12 text-primary mx-auto mb-4" />
-                  <h3 className="text-xl font-bold mb-3 text-foreground">
-                    AI Yield Prediction
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Get accurate crop yield predictions using AI and satellite
-                    data to optimize your farming decisions.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <Shield className="h-12 w-12 text-primary mx-auto mb-4" />
-                  <h3 className="text-xl font-bold mb-3 text-foreground">
-                    DeFi Lending
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Access loans using your future harvest as collateral on
-                    blockchain with competitive rates.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <Globe className="h-12 w-12 text-primary mx-auto mb-4" />
-                  <h3 className="text-xl font-bold mb-3 text-foreground">
-                    Supply Chain Tracking
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Track your harvest from farm to market with blockchain
-                    transparency and QR code verification.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Testimonial Section */}
-            <div className="mb-16">
-              <Card className="w-full">
-                <CardContent className="p-8">
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold text-foreground mb-4">
-                      What Farmers Are Saying
-                    </h3>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-primary bg-opacity-10 rounded-full flex items-center justify-center">
-                        <Users className="h-8 w-8 text-primary" />
-                      </div>
-                      <blockquote className="text-muted-foreground italic mb-4">
-                        "AgriYield helped me predict my maize yield with 95%
-                        accuracy. The loan I got using my harvest as collateral
-                        was a game-changer for my farm."
-                      </blockquote>
-                      <div className="text-sm font-medium text-foreground">
-                        Kwame Asante
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        Maize Farmer, Kumasi
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-primary bg-opacity-10 rounded-full flex items-center justify-center">
-                        <TrendingUp className="h-8 w-8 text-primary" />
-                      </div>
-                      <blockquote className="text-muted-foreground italic mb-4">
-                        "The blockchain tracking gives me confidence that my
-                        cocoa reaches buyers safely. I can see every step of the
-                        journey."
-                      </blockquote>
-                      <div className="text-sm font-medium text-foreground">
-                        Ama Osei
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        Cocoa Farmer, Takoradi
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* CTA Section */}
-            <div className="text-center">
-              <Card className="w-full max-w-2xl mx-auto">
-                <CardContent className="p-8">
-                  <div className="flex items-center justify-center mb-6">
-                    <Users className="h-8 w-8 text-primary mr-3" />
-                    <h2 className="text-2xl font-bold text-foreground">
-                      Join the Agricultural Revolution
-                    </h2>
-                  </div>
-
-                  <p className="text-muted-foreground mb-8">
-                    Connect your Web3 wallet (MetaMask, WalletConnect, etc.) to
-                    start earning rewards, getting predictions, and accessing
-                    DeFi loans.
-                  </p>
-
-                  <Button
-                    size="lg"
-                    className="btn-primary text-xl px-12 py-6 hover-glow"
-                    onClick={handleConnectWallet}
-                    disabled={isConnecting}
-                  >
-                    {isConnecting ? (
-                      <>
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                        Connecting to Hedera...
-                      </>
-                    ) : (
-                      <>
-                        <Wallet className="mr-3 h-6 w-6" />
-                        Connect Wallet
-                        <ArrowRight className="ml-3 h-5 w-5" />
-                      </>
-                    )}
-                  </Button>
-
-                  {!hasWeb3 && (
-                    <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                      <p className="text-yellow-600 dark:text-yellow-400 text-sm">
-                        No Web3 wallet detected. Please install MetaMask or
-                        another Web3 wallet to continue.
-                      </p>
-                      <p className="text-yellow-500 dark:text-yellow-500 text-xs mt-2">
-                        <a
-                          href="https://metamask.io"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline"
-                        >
-                          Install MetaMask
-                        </a>{" "}
-                        or use another Web3-compatible wallet.
-                      </p>
-                      <div className="mt-4">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={handleDemoMode}
-                          className="text-yellow-600 border-yellow-300 hover:bg-yellow-100 dark:text-yellow-400 dark:border-yellow-700 dark:hover:bg-yellow-900/20"
-                        >
-                          Try Demo Mode
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-
-                  {error && (
-                    <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                      <p className="text-red-600 dark:text-red-400 text-sm">
-                        {error}
-                      </p>
-                      <p className="text-red-500 dark:text-red-500 text-xs mt-2">
-                        Make sure you have MetaMask or another Web3 wallet
-                        installed and unlocked.
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Info className="h-4 w-4" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>
-                            Supports MetaMask, WalletConnect, and other Web3
-                            wallets
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                      <span>Web3 Compatible</span>
-                    </div>
-                    <Separator orientation="vertical" className="h-4" />
-                    <div className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Secure & Decentralized</span>
-                    </div>
-                    <Separator orientation="vertical" className="h-4" />
-                    <div className="flex items-center gap-2">
-                      <Globe className="h-4 w-4 text-blue-500" />
-                      <span>Built for African Farmers</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Footer Section */}
-            <div className="mt-16 pt-8 border-t border-border">
-              <div className="text-center">
-                <div className="flex items-center justify-center mb-4">
-                  <Leaf className="h-6 w-6 text-primary mr-2" />
-                  <span className="text-lg font-semibold text-foreground">
+              {/* Main Heading */}
+              <div className="space-y-4">
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
+                  <span className="text-gray-900 dark:text-white">
+                    Welcome to{" "}
+                  </span>
+                  <span className="text-green-600 dark:text-green-400">
                     AgriYield
                   </span>
-                </div>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Empowering African farmers with AI-powered yield prediction
-                  and blockchain technology
+                </h1>
+                <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                  Empowering African Farmers with Blockchain Technology
                 </p>
-                <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
-                  <span>© 2024 AgriYield</span>
-                  <Separator orientation="vertical" className="h-3" />
-                  <span>Built with ❤️ for African Farmers</span>
-                  <Separator orientation="vertical" className="h-3" />
-                  <span>Powered by Hedera Hashgraph</span>
+              </div>
+
+              {/* Subtitle */}
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Predict yields with AI, secure loans through DeFi, and track
+                your harvests on the blockchain. Join thousands of farmers
+                building a sustainable future.
+              </p>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+                <Button
+                  size="lg"
+                  onClick={handleGetStarted}
+                  className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-lg shadow-green-600/30 dark:shadow-green-600/20 group min-w-[200px]"
+                >
+                  <span>Get Started</span>
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+
+                {!isConnected && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        onClick={handleConnectWallet}
+                        disabled={isConnecting || !hasWeb3}
+                        className="border-green-600/50 hover:bg-green-50 dark:hover:bg-green-950/30 dark:border-green-600/50 min-w-[200px]"
+                      >
+                        <Wallet className="mr-2 h-5 w-5" />
+                        <span>
+                          {isConnecting ? "Connecting..." : "Connect Wallet"}
+                        </span>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Connect your Web3 wallet to get started</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+
+                {isConnected && (
+                  <Badge
+                    variant="default"
+                    className="bg-green-600 hover:bg-green-700 px-4 py-2 text-sm"
+                  >
+                    <CheckCircle className="mr-2 h-4 w-4" />
+                    <span>Wallet Connected</span>
+                  </Badge>
+                )}
+              </div>
+
+              {/* Error Alert */}
+              {error && (
+                <Alert
+                  variant="destructive"
+                  className="max-w-md mx-auto border-red-500/50"
+                >
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              {/* Web3 Warning */}
+              {!hasWeb3 && (
+                <Alert className="max-w-md mx-auto border-amber-500/50 bg-amber-50 dark:bg-amber-950/30">
+                  <AlertCircle className="h-4 w-4 text-amber-600" />
+                  <AlertDescription className="text-amber-800 dark:text-amber-300">
+                    Please install MetaMask or another Web3 wallet to connect
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* Stats Section */}
+        <section className="py-12 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-black/50 backdrop-blur-sm">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              {stats.map((stat, index) => {
+                const Icon = stat.icon;
+                return (
+                  <Card
+                    key={index}
+                    className="text-center border-green-500/20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm hover:shadow-lg hover:shadow-green-500/10 transition-all duration-300"
+                  >
+                    <CardContent className="pt-6 space-y-2">
+                      <Icon className="h-8 w-8 mx-auto text-green-600 dark:text-green-400" />
+                      <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                        {stat.value}
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {stat.label}
+                      </p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="py-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center space-y-4 mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
+                Powerful Features for Modern Farming
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Everything you need to optimize your farm and access financial
+                services
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {features.map((feature, index) => {
+                const Icon = feature.icon;
+                return (
+                  <Card
+                    key={index}
+                    className="border-green-500/20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm hover:shadow-xl hover:shadow-green-500/10 hover:-translate-y-1 transition-all duration-300 group"
+                  >
+                    <CardHeader>
+                      <div className="w-12 h-12 rounded-lg bg-green-100 dark:bg-green-950/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <Icon className={`h-6 w-6 ${feature.color}`} />
+                      </div>
+                      <CardTitle className="text-xl text-gray-900 dark:text-white">
+                        {feature.title}
+                      </CardTitle>
+                      <CardDescription className="text-gray-600 dark:text-gray-400">
+                        {feature.description}
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works Section */}
+        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-black/50 backdrop-blur-sm">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center space-y-4 mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
+                How It Works
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400">
+                Get started in three simple steps
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 mx-auto rounded-full bg-green-600 dark:bg-green-600 flex items-center justify-center shadow-lg shadow-green-600/30">
+                  <span className="text-2xl font-bold text-white">1</span>
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Connect Wallet
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Link your Web3 wallet to get started securely
+                </p>
+              </div>
+
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 mx-auto rounded-full bg-green-600 dark:bg-green-600 flex items-center justify-center shadow-lg shadow-green-600/30">
+                  <span className="text-2xl font-bold text-white">2</span>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Complete Onboarding
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Register your farm details and preferences
+                </p>
+              </div>
+
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 mx-auto rounded-full bg-green-600 dark:bg-green-600 flex items-center justify-center shadow-lg shadow-green-600/30">
+                  <span className="text-2xl font-bold text-white">3</span>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Start Growing
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Access all features and grow your farming business
+                </p>
               </div>
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            <Card className="border-green-500/30 bg-gradient-to-br from-green-50 to-white dark:from-green-950/30 dark:to-gray-900 shadow-2xl shadow-green-500/10">
+              <CardContent className="p-12 text-center space-y-6">
+                <div className="w-16 h-16 mx-auto rounded-full bg-green-600 dark:bg-green-600 flex items-center justify-center shadow-lg shadow-green-600/30">
+                  <Leaf className="h-8 w-8 text-white" />
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  Ready to Transform Your Farm?
+                </h2>
+                <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                  Join AgriYield today and experience the future of agriculture
+                  with blockchain technology and AI-powered insights.
+                </p>
+                <Button
+                  size="lg"
+                  onClick={handleGetStarted}
+                  className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-lg shadow-green-600/30 dark:shadow-green-600/20 group"
+                >
+                  <span>
+                    {isConnected ? "Go to Dashboard" : "Get Started Now"}
+                  </span>
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="py-8 px-4 sm:px-6 lg:px-8 border-t border-gray-200 dark:border-gray-800">
+          <div className="max-w-7xl mx-auto">
+            <Separator className="mb-8 bg-green-500/20" />
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Leaf className="h-6 w-6 text-green-600 dark:text-green-400" />
+                <span className="text-lg font-bold text-gray-900 dark:text-white">
+                  AgriYield
+                </span>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                © 2025 AgriYield. Empowering farmers with blockchain technology.
+              </p>
+              <div className="flex items-center gap-4">
+                <Lock className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  Secured by Blockchain
+                </span>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </TooltipProvider>
   );

@@ -114,8 +114,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navi
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/button.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/card.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/badge.tsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$store$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/lib/store.ts [app-ssr] (ecmascript) <locals>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$hybrid$2d$store$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__useHybridStore__as__useAppStore$3e$__ = __turbopack_context__.i("[project]/lib/hybrid-store.ts [app-ssr] (ecmascript) <export useHybridStore as useAppStore>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$wallet$2d$provider$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/wallet-provider.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/sonner/dist/index.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$chart$2f$BarChart$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/recharts/es6/chart/BarChart.js [app-ssr] (ecmascript)");
@@ -147,15 +146,38 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 ;
 function Prediction() {
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
-    const { wallet, farmData, yieldPredictions, addYieldPrediction } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$hybrid$2d$store$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__useHybridStore__as__useAppStore$3e$__["useAppStore"])();
+    const { isConnected, account } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$wallet$2d$provider$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useWalletStore"])();
+    // Simulation data - in the future this will come from the database
+    const farmData = [
+        {
+            id: "1",
+            cropType: "Maize",
+            location: "Kumasi, Ghana",
+            soilMoisture: 75,
+            weatherNotes: "Sunny with light rain expected",
+            timestamp: new Date()
+        }
+    ];
+    const yieldPredictions = [
+        {
+            cropType: "Maize",
+            predictedYield: 4.2,
+            riskLevel: 2,
+            confidence: 0.87,
+            timestamp: new Date()
+        }
+    ];
+    const addYieldPrediction = (prediction)=>{
+        console.log("Adding yield prediction:", prediction);
+    };
     const [isGenerating, setIsGenerating] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [selectedCrop, setSelectedCrop] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        if (!wallet.isConnected) {
+        if (!isConnected) {
             router.push("/");
         }
     }, [
-        wallet.isConnected,
+        isConnected,
         router
     ]);
     const handleGeneratePrediction = async ()=>{
@@ -213,7 +235,7 @@ function Prediction() {
         "Wheat",
         "Cassava"
     ];
-    if (!wallet.isConnected) {
+    if (!isConnected) {
         return null;
     }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -231,14 +253,14 @@ function Prediction() {
                                 className: "h-4 w-4 mr-2"
                             }, void 0, false, {
                                 fileName: "[project]/app/prediction/page.tsx",
-                                lineNumber: 123,
+                                lineNumber: 148,
                                 columnNumber: 11
                             }, this),
                             "Back"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/prediction/page.tsx",
-                        lineNumber: 118,
+                        lineNumber: 143,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -248,7 +270,7 @@ function Prediction() {
                                 children: "Yield Predictions"
                             }, void 0, false, {
                                 fileName: "[project]/app/prediction/page.tsx",
-                                lineNumber: 127,
+                                lineNumber: 152,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -256,19 +278,19 @@ function Prediction() {
                                 children: "AI-powered crop yield predictions and risk analysis"
                             }, void 0, false, {
                                 fileName: "[project]/app/prediction/page.tsx",
-                                lineNumber: 130,
+                                lineNumber: 155,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/prediction/page.tsx",
-                        lineNumber: 126,
+                        lineNumber: 151,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/prediction/page.tsx",
-                lineNumber: 117,
+                lineNumber: 142,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -283,27 +305,27 @@ function Prediction() {
                                         className: "h-5 w-5"
                                     }, void 0, false, {
                                         fileName: "[project]/app/prediction/page.tsx",
-                                        lineNumber: 140,
+                                        lineNumber: 165,
                                         columnNumber: 13
                                     }, this),
                                     "Generate New Prediction"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/prediction/page.tsx",
-                                lineNumber: 139,
+                                lineNumber: 164,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardDescription"], {
                                 children: "Get AI-powered yield predictions for your crops"
                             }, void 0, false, {
                                 fileName: "[project]/app/prediction/page.tsx",
-                                lineNumber: 143,
+                                lineNumber: 168,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/prediction/page.tsx",
-                        lineNumber: 138,
+                        lineNumber: 163,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -318,7 +340,7 @@ function Prediction() {
                                             children: "Select Crop Type"
                                         }, void 0, false, {
                                             fileName: "[project]/app/prediction/page.tsx",
-                                            lineNumber: 150,
+                                            lineNumber: 175,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -331,7 +353,7 @@ function Prediction() {
                                                     children: "Choose a crop..."
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 158,
+                                                    lineNumber: 183,
                                                     columnNumber: 17
                                                 }, this),
                                                 cropTypes.map((crop)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -339,19 +361,19 @@ function Prediction() {
                                                         children: crop
                                                     }, crop, false, {
                                                         fileName: "[project]/app/prediction/page.tsx",
-                                                        lineNumber: 160,
+                                                        lineNumber: 185,
                                                         columnNumber: 19
                                                     }, this))
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/prediction/page.tsx",
-                                            lineNumber: 153,
+                                            lineNumber: 178,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/prediction/page.tsx",
-                                    lineNumber: 149,
+                                    lineNumber: 174,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -366,7 +388,7 @@ function Prediction() {
                                                     className: "animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 174,
+                                                    lineNumber: 199,
                                                     columnNumber: 21
                                                 }, this),
                                                 "Generating..."
@@ -377,7 +399,7 @@ function Prediction() {
                                                     className: "mr-2 h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 179,
+                                                    lineNumber: 204,
                                                     columnNumber: 21
                                                 }, this),
                                                 "Generate Prediction"
@@ -385,29 +407,29 @@ function Prediction() {
                                         }, void 0, true)
                                     }, void 0, false, {
                                         fileName: "[project]/app/prediction/page.tsx",
-                                        lineNumber: 167,
+                                        lineNumber: 192,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/prediction/page.tsx",
-                                    lineNumber: 166,
+                                    lineNumber: 191,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/prediction/page.tsx",
-                            lineNumber: 148,
+                            lineNumber: 173,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/prediction/page.tsx",
-                        lineNumber: 147,
+                        lineNumber: 172,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/prediction/page.tsx",
-                lineNumber: 137,
+                lineNumber: 162,
                 columnNumber: 7
             }, this),
             yieldPredictions.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -422,20 +444,20 @@ function Prediction() {
                                         children: "Yield vs Risk Analysis"
                                     }, void 0, false, {
                                         fileName: "[project]/app/prediction/page.tsx",
-                                        lineNumber: 194,
+                                        lineNumber: 219,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardDescription"], {
                                         children: "Predicted yield and risk levels for your crops"
                                     }, void 0, false, {
                                         fileName: "[project]/app/prediction/page.tsx",
-                                        lineNumber: 195,
+                                        lineNumber: 220,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/prediction/page.tsx",
-                                lineNumber: 193,
+                                lineNumber: 218,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -451,24 +473,24 @@ function Prediction() {
                                                     strokeDasharray: "3 3"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 203,
+                                                    lineNumber: 228,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$XAxis$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["XAxis"], {
                                                     dataKey: "name"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 204,
+                                                    lineNumber: 229,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$YAxis$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["YAxis"], {}, void 0, false, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 205,
+                                                    lineNumber: 230,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$component$2f$Tooltip$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Tooltip"], {}, void 0, false, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 206,
+                                                    lineNumber: 231,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$Bar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Bar"], {
@@ -477,7 +499,7 @@ function Prediction() {
                                                     name: "Yield (tons)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 207,
+                                                    lineNumber: 232,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$cartesian$2f$Bar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Bar"], {
@@ -486,34 +508,34 @@ function Prediction() {
                                                     name: "Risk (%)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 208,
+                                                    lineNumber: 233,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/prediction/page.tsx",
-                                            lineNumber: 202,
+                                            lineNumber: 227,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/prediction/page.tsx",
-                                        lineNumber: 201,
+                                        lineNumber: 226,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/prediction/page.tsx",
-                                    lineNumber: 200,
+                                    lineNumber: 225,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/prediction/page.tsx",
-                                lineNumber: 199,
+                                lineNumber: 224,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/prediction/page.tsx",
-                        lineNumber: 192,
+                        lineNumber: 217,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -525,20 +547,20 @@ function Prediction() {
                                         children: "Risk Distribution"
                                     }, void 0, false, {
                                         fileName: "[project]/app/prediction/page.tsx",
-                                        lineNumber: 218,
+                                        lineNumber: 243,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardDescription"], {
                                         children: "Distribution of risk levels across your predictions"
                                     }, void 0, false, {
                                         fileName: "[project]/app/prediction/page.tsx",
-                                        lineNumber: 219,
+                                        lineNumber: 244,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/prediction/page.tsx",
-                                lineNumber: 217,
+                                lineNumber: 242,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -562,50 +584,50 @@ function Prediction() {
                                                             fill: entry.color
                                                         }, `cell-${index}`, false, {
                                                             fileName: "[project]/app/prediction/page.tsx",
-                                                            lineNumber: 238,
+                                                            lineNumber: 263,
                                                             columnNumber: 25
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 227,
+                                                    lineNumber: 252,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$recharts$2f$es6$2f$component$2f$Tooltip$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Tooltip"], {}, void 0, false, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 241,
+                                                    lineNumber: 266,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/prediction/page.tsx",
-                                            lineNumber: 226,
+                                            lineNumber: 251,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/prediction/page.tsx",
-                                        lineNumber: 225,
+                                        lineNumber: 250,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/prediction/page.tsx",
-                                    lineNumber: 224,
+                                    lineNumber: 249,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/prediction/page.tsx",
-                                lineNumber: 223,
+                                lineNumber: 248,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/prediction/page.tsx",
-                        lineNumber: 216,
+                        lineNumber: 241,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/prediction/page.tsx",
-                lineNumber: 190,
+                lineNumber: 215,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
                 className: "dashboard-card",
@@ -616,7 +638,7 @@ function Prediction() {
                             className: "h-16 w-16 text-muted-foreground mx-auto mb-4"
                         }, void 0, false, {
                             fileName: "[project]/app/prediction/page.tsx",
-                            lineNumber: 251,
+                            lineNumber: 276,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -624,7 +646,7 @@ function Prediction() {
                             children: "No Predictions Yet"
                         }, void 0, false, {
                             fileName: "[project]/app/prediction/page.tsx",
-                            lineNumber: 252,
+                            lineNumber: 277,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -632,18 +654,18 @@ function Prediction() {
                             children: "Generate your first yield prediction to see detailed analytics"
                         }, void 0, false, {
                             fileName: "[project]/app/prediction/page.tsx",
-                            lineNumber: 253,
+                            lineNumber: 278,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/prediction/page.tsx",
-                    lineNumber: 250,
+                    lineNumber: 275,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/prediction/page.tsx",
-                lineNumber: 249,
+                lineNumber: 274,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -655,20 +677,20 @@ function Prediction() {
                                 children: "Recent Predictions"
                             }, void 0, false, {
                                 fileName: "[project]/app/prediction/page.tsx",
-                                lineNumber: 263,
+                                lineNumber: 288,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardDescription"], {
                                 children: "Your latest yield predictions and recommendations"
                             }, void 0, false, {
                                 fileName: "[project]/app/prediction/page.tsx",
-                                lineNumber: 264,
+                                lineNumber: 289,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/prediction/page.tsx",
-                        lineNumber: 262,
+                        lineNumber: 287,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -688,7 +710,7 @@ function Prediction() {
                                                             children: prediction.cropType
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/prediction/page.tsx",
-                                                            lineNumber: 281,
+                                                            lineNumber: 306,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
@@ -696,13 +718,13 @@ function Prediction() {
                                                             children: prediction.riskLevel < 15 ? "Low Risk" : prediction.riskLevel < 25 ? "Medium Risk" : "High Risk"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/prediction/page.tsx",
-                                                            lineNumber: 282,
+                                                            lineNumber: 307,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 280,
+                                                    lineNumber: 305,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -710,13 +732,13 @@ function Prediction() {
                                                     children: prediction.timestamp ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["formatDate"])(prediction.timestamp) : "N/A"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 298,
+                                                    lineNumber: 323,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/prediction/page.tsx",
-                                            lineNumber: 279,
+                                            lineNumber: 304,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -730,7 +752,7 @@ function Prediction() {
                                                             children: "Predicted Yield"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/prediction/page.tsx",
-                                                            lineNumber: 307,
+                                                            lineNumber: 332,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -741,13 +763,13 @@ function Prediction() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/prediction/page.tsx",
-                                                            lineNumber: 310,
+                                                            lineNumber: 335,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 306,
+                                                    lineNumber: 331,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -758,7 +780,7 @@ function Prediction() {
                                                             children: "Risk Level"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/prediction/page.tsx",
-                                                            lineNumber: 315,
+                                                            lineNumber: 340,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -769,13 +791,13 @@ function Prediction() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/prediction/page.tsx",
-                                                            lineNumber: 318,
+                                                            lineNumber: 343,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 314,
+                                                    lineNumber: 339,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -786,7 +808,7 @@ function Prediction() {
                                                             children: "Confidence"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/prediction/page.tsx",
-                                                            lineNumber: 323,
+                                                            lineNumber: 348,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -797,19 +819,19 @@ function Prediction() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/prediction/page.tsx",
-                                                            lineNumber: 326,
+                                                            lineNumber: 351,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/prediction/page.tsx",
-                                                    lineNumber: 322,
+                                                    lineNumber: 347,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/prediction/page.tsx",
-                                            lineNumber: 305,
+                                            lineNumber: 330,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -821,13 +843,13 @@ function Prediction() {
                                                         className: "h-5 w-5 text-green-600 mt-0.5"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/prediction/page.tsx",
-                                                        lineNumber: 336,
+                                                        lineNumber: 361,
                                                         columnNumber: 27
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__["AlertTriangle"], {
                                                         className: "h-5 w-5 text-orange-600 mt-0.5"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/prediction/page.tsx",
-                                                        lineNumber: 338,
+                                                        lineNumber: 363,
                                                         columnNumber: 27
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -837,7 +859,7 @@ function Prediction() {
                                                                 children: prediction.riskLevel < 15 ? "Excellent conditions! Your crop is expected to perform well." : prediction.riskLevel < 25 ? "Good conditions with some risk factors to monitor." : "High risk detected. Consider additional measures to protect your crop."
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/prediction/page.tsx",
-                                                                lineNumber: 341,
+                                                                lineNumber: 366,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -849,35 +871,35 @@ function Prediction() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/prediction/page.tsx",
-                                                                lineNumber: 348,
+                                                                lineNumber: 373,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/prediction/page.tsx",
-                                                        lineNumber: 340,
+                                                        lineNumber: 365,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/prediction/page.tsx",
-                                                lineNumber: 334,
+                                                lineNumber: 359,
                                                 columnNumber: 23
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/prediction/page.tsx",
-                                            lineNumber: 333,
+                                            lineNumber: 358,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, index, true, {
                                     fileName: "[project]/app/prediction/page.tsx",
-                                    lineNumber: 275,
+                                    lineNumber: 300,
                                     columnNumber: 19
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/app/prediction/page.tsx",
-                            lineNumber: 270,
+                            lineNumber: 295,
                             columnNumber: 13
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "text-center py-8",
@@ -886,7 +908,7 @@ function Prediction() {
                                     className: "h-12 w-12 text-muted-foreground mx-auto mb-4"
                                 }, void 0, false, {
                                     fileName: "[project]/app/prediction/page.tsx",
-                                    lineNumber: 360,
+                                    lineNumber: 385,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -894,30 +916,30 @@ function Prediction() {
                                     children: "No predictions available. Generate your first prediction above."
                                 }, void 0, false, {
                                     fileName: "[project]/app/prediction/page.tsx",
-                                    lineNumber: 361,
+                                    lineNumber: 386,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/prediction/page.tsx",
-                            lineNumber: 359,
+                            lineNumber: 384,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/prediction/page.tsx",
-                        lineNumber: 268,
+                        lineNumber: 293,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/prediction/page.tsx",
-                lineNumber: 261,
+                lineNumber: 286,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/prediction/page.tsx",
-        lineNumber: 115,
+        lineNumber: 140,
         columnNumber: 5
     }, this);
 }

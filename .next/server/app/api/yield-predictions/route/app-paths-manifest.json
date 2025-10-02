@@ -1,0 +1,3 @@
+{
+  "/api/yield-predictions/route": "app/api/yield-predictions/route.js"
+}

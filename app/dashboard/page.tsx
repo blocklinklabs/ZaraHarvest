@@ -26,7 +26,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useAppStore } from "@/lib/store";
+import { useWalletStore } from "@/lib/wallet-provider";
 import {
   formatCurrency,
   formatDate,
@@ -53,28 +53,108 @@ import {
 
 export default function Dashboard() {
   const router = useRouter();
-  const {
-    wallet,
-    farmData,
-    yieldPredictions,
-    loans,
-    harvestTokens,
-    badges,
-    addYieldPrediction,
-    earnBadge,
-  } = useAppStore();
+  const { isConnected, account } = useWalletStore();
+
+  // For now, use simulation data - in the future this will come from the database
+  const farmData = [
+    {
+      id: "1",
+      cropType: "Maize",
+      location: "Kumasi, Ghana",
+      soilMoisture: 75,
+      weatherNotes: "Sunny with light rain expected",
+      timestamp: new Date(),
+    },
+    {
+      id: "2",
+      cropType: "Cassava",
+      location: "Kumasi, Ghana",
+      soilMoisture: 68,
+      weatherNotes: "Overcast conditions",
+      timestamp: new Date(),
+    },
+  ];
+
+  const yieldPredictions = [
+    {
+      cropType: "Maize",
+      predictedYield: 4.2,
+      riskLevel: 2,
+      confidence: 0.87,
+      timestamp: new Date(),
+    },
+    {
+      cropType: "Cassava",
+      predictedYield: 8.5,
+      riskLevel: 1,
+      confidence: 0.92,
+      timestamp: new Date(),
+    },
+  ];
+
+  const loans = [
+    {
+      id: "1",
+      amount: 5000,
+      interestRate: 8.5,
+      status: "active" as const,
+      collateral: ["Maize Harvest Token #1"],
+      startDate: new Date(),
+      endDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+    },
+  ];
+
+  const harvestTokens = [
+    {
+      id: "1",
+      cropType: "Maize",
+      amount: 1000,
+      tokenizedAmount: 1000,
+      status: "tokenized" as const,
+      qrCode: "QR_CODE_DATA_HERE",
+    },
+  ];
+
+  const badges = [
+    {
+      id: "1",
+      name: "First Prediction",
+      description: "Made your first yield prediction",
+      earned: true,
+    },
+    {
+      id: "2",
+      name: "Data Contributor",
+      description: "Submitted farm data 5 times",
+      earned: true,
+    },
+    {
+      id: "3",
+      name: "DeFi Pioneer",
+      description: "Used DeFi lending feature",
+      earned: false,
+    },
+  ];
+
+  const addYieldPrediction = (prediction: any) => {
+    console.log("Adding yield prediction:", prediction);
+  };
+
+  const earnBadge = (badgeId: string) => {
+    console.log("Earning badge:", badgeId);
+  };
 
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   useEffect(() => {
-    if (!wallet.isConnected) {
+    if (!isConnected) {
       router.push("/");
     } else {
       // Simulate initial data loading
       setTimeout(() => setIsInitialLoading(false), 1500);
     }
-  }, [wallet.isConnected, router]);
+  }, [isConnected, router]);
 
   const handleRequestPrediction = async () => {
     setIsLoading(true);
@@ -108,7 +188,7 @@ export default function Dashboard() {
   const earnedBadges = badges.filter((badge) => badge.earned);
   const recentTokens = harvestTokens.slice(-3);
 
-  if (!wallet.isConnected) {
+  if (!isConnected) {
     return null;
   }
 
@@ -138,7 +218,7 @@ export default function Dashboard() {
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <Wallet className="h-3 w-3" />
               <span className="text-xs">
-                {wallet.accountId?.slice(0, 8)}...
+                {account?.address?.slice(0, 8)}...
               </span>
             </Badge>
           </div>

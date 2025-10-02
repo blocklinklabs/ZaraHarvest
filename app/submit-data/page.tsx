@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { useAppStore } from "@/lib/store";
+import { useWalletStore } from "@/lib/wallet-provider";
 import { mockHBARReward } from "@/lib/utils";
 import { toast } from "sonner";
 import {
@@ -37,7 +37,27 @@ import {
 
 export default function SubmitData() {
   const router = useRouter();
-  const { wallet, farmData, addFarmData, earnBadge } = useAppStore();
+  const { isConnected, account } = useWalletStore();
+
+  // Simulation data - in the future this will come from the database
+  const farmData = [
+    {
+      id: "1",
+      cropType: "Maize",
+      location: "Kumasi, Ghana",
+      soilMoisture: 75,
+      weatherNotes: "Sunny with light rain expected",
+      timestamp: new Date(),
+    },
+  ];
+
+  const addFarmData = (data: any) => {
+    console.log("Adding farm data:", data);
+  };
+
+  const earnBadge = (badgeId: string) => {
+    console.log("Earning badge:", badgeId);
+  };
 
   const [formData, setFormData] = useState({
     cropType: "",
@@ -52,10 +72,10 @@ export default function SubmitData() {
   const [reward, setReward] = useState(0);
 
   useEffect(() => {
-    if (!wallet.isConnected) {
+    if (!isConnected) {
       router.push("/");
     }
-  }, [wallet.isConnected, router]);
+  }, [isConnected, router]);
 
   const cropTypes = [
     "Maize",
@@ -141,7 +161,7 @@ export default function SubmitData() {
     }
   };
 
-  if (!wallet.isConnected) {
+  if (!isConnected) {
     return null;
   }
 

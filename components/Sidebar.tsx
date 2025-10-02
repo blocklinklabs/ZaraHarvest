@@ -10,7 +10,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAppStore } from "@/lib/store";
+import { useWalletStore } from "@/lib/wallet-provider";
 import {
   Home,
   LayoutDashboard,
@@ -21,6 +21,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Leaf,
+  UserPlus,
 } from "lucide-react";
 
 const navigation = [
@@ -35,6 +36,13 @@ const navigation = [
     href: "/dashboard",
     icon: LayoutDashboard,
     description: "Farm overview",
+  },
+  {
+    name: "Onboard",
+    href: "/onboarding",
+    icon: UserPlus,
+    description: "Complete registration",
+    badge: "Setup",
   },
   {
     name: "Submit Data",
@@ -65,14 +73,14 @@ const navigation = [
 export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { wallet } = useAppStore();
+  const { isConnected } = useWalletStore();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleNavigation = (href: string) => {
     router.push(href);
   };
 
-  if (!wallet.isConnected) {
+  if (!isConnected) {
     return null;
   }
 
@@ -120,13 +128,21 @@ export default function Sidebar() {
                     variant={isActive ? "default" : "ghost"}
                     className={`nav-item w-full justify-start ${
                       isActive ? "active" : ""
-                    } ${isCollapsed ? "px-2" : "px-3"}`}
+                    } ${isCollapsed ? "px-2" : "px-3"} relative`}
                     onClick={() => handleNavigation(item.href)}
                     aria-label={`Navigate to ${item.name}`}
                   >
                     <Icon className="h-4 w-4 flex-shrink-0" />
                     {!isCollapsed && (
-                      <span className="ml-3 truncate">{item.name}</span>
+                      <span className="ml-3 truncate flex-1">{item.name}</span>
+                    )}
+                    {!isCollapsed && (item as any).badge && (
+                      <Badge
+                        variant="secondary"
+                        className="ml-auto text-xs bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300 border-0"
+                      >
+                        {(item as any).badge}
+                      </Badge>
                     )}
                   </Button>
                 </TooltipTrigger>

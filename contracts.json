@@ -1,0 +1,2320 @@
+{
+  "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+  "abi": [
+    {
+      "type": "constructor",
+      "inputs": [],
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "error",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "owner",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "ERC721IncorrectOwner"
+    },
+    {
+      "type": "error",
+      "inputs": [
+        {
+          "name": "operator",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "ERC721InsufficientApproval"
+    },
+    {
+      "type": "error",
+      "inputs": [
+        {
+          "name": "approver",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "ERC721InvalidApprover"
+    },
+    {
+      "type": "error",
+      "inputs": [
+        {
+          "name": "operator",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "ERC721InvalidOperator"
+    },
+    {
+      "type": "error",
+      "inputs": [
+        {
+          "name": "owner",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "ERC721InvalidOwner"
+    },
+    {
+      "type": "error",
+      "inputs": [
+        {
+          "name": "receiver",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "ERC721InvalidReceiver"
+    },
+    {
+      "type": "error",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "ERC721InvalidSender"
+    },
+    {
+      "type": "error",
+      "inputs": [
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "ERC721NonexistentToken"
+    },
+    {
+      "type": "error",
+      "inputs": [
+        {
+          "name": "owner",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "OwnableInvalidOwner"
+    },
+    {
+      "type": "error",
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "OwnableUnauthorizedAccount"
+    },
+    {
+      "type": "error",
+      "inputs": [],
+      "name": "ReentrancyGuardReentrantCall"
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "owner",
+          "type": "address",
+          "baseType": "address",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "approved",
+          "type": "address",
+          "baseType": "address",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "Approval",
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "owner",
+          "type": "address",
+          "baseType": "address",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "operator",
+          "type": "address",
+          "baseType": "address",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "approved",
+          "type": "bool",
+          "baseType": "bool",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "ApprovalForAll",
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "_fromTokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_toTokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "BatchMetadataUpdate",
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "farmer",
+          "type": "address",
+          "baseType": "address",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "baseType": "string",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "baseType": "string",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "FarmerRegistered",
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "farmer",
+          "type": "address",
+          "baseType": "address",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "cropType",
+          "type": "string",
+          "baseType": "string",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "quantity",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "HarvestTokenMinted",
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "loanId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "borrower",
+          "type": "address",
+          "baseType": "address",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "collateralPredictionId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "LoanCreated",
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "loanId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "LoanRepaid",
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "_tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "MetadataUpdate",
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "previousOwner",
+          "type": "address",
+          "baseType": "address",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "newOwner",
+          "type": "address",
+          "baseType": "address",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "farmer",
+          "type": "address",
+          "baseType": "address",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "newScore",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "ReputationUpdated",
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "eventType",
+          "type": "string",
+          "baseType": "string",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "baseType": "string",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "SupplyChainEventAdded",
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "from",
+          "type": "address",
+          "baseType": "address",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "to",
+          "type": "address",
+          "baseType": "address",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "Transfer",
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "predictionId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "farmer",
+          "type": "address",
+          "baseType": "address",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "cropType",
+          "type": "string",
+          "baseType": "string",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "predictedYield",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "YieldPredictionCreated",
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "inputs": [
+        {
+          "name": "predictionId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": true,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "actualYield",
+          "type": "uint256",
+          "baseType": "uint256",
+          "indexed": false,
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "YieldVerified",
+      "anonymous": false
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_eventType",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_location",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_notes",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "addSupplyChainEvent",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "to",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "approve",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "owner",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "balanceOf",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_cropType",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_predictedYield",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_confidence",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_harvestDate",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "createYieldPrediction",
+      "constant": false,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [],
+      "name": "defaultInterestRate",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "farmerLoans",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "farmerPredictions",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "farmerTokens",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "farmers",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "walletAddress",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "totalFarmSize",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "registrationDate",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "reputationScore",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "isActive",
+          "type": "bool",
+          "baseType": "bool",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "getApproved",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_farmer",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "getFarmerLoans",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256[]",
+          "baseType": "array",
+          "components": null,
+          "arrayLength": -1,
+          "arrayChildren": {
+            "name": "",
+            "type": "uint256",
+            "baseType": "uint256",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_farmer",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "getFarmerPredictions",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256[]",
+          "baseType": "array",
+          "components": null,
+          "arrayLength": -1,
+          "arrayChildren": {
+            "name": "",
+            "type": "uint256",
+            "baseType": "uint256",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_farmer",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "getFarmerTokens",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256[]",
+          "baseType": "array",
+          "components": null,
+          "arrayLength": -1,
+          "arrayChildren": {
+            "name": "",
+            "type": "uint256",
+            "baseType": "uint256",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_loanId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "getLoanDetails",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "borrower",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "totalOwed",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "status",
+          "type": "uint8",
+          "baseType": "uint8",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "dueDate",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "getSupplyChainEvents",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "tuple[]",
+          "baseType": "array",
+          "components": null,
+          "arrayLength": -1,
+          "arrayChildren": {
+            "name": "",
+            "type": "tuple",
+            "baseType": "tuple",
+            "components": [
+              {
+                "name": "tokenId",
+                "type": "uint256",
+                "baseType": "uint256",
+                "components": null,
+                "arrayLength": null,
+                "arrayChildren": null
+              },
+              {
+                "name": "eventType",
+                "type": "string",
+                "baseType": "string",
+                "components": null,
+                "arrayLength": null,
+                "arrayChildren": null
+              },
+              {
+                "name": "location",
+                "type": "string",
+                "baseType": "string",
+                "components": null,
+                "arrayLength": null,
+                "arrayChildren": null
+              },
+              {
+                "name": "timestamp",
+                "type": "uint256",
+                "baseType": "uint256",
+                "components": null,
+                "arrayLength": null,
+                "arrayChildren": null
+              },
+              {
+                "name": "actor",
+                "type": "address",
+                "baseType": "address",
+                "components": null,
+                "arrayLength": null,
+                "arrayChildren": null
+              },
+              {
+                "name": "notes",
+                "type": "string",
+                "baseType": "string",
+                "components": null,
+                "arrayLength": null,
+                "arrayChildren": null
+              }
+            ],
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "harvestTokens",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "farmer",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "cropType",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "quantity",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "harvestDate",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "qualityGrade",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "isLocked",
+          "type": "bool",
+          "baseType": "bool",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "metadataURI",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "owner",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "operator",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "isApprovedForAll",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool",
+          "baseType": "bool",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "loans",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "loanId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "borrower",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "collateralPredictionId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "interestRate",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "startDate",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "dueDate",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "status",
+          "type": "uint8",
+          "baseType": "uint8",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "repaidAmount",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [],
+      "name": "maxLoanDuration",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [],
+      "name": "minCollateralRatio",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_cropType",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_quantity",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_qualityGrade",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_metadataURI",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "mintHarvestToken",
+      "constant": false,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [],
+      "name": "name",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [],
+      "name": "nextLoanId",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [],
+      "name": "nextPredictionId",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [],
+      "name": "nextTokenId",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [],
+      "name": "owner",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "ownerOf",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [],
+      "name": "platformFeeRate",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_name",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_location",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_totalFarmSize",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "registerFarmer",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [],
+      "name": "renounceOwnership",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_loanId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "repayLoan",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "payable",
+      "payable": true,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_collateralPredictionId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_amount",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "requestLoan",
+      "constant": false,
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "from",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "to",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "safeTransferFrom",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "from",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "to",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "data",
+          "type": "bytes",
+          "baseType": "bytes",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "safeTransferFrom",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "operator",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "approved",
+          "type": "bool",
+          "baseType": "bool",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "setApprovalForAll",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "supplyChainEvents",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "eventType",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "timestamp",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "actor",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "notes",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "interfaceId",
+          "type": "bytes4",
+          "baseType": "bytes4",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "supportsInterface",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool",
+          "baseType": "bool",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [],
+      "name": "symbol",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "tokenURI",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "from",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "to",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "tokenId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "transferFrom",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "transferOwnership",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_name",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_location",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_totalFarmSize",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "updateFarmerProfile",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_platformFeeRate",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_defaultInterestRate",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_maxLoanDuration",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_minCollateralRatio",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "updatePlatformSettings",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "_predictionId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "_actualYield",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "verifyYield",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [],
+      "name": "withdrawPlatformFees",
+      "constant": false,
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "function",
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "name": "yieldPredictions",
+      "constant": true,
+      "outputs": [
+        {
+          "name": "predictionId",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "farmer",
+          "type": "address",
+          "baseType": "address",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "cropType",
+          "type": "string",
+          "baseType": "string",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "predictedYield",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "confidence",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "predictionDate",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "harvestDate",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "isVerified",
+          "type": "bool",
+          "baseType": "bool",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        },
+        {
+          "name": "actualYield",
+          "type": "uint256",
+          "baseType": "uint256",
+          "components": null,
+          "arrayLength": null,
+          "arrayChildren": null
+        }
+      ],
+      "stateMutability": "view",
+      "payable": false,
+      "gas": null
+    },
+    {
+      "type": "fallback",
+      "inputs": [],
+      "payable": true
+    }
+  ],
+  "network": "localhost",
+  "deployedAt": "2025-10-02T08:45:05.930Z",
+  "gasUsed": "3793922",
+  "blockNumber": 4
+}

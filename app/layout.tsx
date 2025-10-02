@@ -10,6 +10,7 @@ import SimulationProvider from "@/components/SimulationProvider";
 import DatabaseProvider from "@/components/DatabaseProvider";
 import ClientToaster from "@/components/ClientToaster";
 import ClientOnly from "@/components/ClientOnly";
+import ConditionalLayout from "@/components/ConditionalLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,19 +42,7 @@ export default function RootLayout({
         <ClientOnly>
           <DatabaseProvider>
             <SimulationProvider>
-              <div className="min-h-screen dashboard-bg">
-                <Header />
-                <div className="flex">
-                  <Sidebar />
-                  <main className="flex-1 pt-16 md:ml-64 min-h-screen">
-                    <div className="container-dashboard py-6">{children}</div>
-                    <Footer />
-                  </main>
-                </div>
-                <MobileNav />
-                <OfflineIndicator />
-                <ClientToaster />
-              </div>
+              <ConditionalLayout>{children}</ConditionalLayout>
             </SimulationProvider>
           </DatabaseProvider>
         </ClientOnly>
