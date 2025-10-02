@@ -19,7 +19,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useAppStore } from "@/lib/store";
-import { useHybridStore } from "@/lib/hybrid-store";
 import { hederaWallet } from "@/lib/hedera";
 import {
   Wallet,
@@ -39,105 +38,23 @@ import {
 
 export default function Home() {
   const router = useRouter();
-  const store = useAppStore();
-
-  // Check if store is properly initialized
-  if (!store || typeof store !== "object") {
-    console.error("Store is not properly initialized:", store);
-  }
-
-  const wallet = store?.wallet || {
-    accountId: null,
-    isConnected: false,
-    connect: async (accountId: string) => {
-      console.log("Fallback wallet connect called with:", accountId);
-      // This is a fallback - the real store should handle this
-    },
-    disconnect: () => {
-      console.log("Fallback wallet disconnect called");
-    },
-  };
-  const isOnline = store?.isOnline || true;
-
-  // Debug logging
-  console.log("Store:", store);
-  console.log("Wallet from store:", wallet);
-  console.log("Store keys:", Object.keys(store));
-  console.log("Store wallet:", store.wallet);
-  console.log("Store wallet type:", typeof store.wallet);
-  console.log(
-    "Store wallet keys:",
-    store.wallet ? Object.keys(store.wallet) : "store.wallet is null/undefined"
-  );
-  console.log(
-    "Wallet keys:",
-    wallet ? Object.keys(wallet) : "wallet is null/undefined"
-  );
+  const { wallet, isOnline } = useAppStore();
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasWeb3, setHasWeb3] = useState(false);
-  const [storeReady, setStoreReady] = useState(false);
 
   // Check for Web3 availability
   useEffect(() => {
     setHasWeb3(typeof window !== "undefined" && !!window.ethereum);
   }, []);
 
-  // Check if store is ready
-  useEffect(() => {
-    console.log("useEffect triggered with store:", store);
-    console.log("Store type:", typeof store);
-    console.log(
-      "Store keys:",
-      store ? Object.keys(store) : "store is null/undefined"
-    );
-
-    if (store && store.wallet && typeof store.wallet.connect === "function") {
-      setStoreReady(true);
-      console.log("Store is ready with proper wallet object");
-    } else {
-      console.log("Store not ready yet:", store);
-      console.log("Store wallet:", store?.wallet);
-      console.log("Store wallet type:", typeof store?.wallet);
-      console.log("Store wallet connect:", store?.wallet?.connect);
-      setStoreReady(false);
-    }
-  }, [store]);
-
   const handleConnectWallet = async () => {
-    if (!storeReady) {
-      setError("Store is not ready yet. Please wait a moment and try again.");
-      return;
-    }
-
     setIsConnecting(true);
     setError(null);
 
     try {
-      console.log("Starting wallet connection...");
-      console.log("Wallet object:", wallet);
-      console.log("Wallet type:", typeof wallet);
-      console.log("Store ready:", storeReady);
-
-      if (!wallet) {
-        throw new Error("Wallet object is not available");
-      }
-
-      if (typeof wallet.connect !== "function") {
-        console.error(
-          "wallet.connect is not a function. Wallet object:",
-          wallet
-        );
-        throw new Error(
-          "wallet.connect is not a function. Please check the store implementation."
-        );
-      }
-
       const account = await hederaWallet.connect();
-      console.log("Hedera account:", account);
-
       wallet.connect(account.accountId);
-      console.log("Wallet connected successfully");
       router.push("/dashboard");
     } catch (error) {
       console.error("Failed to connect wallet:", error);
@@ -149,15 +66,8 @@ export default function Home() {
     }
   };
 
-  const handleDemoMode = async () => {
-    if (!storeReady) {
-      setError("Store is not ready yet. Please wait a moment and try again.");
-      return;
-    }
-
+  const handleDemoMode = () => {
     // Use a demo wallet address for demo mode
-    console.log("Demo mode - wallet object:", wallet);
-    console.log("Demo mode - wallet.connect:", wallet.connect);
     wallet.connect("0x1234567890123456789012345678901234567890");
     router.push("/dashboard");
   };
@@ -475,7 +385,7 @@ export default function Home() {
                     size="lg"
                     className="btn-primary text-xl px-12 py-6 hover-glow"
                     onClick={handleConnectWallet}
-                    disabled={isConnecting || !storeReady}
+                    disabled={isConnecting}
                   >
                     {isConnecting ? (
                       <>
@@ -491,15 +401,7 @@ export default function Home() {
                     )}
                   </Button>
 
-                  {!storeReady && (
-                    <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                      <p className="text-blue-600 dark:text-blue-400 text-sm">
-                        Initializing store... Please wait a moment.
-                      </p>
-                    </div>
-                  )}
-
-                  {!hasWeb3 && storeReady && (
+                  {!hasWeb3 && (
                     <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
                       <p className="text-yellow-600 dark:text-yellow-400 text-sm">
                         No Web3 wallet detected. Please install MetaMask or
@@ -524,21 +426,6 @@ export default function Home() {
                           className="text-yellow-600 border-yellow-300 hover:bg-yellow-100 dark:text-yellow-400 dark:border-yellow-700 dark:hover:bg-yellow-900/20"
                         >
                           Try Demo Mode
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          onClick={() => {
-                            console.log("Debug - wallet:", wallet);
-                            console.log("Debug - store:", store);
-                            console.log(
-                              "Debug - wallet.connect:",
-                              wallet?.connect
-                            );
-                          }}
-                          className="mt-2"
-                        >
-                          Debug Wallet
                         </Button>
                       </div>
                     </div>

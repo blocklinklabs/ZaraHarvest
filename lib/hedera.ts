@@ -73,6 +73,7 @@ export class HederaWallet {
 
   async getBalance(): Promise<number> {
     if (!this.account) throw new Error("Not connected");
+    if (!window.ethereum) throw new Error("No Web3 provider found");
 
     try {
       const balance = await window.ethereum.request({
@@ -89,6 +90,7 @@ export class HederaWallet {
 
   async transferHBAR(to: string, amount: number): Promise<string> {
     if (!this.account) throw new Error("Not connected");
+    if (!window.ethereum) throw new Error("No Web3 provider found");
 
     try {
       // Convert amount to wei
