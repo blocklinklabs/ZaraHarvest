@@ -21,9 +21,11 @@ export default function ConditionalLayout({
   const dashboardPages = [
     "/dashboard",
     "/submit-data",
+    "/my-submissions",
     "/prediction",
     "/lending",
     "/tracker",
+    "/settings",
   ];
 
   const isDashboardPage = dashboardPages.includes(pathname);

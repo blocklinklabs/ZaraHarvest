@@ -74,6 +74,10 @@ export interface AgriYieldContract {
     notes: string
   ) => Promise<any>;
 
+  // Reward System
+  rewardFarmer: (farmer: string, amount: number) => Promise<any>;
+  fundRewards: () => Promise<any>;
+
   // View Functions
   getFarmerPredictions: (farmer: string) => Promise<number[]>;
   getFarmerLoans: (farmer: string) => Promise<number[]>;
@@ -199,6 +203,38 @@ export class AgriYieldHelper {
 
   async getFarmerLoans(farmer: string) {
     return await this.contract.getFarmerLoans(farmer);
+  }
+
+  // Reward System
+  async rewardFarmer(farmer: string, amount: number) {
+    try {
+      const tx = await this.contract.rewardFarmer(farmer, amount);
+      await tx.wait();
+      return {
+        hash: tx.hash,
+        success: true,
+        amount: amount,
+        farmer: farmer,
+      };
+    } catch (error) {
+      console.error("Error rewarding farmer:", error);
+      throw error;
+    }
+  }
+
+  async fundRewards(amount?: number) {
+    try {
+      const tx = await this.contract.fundRewards({ value: amount || 0 });
+      await tx.wait();
+      return {
+        hash: tx.hash,
+        success: true,
+        amount: amount || 0,
+      };
+    } catch (error) {
+      console.error("Error funding rewards:", error);
+      throw error;
+    }
   }
 
   // Platform info

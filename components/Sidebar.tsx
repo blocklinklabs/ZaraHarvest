@@ -22,6 +22,8 @@ import {
   ChevronRight,
   Leaf,
   UserPlus,
+  Settings,
+  FileText,
 } from "lucide-react";
 
 const navigation = [
@@ -51,6 +53,12 @@ const navigation = [
     description: "Share farm data",
   },
   {
+    name: "My Submissions",
+    href: "/my-submissions",
+    icon: FileText,
+    description: "View submissions",
+  },
+  {
     name: "Predictions",
     href: "/prediction",
     icon: BarChart3,
@@ -67,6 +75,12 @@ const navigation = [
     href: "/tracker",
     icon: Clock,
     description: "Supply chain tracking",
+  },
+  {
+    name: "Settings",
+    href: "/settings",
+    icon: Settings,
+    description: "Account settings",
   },
 ];
 
@@ -126,7 +140,7 @@ export default function Sidebar() {
                 <TooltipTrigger asChild>
                   <Button
                     variant={isActive ? "default" : "ghost"}
-                    className={`nav-item w-full justify-start ${
+                    className={`nav-item w-full justify-start text-left ${
                       isActive ? "active" : ""
                     } ${isCollapsed ? "px-2" : "px-3"} relative`}
                     onClick={() => handleNavigation(item.href)}
@@ -134,7 +148,9 @@ export default function Sidebar() {
                   >
                     <Icon className="h-4 w-4 flex-shrink-0" />
                     {!isCollapsed && (
-                      <span className="ml-3 truncate flex-1">{item.name}</span>
+                      <span className="ml-3 truncate flex-1 text-left">
+                        {item.name}
+                      </span>
                     )}
                     {!isCollapsed && (item as any).badge && (
                       <Badge

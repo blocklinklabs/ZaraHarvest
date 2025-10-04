@@ -1,6 +1,9 @@
 {
-  "/dashboard/page": "app/dashboard/page.js",
+  "/api/badges/route": "app/api/badges/route.js",
+  "/api/farm-data/route": "app/api/farm-data/route.js",
+  "/api/harvest-tokens/route": "app/api/harvest-tokens/route.js",
+  "/api/loans/route": "app/api/loans/route.js",
+  "/api/yield-predictions/route": "app/api/yield-predictions/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/onboarding/page": "app/onboarding/page.js",
   "/page": "app/page.js"
 }

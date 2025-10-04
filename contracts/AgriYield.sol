@@ -106,6 +106,8 @@ contract AgriYield is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
     event HarvestTokenMinted(uint256 indexed tokenId, address indexed farmer, string cropType, uint256 quantity);
     event SupplyChainEventAdded(uint256 indexed tokenId, string eventType, string location);
     event ReputationUpdated(address indexed farmer, uint256 newScore);
+    event FarmerRewarded(address indexed farmer, uint256 amount, uint256 timestamp);
+    event RewardsFunded(uint256 amount, uint256 timestamp);
     
     // ============ CONSTRUCTOR ============
     
@@ -432,6 +434,33 @@ contract AgriYield is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard {
     
     function withdrawPlatformFees() external onlyOwner {
         payable(owner()).transfer(address(this).balance);
+    }
+    
+    // ============ REWARD SYSTEM ============
+    
+    /**
+     * @dev Reward a farmer with HBAR for data contribution
+     * @param _farmer The farmer's wallet address
+     * @param _amount The amount of HBAR to reward (in wei)
+     */
+    function rewardFarmer(address _farmer, uint256 _amount) external onlyOwner {
+        require(_farmer != address(0), "Invalid farmer address");
+        require(_amount > 0, "Reward amount must be greater than 0");
+        require(address(this).balance >= _amount, "Insufficient contract balance");
+        
+        // Transfer HBAR to farmer
+        payable(_farmer).transfer(_amount);
+        
+        // Emit event for tracking
+        emit FarmerRewarded(_farmer, _amount, block.timestamp);
+    }
+    
+    /**
+     * @dev Fund the contract with HBAR for rewards
+     */
+    function fundRewards() external payable {
+        require(msg.value > 0, "Must send HBAR to fund rewards");
+        emit RewardsFunded(msg.value, block.timestamp);
     }
     
     // ============ REQUIRED OVERRIDES ============

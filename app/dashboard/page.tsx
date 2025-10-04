@@ -55,65 +55,49 @@ export default function Dashboard() {
   const router = useRouter();
   const { isConnected, account } = useWalletStore();
 
-  // For now, use simulation data - in the future this will come from the database
-  const farmData = [
-    {
-      id: "1",
-      cropType: "Maize",
-      location: "Kumasi, Ghana",
-      soilMoisture: 75,
-      weatherNotes: "Sunny with light rain expected",
-      timestamp: new Date(),
-    },
-    {
-      id: "2",
-      cropType: "Cassava",
-      location: "Kumasi, Ghana",
-      soilMoisture: 68,
-      weatherNotes: "Overcast conditions",
-      timestamp: new Date(),
-    },
-  ];
+  // User data state
+  const [userData, setUserData] = useState<any>(null);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
 
-  const yieldPredictions = [
-    {
-      cropType: "Maize",
-      predictedYield: 4.2,
-      riskLevel: 2,
-      confidence: 0.87,
-      timestamp: new Date(),
-    },
-    {
-      cropType: "Cassava",
-      predictedYield: 8.5,
-      riskLevel: 1,
-      confidence: 0.92,
-      timestamp: new Date(),
-    },
-  ];
+  // Dashboard data state
+  const [dashboardData, setDashboardData] = useState({
+    farmData: [] as any[],
+    yieldPredictions: [] as any[],
+    loans: [] as any[],
+    harvestTokens: [] as any[],
+  });
+  const [isLoadingData, setIsLoadingData] = useState(true);
 
-  const loans = [
-    {
-      id: "1",
-      amount: 5000,
-      interestRate: 8.5,
-      status: "active" as const,
-      collateral: ["Maize Harvest Token #1"],
-      startDate: new Date(),
-      endDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-    },
-  ];
+  // Use real data from database
+  const farmData = dashboardData.farmData;
+  const yieldPredictions = dashboardData.yieldPredictions;
+  const loans = dashboardData.loans;
+  const harvestTokens = dashboardData.harvestTokens;
 
-  const harvestTokens = [
-    {
-      id: "1",
-      cropType: "Maize",
-      amount: 1000,
-      tokenizedAmount: 1000,
-      status: "tokenized" as const,
-      qrCode: "QR_CODE_DATA_HERE",
-    },
-  ];
+  // Calculate harvest data from real database
+  const calculateHarvestData = () => {
+    if (yieldPredictions.length === 0) {
+      return {
+        totalTons: 0,
+        primaryCrop: userData?.cropType || "Maize",
+        recentHarvest: null,
+      };
+    }
+
+    // Get the most recent prediction
+    const latestPrediction = yieldPredictions[yieldPredictions.length - 1];
+    const totalTons = latestPrediction.predictedYield || 0;
+    const primaryCrop =
+      latestPrediction.cropType || userData?.cropType || "Maize";
+
+    return {
+      totalTons: totalTons,
+      primaryCrop: primaryCrop,
+      recentHarvest: latestPrediction,
+    };
+  };
+
+  const harvestData = calculateHarvestData();
 
   const badges = [
     {
@@ -145,16 +129,109 @@ export default function Dashboard() {
   };
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   useEffect(() => {
     if (!isConnected) {
       router.push("/");
-    } else {
-      // Simulate initial data loading
-      setTimeout(() => setIsInitialLoading(false), 1500);
     }
   }, [isConnected, router]);
+
+  // Fetch user data from database
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!isConnected || !account?.address) {
+        setIsLoadingUser(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `/api/user/profile?walletAddress=${account.address}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data.user);
+        } else {
+          console.log("User not found in database, using fallback data");
+          // Try to get data from localStorage as fallback
+          const localData = localStorage.getItem("farmerData");
+          if (localData) {
+            const parsedData = JSON.parse(localData);
+            setUserData({
+              name: parsedData.fullName,
+              email: parsedData.email,
+              location: parsedData.location,
+              farmSize: parsedData.farmSize,
+              experience: parsedData.farmingExperience,
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+        // Try to get data from localStorage as fallback
+        const localData = localStorage.getItem("farmerData");
+        if (localData) {
+          const parsedData = JSON.parse(localData);
+          setUserData({
+            name: parsedData.fullName,
+            email: parsedData.email,
+            location: parsedData.location,
+            farmSize: parsedData.farmSize,
+            experience: parsedData.farmingExperience,
+          });
+        }
+      } finally {
+        setIsLoadingUser(false);
+      }
+    };
+
+    fetchUserData();
+  }, [isConnected, account?.address]);
+
+  // Fetch dashboard data from database
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      if (!isConnected || !account?.address) {
+        setIsLoadingData(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `/api/dashboard/data?walletAddress=${account.address}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setDashboardData({
+            farmData: data.farmData || [],
+            yieldPredictions: data.yieldPredictions || [],
+            loans: data.loans || [],
+            harvestTokens: data.harvestTokens || [],
+          });
+        } else {
+          console.log("No dashboard data found, using empty arrays");
+          setDashboardData({
+            farmData: [],
+            yieldPredictions: [],
+            loans: [],
+            harvestTokens: [],
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch dashboard data:", error);
+        setDashboardData({
+          farmData: [],
+          yieldPredictions: [],
+          loans: [],
+          harvestTokens: [],
+        });
+      } finally {
+        setIsLoadingData(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, [isConnected, account?.address]);
 
   const handleRequestPrediction = async () => {
     setIsLoading(true);
@@ -207,7 +284,13 @@ export default function Dashboard() {
               Farm Dashboard
             </h1>
             <p className="text-muted-foreground">
-              Welcome back! Here's your agricultural overview.
+              {isLoadingUser ? (
+                <Skeleton className="h-4 w-64" />
+              ) : (
+                `Welcome back${
+                  userData?.name ? `, ${userData.name}` : ""
+                }! Here's your agricultural overview.`
+              )}
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -236,21 +319,96 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold text-green-800 dark:text-green-200 mb-2">
-                    Welcome back, Kwame! 👋
+                    {isLoadingUser ? (
+                      <Skeleton className="h-8 w-48" />
+                    ) : (
+                      `Welcome back, ${userData?.name || "Farmer"}!`
+                    )}
                   </h2>
                   <p className="text-green-700 dark:text-green-300">
-                    Your farm is performing excellently with 4.2 tons of Maize
-                    harvested this week
+                    {isLoadingUser ? (
+                      <Skeleton className="h-4 w-64" />
+                    ) : (
+                      `Your ${
+                        userData?.farmSize
+                          ? `${userData.farmSize} acre`
+                          : "farm"
+                      } in ${
+                        userData?.location || "your location"
+                      } is performing ${
+                        harvestData.totalTons > 0
+                          ? `excellently with ${harvestData.totalTons} tons of ${harvestData.primaryCrop} predicted`
+                          : "ready for your first yield prediction"
+                      }`
+                    )}
                   </p>
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-green-600">4.2</div>
-                  <div className="text-sm text-green-600">tons harvested</div>
+                  <div className="text-3xl font-bold text-green-600">
+                    {isLoadingData ? (
+                      <Skeleton className="h-8 w-12" />
+                    ) : (
+                      harvestData.totalTons.toFixed(1)
+                    )}
+                  </div>
+                  <div className="text-sm text-green-600">
+                    {isLoadingData ? (
+                      <Skeleton className="h-3 w-16" />
+                    ) : harvestData.totalTons > 0 ? (
+                      "tons predicted"
+                    ) : (
+                      "no predictions"
+                    )}
+                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
         </motion.div>
+
+        {/* Farm Profile - Similar to Welcome Banner */}
+        {userData && !isLoadingUser && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mb-6"
+          >
+            <Card className="dashboard-card bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 border-blue-200 dark:border-blue-800">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-2xl font-bold text-blue-800 dark:text-blue-200 mb-2 flex items-center gap-2">
+                      <BarChart3 className="h-6 w-6 text-blue-600" />
+                      Your Farm Profile
+                    </h2>
+                    <p className="text-blue-700 dark:text-blue-300">
+                      {userData.farmSize
+                        ? `${userData.farmSize} acres`
+                        : "Farm"}{" "}
+                      in {userData.location || "your location"} •{" "}
+                      {userData.experience
+                        ? `${userData.experience} years`
+                        : "New"}{" "}
+                      experience • Growing{" "}
+                      {userData.cropType || "various crops"}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-3xl font-bold text-blue-600">
+                      {farmData.length +
+                        yieldPredictions.length +
+                        harvestTokens.length}
+                    </div>
+                    <div className="text-sm text-blue-600">
+                      total activities
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
 
         {/* Stats Grid */}
         <motion.div
@@ -269,7 +427,7 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              {isInitialLoading ? (
+              {isLoadingData ? (
                 <div className="space-y-2">
                   <Skeleton className="h-8 w-16" />
                   <Skeleton className="h-4 w-24" />
@@ -279,8 +437,16 @@ export default function Dashboard() {
                   <div className="metric-value">{farmData.length}</div>
                   <p className="metric-label">
                     {farmData.length > 0
-                      ? `Latest: ${farmData[farmData.length - 1].cropType}`
-                      : "No data yet"}
+                      ? `Latest: ${farmData[farmData.length - 1].cropType}${
+                          userData?.farmSize
+                            ? ` • ${userData.farmSize} acres`
+                            : ""
+                        }`
+                      : `No data yet${
+                          userData?.farmSize
+                            ? ` • ${userData.farmSize} acres`
+                            : ""
+                        }`}
                   </p>
                 </>
               )}
@@ -297,7 +463,7 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              {isInitialLoading ? (
+              {isLoadingData ? (
                 <div className="space-y-2">
                   <Skeleton className="h-8 w-16" />
                   <Skeleton className="h-4 w-24" />
@@ -328,7 +494,7 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              {isInitialLoading ? (
+              {isLoadingData ? (
                 <div className="space-y-2">
                   <Skeleton className="h-8 w-16" />
                   <Skeleton className="h-4 w-24" />
@@ -358,7 +524,7 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              {isInitialLoading ? (
+              {isLoadingData ? (
                 <div className="space-y-2">
                   <Skeleton className="h-8 w-16" />
                   <Skeleton className="h-4 w-24" />
@@ -405,7 +571,7 @@ export default function Dashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {isInitialLoading ? (
+                {isLoadingData ? (
                   <div className="space-y-4">
                     <Skeleton className="h-32 w-full" />
                     <Skeleton className="h-10 w-full" />
@@ -553,7 +719,7 @@ export default function Dashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {isInitialLoading ? (
+                {isLoadingData ? (
                   <div className="space-y-4">
                     <Skeleton className="h-32 w-full" />
                     <Skeleton className="h-10 w-full" />
@@ -678,7 +844,7 @@ export default function Dashboard() {
               <CardDescription>Your tokenized harvest assets</CardDescription>
             </CardHeader>
             <CardContent>
-              {isInitialLoading ? (
+              {isLoadingData ? (
                 <div className="space-y-4">
                   <Skeleton className="h-20 w-full" />
                   <Skeleton className="h-20 w-full" />

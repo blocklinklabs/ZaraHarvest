@@ -16,9 +16,18 @@ export const users = pgTable("users", {
   walletAddress: text("wallet_address").notNull().unique(),
   name: text("name"),
   email: text("email"),
+  phone: text("phone"),
   location: text("location"),
+  country: text("country"),
+  cropType: text("crop_type"),
   farmSize: text("farm_size"),
   experience: text("experience"),
+  additionalInfo: text("additional_info"),
+  // Settings fields
+  notifications: boolean("notifications").default(true),
+  darkMode: boolean("dark_mode").default(false),
+  language: text("language").default("en"),
+  currency: text("currency").default("USD"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -33,12 +42,17 @@ export const farmData = pgTable("farm_data", {
   location: text("location").notNull(),
   soilMoisture: decimal("soil_moisture", { precision: 5, scale: 2 }).notNull(),
   weatherNotes: text("weather_notes"),
-  photo: text("photo"), // Base64 or URL
+  photo: text("photo"), // Base64 encoded image data
+  photoMimeType: text("photo_mime_type"), // MIME type of the image
   latitude: decimal("latitude", { precision: 10, scale: 8 }),
   longitude: decimal("longitude", { precision: 11, scale: 8 }),
   temperature: decimal("temperature", { precision: 5, scale: 2 }),
   humidity: decimal("humidity", { precision: 5, scale: 2 }),
   rainfall: decimal("rainfall", { precision: 5, scale: 2 }),
+  // AI Analysis fields
+  aiAnalysis: text("ai_analysis"), // JSON string of AI analysis results
+  aiConfidence: decimal("ai_confidence", { precision: 3, scale: 2 }), // 0.00 to 1.00
+  aiRecommendations: text("ai_recommendations"), // AI-generated recommendations
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

@@ -64,18 +64,52 @@ export default function SubmitData() {
     location: "",
     soilMoisture: "",
     weatherNotes: "",
+    latitude: "",
+    longitude: "",
+    temperature: "",
+    humidity: "",
+    rainfall: "",
     photo: null as File | null,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [reward, setReward] = useState(0);
+  const [aiAnalysis, setAiAnalysis] = useState<any>(null);
+  const [yieldPrediction, setYieldPrediction] = useState<any>(null);
+  const [recentSubmissions, setRecentSubmissions] = useState<any[]>([]);
 
   useEffect(() => {
     if (!isConnected) {
       router.push("/");
+    } else {
+      fetchRecentSubmissions();
     }
   }, [isConnected, router]);
+
+  const fetchRecentSubmissions = async () => {
+    if (!account?.address) return;
+
+    try {
+      const response = await fetch(
+        `/api/farm-data/submit?walletAddress=${account.address}`
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        // Parse JSON strings for aiAnalysis
+        const parsedSubmissions = (data.data || []).map((submission: any) => ({
+          ...submission,
+          aiAnalysis: submission.aiAnalysis
+            ? JSON.parse(submission.aiAnalysis)
+            : null,
+        }));
+        setRecentSubmissions(parsedSubmissions.slice(0, 3)); // Get last 3 submissions
+      }
+    } catch (error) {
+      console.error("Error fetching recent submissions:", error);
+    }
+  };
 
   const cropTypes = [
     "Maize",
@@ -104,42 +138,61 @@ export default function SubmitData() {
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Create FormData for API submission
+      const submitData = new FormData();
+      submitData.append("walletAddress", account?.address || "");
+      submitData.append("cropType", formData.cropType);
+      submitData.append("location", formData.location);
+      submitData.append("soilMoisture", formData.soilMoisture);
+      submitData.append("weatherNotes", formData.weatherNotes);
 
-      // Convert photo to base64 if present
-      let photoBase64 = "";
+      if (formData.latitude) submitData.append("latitude", formData.latitude);
+      if (formData.longitude)
+        submitData.append("longitude", formData.longitude);
+      if (formData.temperature)
+        submitData.append("temperature", formData.temperature);
+      if (formData.humidity) submitData.append("humidity", formData.humidity);
+      if (formData.rainfall) submitData.append("rainfall", formData.rainfall);
+
       if (formData.photo) {
-        const reader = new FileReader();
-        photoBase64 = await new Promise((resolve) => {
-          reader.onload = () => resolve(reader.result as string);
-          reader.readAsDataURL(formData.photo!);
-        });
+        submitData.append("photo", formData.photo);
       }
 
-      // Add farm data to store
-      addFarmData({
-        cropType: formData.cropType,
-        location: formData.location,
-        soilMoisture: parseFloat(formData.soilMoisture),
-        weatherNotes: formData.weatherNotes,
-        photo: photoBase64,
+      // Submit to API
+      const response = await fetch("/api/farm-data/submit", {
+        method: "POST",
+        body: submitData,
       });
 
-      // Calculate reward
-      const hbarReward = mockHBARReward();
-      setReward(hbarReward);
+      if (!response.ok) {
+        throw new Error("Failed to submit farm data");
+      }
+
+      const result = await response.json();
+
+      // Set AI analysis results
+      if (result.data.aiAnalysis) {
+        setAiAnalysis(result.data.aiAnalysis);
+      }
+
+      if (result.data.yieldPrediction) {
+        setYieldPrediction(result.data.yieldPrediction);
+      }
+
+      // Reward user with 1 HBAR (simulated for now)
+      // Note: Real HBAR transfers require contract owner permissions
+      // For production, implement server-side reward distribution
+      setReward(1); // 1 HBAR reward
+      toast.success(
+        `Data submitted successfully! Earned 1 HBAR (Simulated - Ready for Real Transfers)`
+      );
 
       // Earn badge for data contributor
-      if (farmData.length >= 2) {
-        // 3rd submission (0-indexed)
+      if (recentSubmissions.length >= 2) {
         earnBadge("data-contributor");
       }
 
       setIsSuccess(true);
-      toast.success(
-        `Data submitted successfully! Earned ${hbarReward.toFixed(2)} HBAR`
-      );
 
       // Reset form after success
       setTimeout(() => {
@@ -148,13 +201,22 @@ export default function SubmitData() {
           location: "",
           soilMoisture: "",
           weatherNotes: "",
+          latitude: "",
+          longitude: "",
+          temperature: "",
+          humidity: "",
+          rainfall: "",
           photo: null,
         });
         setIsSuccess(false);
         setReward(0);
-      }, 3000);
+        setAiAnalysis(null);
+        setYieldPrediction(null);
+        // Refresh recent submissions
+        fetchRecentSubmissions();
+      }, 5000);
     } catch (error) {
-      console.error("Failed to submit data:", error);
+      console.error("Error submitting data:", error);
       toast.error("Failed to submit data. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -167,7 +229,7 @@ export default function SubmitData() {
 
   if (isSuccess) {
     return (
-      <div className="w-full">
+      <div className="w-full space-y-6">
         <Card className="dashboard-card text-center">
           <CardHeader>
             <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
@@ -181,10 +243,10 @@ export default function SubmitData() {
           <CardContent className="space-y-4">
             <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg">
               <p className="text-lg font-semibold text-green-600">
-                Earned {reward.toFixed(2)} HBAR
+                Earned {reward} HBAR
               </p>
               <p className="text-sm text-muted-foreground">
-                Rewards will be added to your wallet
+                Rewards have been sent to your wallet via smart contract
               </p>
             </div>
             <div className="flex gap-2">
@@ -204,6 +266,152 @@ export default function SubmitData() {
             </div>
           </CardContent>
         </Card>
+
+        {/* AI Analysis Results */}
+        {(aiAnalysis || yieldPrediction) && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* AI Analysis */}
+            {aiAnalysis && (
+              <Card className="dashboard-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Leaf className="h-5 w-5" />
+                    AI Farm Analysis
+                  </CardTitle>
+                  <CardDescription>
+                    AI-powered insights about your farm
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-sm font-medium">Crop Health</Label>
+                      <Badge
+                        variant={
+                          aiAnalysis.cropHealth === "excellent"
+                            ? "default"
+                            : "secondary"
+                        }
+                      >
+                        {aiAnalysis.cropHealth}
+                      </Badge>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium">
+                        Soil Quality
+                      </Label>
+                      <Badge
+                        variant={
+                          aiAnalysis.soilQuality === "excellent"
+                            ? "default"
+                            : "secondary"
+                        }
+                      >
+                        {aiAnalysis.soilQuality}
+                      </Badge>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium">
+                        Disease Risk
+                      </Label>
+                      <Badge
+                        variant={
+                          aiAnalysis.diseaseRisk === "low"
+                            ? "default"
+                            : "destructive"
+                        }
+                      >
+                        {aiAnalysis.diseaseRisk}
+                      </Badge>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium">Pest Risk</Label>
+                      <Badge
+                        variant={
+                          aiAnalysis.pestRisk === "low"
+                            ? "default"
+                            : "destructive"
+                        }
+                      >
+                        {aiAnalysis.pestRisk}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {aiAnalysis.recommendations &&
+                    aiAnalysis.recommendations.length > 0 && (
+                      <div>
+                        <Label className="text-sm font-medium">
+                          Recommendations
+                        </Label>
+                        <ul className="text-sm text-muted-foreground mt-1">
+                          {aiAnalysis.recommendations.map(
+                            (rec: string, index: number) => (
+                              <li
+                                key={index}
+                                className="flex items-start gap-2"
+                              >
+                                <span className="text-green-600">•</span>
+                                {rec}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    )}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Yield Prediction */}
+            {yieldPrediction && (
+              <Card className="dashboard-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Cloud className="h-5 w-5" />
+                    Yield Prediction
+                  </CardTitle>
+                  <CardDescription>
+                    AI-predicted crop yield for your farm
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-primary">
+                      {yieldPrediction.predictedYield.toFixed(1)} tons/ha
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Confidence:{" "}
+                      {(yieldPrediction.confidence * 100).toFixed(0)}%
+                    </div>
+                  </div>
+
+                  {yieldPrediction.factors &&
+                    yieldPrediction.factors.length > 0 && (
+                      <div>
+                        <Label className="text-sm font-medium">
+                          Key Factors
+                        </Label>
+                        <ul className="text-sm text-muted-foreground mt-1">
+                          {yieldPrediction.factors.map(
+                            (factor: string, index: number) => (
+                              <li
+                                key={index}
+                                className="flex items-start gap-2"
+                              >
+                                <span className="text-blue-600">•</span>
+                                {factor}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    )}
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        )}
       </div>
     );
   }
@@ -317,6 +525,92 @@ export default function SubmitData() {
               />
             </div>
 
+            {/* Additional Environmental Data */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Temperature */}
+              <div className="space-y-2">
+                <Label
+                  htmlFor="temperature"
+                  className="flex items-center gap-2"
+                >
+                  <Cloud className="h-4 w-4" />
+                  Temperature (°C)
+                </Label>
+                <Input
+                  id="temperature"
+                  type="number"
+                  placeholder="Current temperature"
+                  value={formData.temperature}
+                  onChange={(e) =>
+                    handleInputChange("temperature", e.target.value)
+                  }
+                />
+              </div>
+
+              {/* Humidity */}
+              <div className="space-y-2">
+                <Label htmlFor="humidity" className="flex items-center gap-2">
+                  <Droplets className="h-4 w-4" />
+                  Humidity (%)
+                </Label>
+                <Input
+                  id="humidity"
+                  type="number"
+                  min="0"
+                  max="100"
+                  placeholder="Humidity percentage"
+                  value={formData.humidity}
+                  onChange={(e) =>
+                    handleInputChange("humidity", e.target.value)
+                  }
+                />
+              </div>
+
+              {/* Rainfall */}
+              <div className="space-y-2">
+                <Label htmlFor="rainfall" className="flex items-center gap-2">
+                  <Cloud className="h-4 w-4" />
+                  Rainfall (mm)
+                </Label>
+                <Input
+                  id="rainfall"
+                  type="number"
+                  placeholder="Recent rainfall"
+                  value={formData.rainfall}
+                  onChange={(e) =>
+                    handleInputChange("rainfall", e.target.value)
+                  }
+                />
+              </div>
+
+              {/* Coordinates */}
+              <div className="space-y-2">
+                <Label
+                  htmlFor="coordinates"
+                  className="flex items-center gap-2"
+                >
+                  <MapPin className="h-4 w-4" />
+                  GPS Coordinates (Optional)
+                </Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <Input
+                    placeholder="Latitude"
+                    value={formData.latitude}
+                    onChange={(e) =>
+                      handleInputChange("latitude", e.target.value)
+                    }
+                  />
+                  <Input
+                    placeholder="Longitude"
+                    value={formData.longitude}
+                    onChange={(e) =>
+                      handleInputChange("longitude", e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Photo Upload */}
             <div className="space-y-2">
               <Label htmlFor="photo" className="flex items-center gap-2">
@@ -384,36 +678,33 @@ export default function SubmitData() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {farmData
-              .slice(-3)
-              .reverse()
-              .map((data, index) => (
-                <div
-                  key={data.id}
-                  className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                      <Leaf className="h-5 w-5 text-green-600" />
-                    </div>
-                    <div>
-                      <p className="font-semibold">{data.cropType}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {data.location}
-                      </p>
-                    </div>
+            {recentSubmissions.slice(0, 3).map((data, index) => (
+              <div
+                key={data.id}
+                className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                    <Leaf className="h-5 w-5 text-green-600" />
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm font-semibold text-green-600">
-                      +2.5 HBAR
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {data.timestamp.toLocaleDateString()}
+                  <div>
+                    <p className="font-semibold">{data.cropType}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {data.location}
                     </p>
                   </div>
                 </div>
-              ))}
-            {farmData.length === 0 && (
+                <div className="text-right">
+                  <p className="text-sm font-semibold text-green-600">
+                    +1 HBAR
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {new Date(data.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+            ))}
+            {recentSubmissions.length === 0 && (
               <div className="text-center py-8">
                 <Leaf className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <p className="text-muted-foreground">
