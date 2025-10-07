@@ -206,7 +206,7 @@ export class AgriYieldHelper {
   }
 
   // Reward System
-  async rewardFarmer(farmer: string, amount: number) {
+  async rewardFarmer(farmer: string, amount: bigint) {
     try {
       const tx = await this.contract.rewardFarmer(farmer, amount);
       await tx.wait();
@@ -222,14 +222,14 @@ export class AgriYieldHelper {
     }
   }
 
-  async fundRewards(amount?: number) {
+  async fundRewards(amount?: bigint) {
     try {
-      const tx = await this.contract.fundRewards({ value: amount || 0 });
+      const tx = await this.contract.fundRewards({ value: amount || 0n });
       await tx.wait();
       return {
         hash: tx.hash,
         success: true,
-        amount: amount || 0,
+        amount: amount || 0n,
       };
     } catch (error) {
       console.error("Error funding rewards:", error);

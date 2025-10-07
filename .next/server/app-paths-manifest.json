@@ -1,9 +1,6 @@
 {
-  "/api/badges/route": "app/api/badges/route.js",
-  "/api/farm-data/route": "app/api/farm-data/route.js",
-  "/api/harvest-tokens/route": "app/api/harvest-tokens/route.js",
-  "/api/loans/route": "app/api/loans/route.js",
-  "/api/yield-predictions/route": "app/api/yield-predictions/route.js",
+  "/api/farm-data/submit/route": "app/api/farm-data/submit/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/page": "app/page.js"
+  "/my-submissions/page": "app/my-submissions/page.js",
+  "/submit-data/page": "app/submit-data/page.js"
 }

@@ -24,6 +24,8 @@ import { Badge } from "@/components/ui/badge";
 import { useWalletStore } from "@/lib/wallet-provider";
 import { mockHBARReward } from "@/lib/utils";
 import { toast } from "sonner";
+import { AgriYieldHelper } from "@/lib/contract";
+import { ethers } from "ethers";
 import {
   Leaf,
   MapPin,
@@ -179,13 +181,50 @@ export default function SubmitData() {
         setYieldPrediction(result.data.yieldPrediction);
       }
 
-      // Reward user with 1 HBAR (simulated for now)
-      // Note: Real HBAR transfers require contract owner permissions
-      // For production, implement server-side reward distribution
-      setReward(1); // 1 HBAR reward
-      toast.success(
-        `Data submitted successfully! Earned 1 HBAR (Simulated - Ready for Real Transfers)`
-      );
+      // Reward user with 1 HBAR using real smart contract
+      try {
+        // Check if we have a wallet provider
+        if (!window.ethereum) {
+          throw new Error("No wallet provider found");
+        }
+
+        // Create provider and signer for Hedera Testnet
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+
+        // Initialize contract helper with signer
+        const contractHelper = new AgriYieldHelper(signer);
+
+        // Convert 1 HBAR to wei
+        const rewardAmount = ethers.parseEther("1"); // 1 HBAR in wei
+
+        console.log("🌾 Sending real HBAR reward via smart contract...");
+
+        // Call the smart contract to reward the farmer
+        const rewardTx = await contractHelper.rewardFarmer(
+          account.address,
+          rewardAmount
+        );
+
+        if (rewardTx.success) {
+          setReward(1); // 1 HBAR reward
+          toast.success(
+            `🎉 Data submitted successfully! Earned 1 HBAR (Transaction: ${rewardTx.hash})`
+          );
+          console.log("✅ Real HBAR reward sent:", rewardTx);
+        } else {
+          throw new Error("Reward transaction failed");
+        }
+      } catch (contractError) {
+        console.error("❌ Smart contract reward failed:", contractError);
+        toast.error("Failed to send HBAR reward. Please try again.");
+
+        // Still show success for data submission
+        setReward(0);
+        toast.success(
+          "Data submitted successfully! (Reward failed - contact support)"
+        );
+      }
 
       // Earn badge for data contributor
       if (recentSubmissions.length >= 2) {
