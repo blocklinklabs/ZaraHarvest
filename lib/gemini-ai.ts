@@ -1,9 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Initialize Gemini AI
-const genAI = new GoogleGenerativeAI(
-  process.env.GEMINI_API_KEY || "AIzaSyCDjJOR9qH3WqatqCkZwb-XHE6lKu5XS1c"
-);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export interface FarmDataAnalysis {
   cropHealth: "excellent" | "good" | "fair" | "poor";
