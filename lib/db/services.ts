@@ -77,6 +77,16 @@ export async function createYieldPrediction(
   return prediction;
 }
 
+export async function createYieldPredictionWithFarmData(
+  predictionData: NewYieldPrediction & { farmDataId?: string }
+) {
+  const [prediction] = await db
+    .insert(yieldPredictions)
+    .values(predictionData)
+    .returning();
+  return prediction;
+}
+
 export async function getYieldPredictionsByUserId(userId: string) {
   return await db
     .select()
@@ -95,8 +105,48 @@ export async function getLatestYieldPredictionByUserId(userId: string) {
   return prediction;
 }
 
+export async function getYieldPredictionsWithFarmDataByUserId(userId: string) {
+  return await db
+    .select({
+      id: yieldPredictions.id,
+      cropType: yieldPredictions.cropType,
+      predictedYield: yieldPredictions.predictedYield,
+      riskLevel: yieldPredictions.riskLevel,
+      confidence: yieldPredictions.confidence,
+      modelVersion: yieldPredictions.modelVersion,
+      inputData: yieldPredictions.inputData,
+      createdAt: yieldPredictions.createdAt,
+      farmDataId: yieldPredictions.farmDataId,
+      farmData: {
+        id: farmData.id,
+        location: farmData.location,
+        soilMoisture: farmData.soilMoisture,
+        weatherNotes: farmData.weatherNotes,
+        temperature: farmData.temperature,
+        humidity: farmData.humidity,
+        rainfall: farmData.rainfall,
+        createdAt: farmData.createdAt,
+      },
+    })
+    .from(yieldPredictions)
+    .leftJoin(farmData, eq(yieldPredictions.farmDataId, farmData.id))
+    .where(eq(yieldPredictions.userId, userId))
+    .orderBy(desc(yieldPredictions.createdAt));
+}
+
 // Loan services
 export async function createLoan(loanData: NewLoan) {
+  const [loan] = await db.insert(loans).values(loanData).returning();
+  return loan;
+}
+
+export async function createLoanWithBlockchain(
+  loanData: NewLoan & {
+    blockchainLoanId?: string;
+    collateralPredictionId?: string;
+    blockchainTxHash?: string;
+  }
+) {
   const [loan] = await db.insert(loans).values(loanData).returning();
   return loan;
 }
@@ -129,8 +179,42 @@ export async function updateLoanStatus(
   return loan;
 }
 
+export async function updateLoanRepayment(
+  id: string,
+  repaidAmount: string,
+  status?: "pending" | "active" | "completed" | "defaulted"
+) {
+  const updateData: any = {
+    repaidAmount,
+    updatedAt: new Date(),
+  };
+  if (status) {
+    updateData.status = status;
+  }
+
+  const [loan] = await db
+    .update(loans)
+    .set(updateData)
+    .where(eq(loans.id, id))
+    .returning();
+  return loan;
+}
+
 // Harvest token services
 export async function createHarvestToken(tokenData: NewHarvestToken) {
+  const [token] = await db.insert(harvestTokens).values(tokenData).returning();
+  return token;
+}
+
+export async function createHarvestTokenWithBlockchain(
+  tokenData: NewHarvestToken & {
+    yieldPredictionId?: string;
+    qualityGrade?: string;
+    metadataURI?: string;
+    blockchainTokenId?: string;
+    blockchainTxHash?: string;
+  }
+) {
   const [token] = await db.insert(harvestTokens).values(tokenData).returning();
   return token;
 }
@@ -145,11 +229,37 @@ export async function getHarvestTokensByUserId(userId: string) {
 
 export async function updateHarvestTokenStatus(
   id: string,
-  status: "pending" | "tokenized" | "sold" | "burned"
+  status: "pending" | "tokenized" | "sold" | "burned" | "locked"
 ) {
   const [token] = await db
     .update(harvestTokens)
     .set({ status, updatedAt: new Date() })
+    .where(eq(harvestTokens.id, id))
+    .returning();
+  return token;
+}
+
+export async function getAvailableCollateralByUserId(userId: string) {
+  return await db
+    .select()
+    .from(harvestTokens)
+    .where(
+      and(
+        eq(harvestTokens.userId, userId),
+        eq(harvestTokens.status, "tokenized"),
+        eq(harvestTokens.isLocked, false)
+      )
+    )
+    .orderBy(desc(harvestTokens.createdAt));
+}
+
+export async function updateHarvestTokenLockStatus(
+  id: string,
+  isLocked: boolean
+) {
+  const [token] = await db
+    .update(harvestTokens)
+    .set({ isLocked, updatedAt: new Date() })
     .where(eq(harvestTokens.id, id))
     .returning();
   return token;

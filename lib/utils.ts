@@ -5,11 +5,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatCurrency(amount: number, currency = "USD") {
+export function formatCurrency(
+  amount: number | null | undefined,
+  currency = "USD"
+) {
+  const safeAmount = amount ?? 0;
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
-  }).format(amount);
+  }).format(safeAmount);
 }
 
 export function safeDate(date: any): Date {
@@ -28,11 +32,21 @@ export function safeDate(date: any): Date {
 export function formatDate(date: Date | string | number) {
   const dateObj = safeDate(date);
 
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(dateObj);
+  // Double-check that the date is valid before formatting
+  if (isNaN(dateObj.getTime())) {
+    return "Invalid Date";
+  }
+
+  try {
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }).format(dateObj);
+  } catch (error) {
+    console.error("Error formatting date:", error, "Input:", date);
+    return "Invalid Date";
+  }
 }
 
 export function generateMockYieldPrediction(cropType: string): {

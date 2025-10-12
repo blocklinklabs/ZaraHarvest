@@ -1,0 +1,11 @@
+var R=require("../../../../chunks/[turbopack]_runtime.js")("server/app/api/rewards/send/route.js")
+R.c("server/chunks/node_modules_next_ba668f86._.js")
+R.c("server/chunks/node_modules_ethers_lib_esm_abi_ab6c11e1._.js")
+R.c("server/chunks/node_modules_ethers_lib_esm_providers_b7e4eb2c._.js")
+R.c("server/chunks/node_modules_ethers_lib_esm_0a3ff82c._.js")
+R.c("server/chunks/01637_@noble_curves_esm_d0c1a9f8._.js")
+R.c("server/chunks/node_modules_723c8f08._.js")
+R.c("server/chunks/[root-of-the-server]__58682504._.js")
+R.m("[project]/.next-internal/server/app/api/rewards/send/route/actions.js [app-rsc] (server actions loader, ecmascript)")
+R.m("[project]/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/app/api/rewards/send/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)")
+module.exports=R.m("[project]/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/app/api/rewards/send/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)").exports

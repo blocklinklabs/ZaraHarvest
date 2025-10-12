@@ -204,7 +204,7 @@ export default function Onboarding() {
 
       toast.success("Registration Complete!", {
         description:
-          "Welcome to AgriYield! Your data has been saved to the database. Redirecting to dashboard...",
+          "Welcome to ZaraHarvest! Your data has been saved to the database. Redirecting to dashboard...",
         icon: <CheckCircle className="h-4 w-4 text-green-500" />,
       });
 
@@ -263,7 +263,7 @@ export default function Onboarding() {
               Farmer Onboarding
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-400">
-              Let's get you set up on AgriYield
+              Let's get you set up on ZaraHarvest
             </p>
           </div>
 

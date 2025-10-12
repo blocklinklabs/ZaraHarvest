@@ -887,10 +887,11 @@ function cn(...inputs) {
     return (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$tailwind$2d$merge$2f$dist$2f$bundle$2d$mjs$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["twMerge"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$clsx$2f$dist$2f$clsx$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(inputs));
 }
 function formatCurrency(amount, currency = "USD") {
+    const safeAmount = amount ?? 0;
     return new Intl.NumberFormat("en-US", {
         style: "currency",
         currency
-    }).format(amount);
+    }).format(safeAmount);
 }
 function safeDate(date) {
     if (date instanceof Date) {
@@ -904,11 +905,20 @@ function safeDate(date) {
 }
 function formatDate(date) {
     const dateObj = safeDate(date);
-    return new Intl.DateTimeFormat("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-    }).format(dateObj);
+    // Double-check that the date is valid before formatting
+    if (isNaN(dateObj.getTime())) {
+        return "Invalid Date";
+    }
+    try {
+        return new Intl.DateTimeFormat("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+        }).format(dateObj);
+    } catch (error) {
+        console.error("Error formatting date:", error, "Input:", date);
+        return "Invalid Date";
+    }
 }
 function generateMockYieldPrediction(cropType) {
     const baseYield = {
@@ -1876,7 +1886,7 @@ function Header() {
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                                     className: "text-xl font-bold text-foreground",
-                                    children: "AgriYield"
+                                    children: "ZaraHarvest"
                                 }, void 0, false, {
                                     fileName: "[project]/components/Header.tsx",
                                     lineNumber: 123,
@@ -2634,7 +2644,7 @@ function Sidebar() {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         className: "text-sm font-medium text-foreground truncate",
-                                        children: "AgriYield"
+                                        children: "ZaraHarvest"
                                     }, void 0, false, {
                                         fileName: "[project]/components/Sidebar.tsx",
                                         lineNumber: 189,
@@ -2925,7 +2935,7 @@ function Footer() {
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 className: "text-lg font-bold text-foreground",
-                                                children: "AgriYield"
+                                                children: "ZaraHarvest"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/Footer.tsx",
                                                 lineNumber: 22,
@@ -3270,7 +3280,7 @@ function Footer() {
                                 className: "flex items-center gap-4 text-sm text-muted-foreground",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        children: "© 2025 AgriYield"
+                                        children: "© 2025 ZaraHarvest"
                                     }, void 0, false, {
                                         fileName: "[project]/components/Footer.tsx",
                                         lineNumber: 150,

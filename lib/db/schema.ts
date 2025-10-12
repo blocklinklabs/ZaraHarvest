@@ -62,6 +62,9 @@ export const yieldPredictions = pgTable("yield_predictions", {
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
+  farmDataId: uuid("farm_data_id").references(() => farmData.id, {
+    onDelete: "set null",
+  }),
   cropType: text("crop_type").notNull(),
   predictedYield: decimal("predicted_yield", {
     precision: 8,
@@ -80,6 +83,7 @@ export const loans = pgTable("loans", {
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
+  blockchainLoanId: text("blockchain_loan_id"), // Smart contract loan ID
   amount: decimal("amount", { precision: 12, scale: 2 }).notNull(),
   interestRate: decimal("interest_rate", { precision: 5, scale: 2 }).notNull(),
   status: text("status", {
@@ -88,8 +92,12 @@ export const loans = pgTable("loans", {
     .notNull()
     .default("pending"),
   collateral: jsonb("collateral").notNull(), // Array of token IDs
+  collateralPredictionId: text("collateral_prediction_id"), // Smart contract prediction ID
   startDate: timestamp("start_date").notNull(),
   endDate: timestamp("end_date").notNull(),
+  repaidAmount: decimal("repaid_amount", { precision: 12, scale: 2 }).default(
+    "0"
+  ),
   blockchainTxHash: text("blockchain_tx_hash"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -101,17 +109,26 @@ export const harvestTokens = pgTable("harvest_tokens", {
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
+  yieldPredictionId: uuid("yield_prediction_id").references(
+    () => yieldPredictions.id,
+    { onDelete: "set null" }
+  ),
   cropType: text("crop_type").notNull(),
   amount: decimal("amount", { precision: 8, scale: 2 }).notNull(),
   tokenizedAmount: decimal("tokenized_amount", {
     precision: 12,
     scale: 2,
   }).notNull(),
-  status: text("status", { enum: ["pending", "tokenized", "sold", "burned"] })
+  qualityGrade: text("quality_grade"), // A, B, C grade
+  status: text("status", {
+    enum: ["pending", "tokenized", "sold", "burned", "locked"],
+  })
     .notNull()
     .default("pending"),
+  isLocked: boolean("is_locked").default(false), // Locked as loan collateral
   qrCode: text("qr_code").notNull(),
-  blockchainTokenId: text("blockchain_token_id"),
+  metadataURI: text("metadata_uri"), // NFT metadata URI
+  blockchainTokenId: text("blockchain_token_id"), // Smart contract token ID
   blockchainTxHash: text("blockchain_tx_hash"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -181,6 +198,10 @@ export const yieldPredictionsRelations = relations(
       fields: [yieldPredictions.userId],
       references: [users.id],
     }),
+    farmData: one(farmData, {
+      fields: [yieldPredictions.farmDataId],
+      references: [farmData.id],
+    }),
   })
 );
 
@@ -197,6 +218,10 @@ export const harvestTokensRelations = relations(
     user: one(users, {
       fields: [harvestTokens.userId],
       references: [users.id],
+    }),
+    yieldPrediction: one(yieldPredictions, {
+      fields: [harvestTokens.yieldPredictionId],
+      references: [yieldPredictions.id],
     }),
     supplyChainEvents: many(supplyChainEvents),
   })

@@ -629,11 +629,40 @@ function SubmitData() {
             if (result.data.yieldPrediction) {
                 setYieldPrediction(result.data.yieldPrediction);
             }
-            // Reward user with 1 HBAR (simulated for now)
-            // Note: Real HBAR transfers require contract owner permissions
-            // For production, implement server-side reward distribution
-            setReward(1); // 1 HBAR reward
-            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success("Data submitted successfully! Earned 1 HBAR (Simulated - Ready for Real Transfers)");
+            // Reward user with 1 HBAR using backend API
+            try {
+                console.log("🌾 Sending real HBAR reward via API...");
+                // Call the backend API to send HBAR reward
+                const rewardResponse = await fetch("/api/rewards/send", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        walletAddress: account === null || account === void 0 ? void 0 : account.address,
+                        amount: "1"
+                    })
+                });
+                if (!rewardResponse.ok) {
+                    const errorData = await rewardResponse.json();
+                    throw new Error(errorData.error || "Failed to send reward");
+                }
+                const rewardData = await rewardResponse.json();
+                if (rewardData.success) {
+                    setReward(1); // 1 HBAR reward
+                    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success("🎉 Data submitted successfully! Earned 1 HBAR (Transaction: ".concat(rewardData.data.transactionHash, ")"));
+                    console.log("✅ Real HBAR reward sent:", rewardData.data);
+                } else {
+                    throw new Error("Reward transaction failed");
+                }
+            } catch (rewardError) {
+                console.error("❌ HBAR reward failed:", rewardError);
+                const errorMessage = rewardError instanceof Error ? rewardError.message : "Unknown error";
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Failed to send HBAR reward: ".concat(errorMessage));
+                // Still show success for data submission
+                setReward(0);
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success("Data submitted successfully! (Reward failed - contact support)");
+            }
             // Earn badge for data contributor
             if (recentSubmissions.length >= 2) {
                 earnBadge("data-contributor");
@@ -683,7 +712,7 @@ function SubmitData() {
                                     className: "h-16 w-16 text-green-600 mx-auto mb-4"
                                 }, void 0, false, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 237,
+                                    lineNumber: 274,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardTitle"], {
@@ -691,20 +720,20 @@ function SubmitData() {
                                     children: "Data Submitted Successfully!"
                                 }, void 0, false, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 238,
+                                    lineNumber: 275,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
                                     children: "Thank you for contributing to the AgriYield network"
                                 }, void 0, false, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 241,
+                                    lineNumber: 278,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/submit-data/page.tsx",
-                            lineNumber: 236,
+                            lineNumber: 273,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -722,7 +751,7 @@ function SubmitData() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 247,
+                                            lineNumber: 284,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -730,13 +759,13 @@ function SubmitData() {
                                             children: "Rewards have been sent to your wallet via smart contract"
                                         }, void 0, false, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 250,
+                                            lineNumber: 287,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 246,
+                                    lineNumber: 283,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -748,7 +777,7 @@ function SubmitData() {
                                             children: "View Dashboard"
                                         }, void 0, false, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 255,
+                                            lineNumber: 292,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -758,25 +787,25 @@ function SubmitData() {
                                             children: "Submit More Data"
                                         }, void 0, false, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 261,
+                                            lineNumber: 298,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 254,
+                                    lineNumber: 291,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/submit-data/page.tsx",
-                            lineNumber: 245,
+                            lineNumber: 282,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/submit-data/page.tsx",
-                    lineNumber: 235,
+                    lineNumber: 272,
                     columnNumber: 9
                 }, this),
                 (aiAnalysis || yieldPrediction) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -794,27 +823,27 @@ function SubmitData() {
                                                     className: "h-5 w-5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 280,
+                                                    lineNumber: 317,
                                                     columnNumber: 21
                                                 }, this),
                                                 "AI Farm Analysis"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 279,
+                                            lineNumber: 316,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
                                             children: "AI-powered insights about your farm"
                                         }, void 0, false, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 283,
+                                            lineNumber: 320,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 278,
+                                    lineNumber: 315,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -830,7 +859,7 @@ function SubmitData() {
                                                             children: "Crop Health"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 290,
+                                                            lineNumber: 327,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -838,13 +867,13 @@ function SubmitData() {
                                                             children: aiAnalysis.cropHealth
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 291,
+                                                            lineNumber: 328,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 289,
+                                                    lineNumber: 326,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -854,7 +883,7 @@ function SubmitData() {
                                                             children: "Soil Quality"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 302,
+                                                            lineNumber: 339,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -862,13 +891,13 @@ function SubmitData() {
                                                             children: aiAnalysis.soilQuality
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 305,
+                                                            lineNumber: 342,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 301,
+                                                    lineNumber: 338,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -878,7 +907,7 @@ function SubmitData() {
                                                             children: "Disease Risk"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 316,
+                                                            lineNumber: 353,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -886,13 +915,13 @@ function SubmitData() {
                                                             children: aiAnalysis.diseaseRisk
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 319,
+                                                            lineNumber: 356,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 315,
+                                                    lineNumber: 352,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -902,7 +931,7 @@ function SubmitData() {
                                                             children: "Pest Risk"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 330,
+                                                            lineNumber: 367,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -910,19 +939,19 @@ function SubmitData() {
                                                             children: aiAnalysis.pestRisk
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 331,
+                                                            lineNumber: 368,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 329,
+                                                    lineNumber: 366,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 288,
+                                            lineNumber: 325,
                                             columnNumber: 19
                                         }, this),
                                         aiAnalysis.recommendations && aiAnalysis.recommendations.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -932,7 +961,7 @@ function SubmitData() {
                                                     children: "Recommendations"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 346,
+                                                    lineNumber: 383,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -945,37 +974,37 @@ function SubmitData() {
                                                                     children: "•"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                                    lineNumber: 356,
+                                                                    lineNumber: 393,
                                                                     columnNumber: 33
                                                                 }, this),
                                                                 rec
                                                             ]
                                                         }, index, true, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 352,
+                                                            lineNumber: 389,
                                                             columnNumber: 31
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 349,
+                                                    lineNumber: 386,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 345,
+                                            lineNumber: 382,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 287,
+                                    lineNumber: 324,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/submit-data/page.tsx",
-                            lineNumber: 277,
+                            lineNumber: 314,
                             columnNumber: 15
                         }, this),
                         yieldPrediction && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -990,27 +1019,27 @@ function SubmitData() {
                                                     className: "h-5 w-5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 373,
+                                                    lineNumber: 410,
                                                     columnNumber: 21
                                                 }, this),
                                                 "Yield Prediction"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 372,
+                                            lineNumber: 409,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
                                             children: "AI-predicted crop yield for your farm"
                                         }, void 0, false, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 376,
+                                            lineNumber: 413,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 371,
+                                    lineNumber: 408,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -1027,7 +1056,7 @@ function SubmitData() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 382,
+                                                    lineNumber: 419,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1040,13 +1069,13 @@ function SubmitData() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 385,
+                                                    lineNumber: 422,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 381,
+                                            lineNumber: 418,
                                             columnNumber: 19
                                         }, this),
                                         yieldPrediction.factors && yieldPrediction.factors.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1056,7 +1085,7 @@ function SubmitData() {
                                                     children: "Key Factors"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 394,
+                                                    lineNumber: 431,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -1069,49 +1098,49 @@ function SubmitData() {
                                                                     children: "•"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                                    lineNumber: 404,
+                                                                    lineNumber: 441,
                                                                     columnNumber: 33
                                                                 }, this),
                                                                 factor
                                                             ]
                                                         }, index, true, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 400,
+                                                            lineNumber: 437,
                                                             columnNumber: 31
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 397,
+                                                    lineNumber: 434,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 393,
+                                            lineNumber: 430,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 380,
+                                    lineNumber: 417,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/submit-data/page.tsx",
-                            lineNumber: 370,
+                            lineNumber: 407,
                             columnNumber: 15
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/submit-data/page.tsx",
-                    lineNumber: 274,
+                    lineNumber: 311,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/submit-data/page.tsx",
-            lineNumber: 234,
+            lineNumber: 271,
             columnNumber: 7
         }, this);
     }
@@ -1130,14 +1159,14 @@ function SubmitData() {
                                 className: "h-4 w-4 mr-2"
                             }, void 0, false, {
                                 fileName: "[project]/app/submit-data/page.tsx",
-                                lineNumber: 430,
+                                lineNumber: 467,
                                 columnNumber: 11
                             }, this),
                             "Back"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/submit-data/page.tsx",
-                        lineNumber: 425,
+                        lineNumber: 462,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1147,7 +1176,7 @@ function SubmitData() {
                                 children: "Submit Farm Data"
                             }, void 0, false, {
                                 fileName: "[project]/app/submit-data/page.tsx",
-                                lineNumber: 434,
+                                lineNumber: 471,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1155,19 +1184,19 @@ function SubmitData() {
                                 children: "Help improve yield predictions by sharing your farm data"
                             }, void 0, false, {
                                 fileName: "[project]/app/submit-data/page.tsx",
-                                lineNumber: 437,
+                                lineNumber: 474,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/submit-data/page.tsx",
-                        lineNumber: 433,
+                        lineNumber: 470,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/submit-data/page.tsx",
-                lineNumber: 424,
+                lineNumber: 461,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -1182,27 +1211,27 @@ function SubmitData() {
                                         className: "h-5 w-5"
                                     }, void 0, false, {
                                         fileName: "[project]/app/submit-data/page.tsx",
-                                        lineNumber: 446,
+                                        lineNumber: 483,
                                         columnNumber: 13
                                     }, this),
                                     "Farm Data Collection"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/submit-data/page.tsx",
-                                lineNumber: 445,
+                                lineNumber: 482,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
                                 children: "Earn HBAR tokens by contributing data to the network"
                             }, void 0, false, {
                                 fileName: "[project]/app/submit-data/page.tsx",
-                                lineNumber: 449,
+                                lineNumber: 486,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/submit-data/page.tsx",
-                        lineNumber: 444,
+                        lineNumber: 481,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -1221,14 +1250,14 @@ function SubmitData() {
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 458,
+                                                    lineNumber: 495,
                                                     columnNumber: 17
                                                 }, this),
                                                 "Crop Type"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 457,
+                                            lineNumber: 494,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
@@ -1240,12 +1269,12 @@ function SubmitData() {
                                                         placeholder: "Select crop type"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/submit-data/page.tsx",
-                                                        lineNumber: 466,
+                                                        lineNumber: 503,
                                                         columnNumber: 19
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 465,
+                                                    lineNumber: 502,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -1254,24 +1283,24 @@ function SubmitData() {
                                                             children: crop
                                                         }, crop, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 470,
+                                                            lineNumber: 507,
                                                             columnNumber: 21
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 468,
+                                                    lineNumber: 505,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 461,
+                                            lineNumber: 498,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 456,
+                                    lineNumber: 493,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1285,14 +1314,14 @@ function SubmitData() {
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 481,
+                                                    lineNumber: 518,
                                                     columnNumber: 17
                                                 }, this),
                                                 "Location"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 480,
+                                            lineNumber: 517,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1303,13 +1332,13 @@ function SubmitData() {
                                             required: true
                                         }, void 0, false, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 484,
+                                            lineNumber: 521,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 479,
+                                    lineNumber: 516,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1323,14 +1352,14 @@ function SubmitData() {
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 496,
+                                                    lineNumber: 533,
                                                     columnNumber: 17
                                                 }, this),
                                                 "Soil Moisture (%)"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 495,
+                                            lineNumber: 532,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1344,13 +1373,13 @@ function SubmitData() {
                                             required: true
                                         }, void 0, false, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 499,
+                                            lineNumber: 536,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 494,
+                                    lineNumber: 531,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1364,14 +1393,14 @@ function SubmitData() {
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 516,
+                                                    lineNumber: 553,
                                                     columnNumber: 17
                                                 }, this),
                                                 "Weather Notes"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 515,
+                                            lineNumber: 552,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -1382,13 +1411,13 @@ function SubmitData() {
                                             rows: 3
                                         }, void 0, false, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 519,
+                                            lineNumber: 556,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 514,
+                                    lineNumber: 551,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1405,14 +1434,14 @@ function SubmitData() {
                                                             className: "h-4 w-4"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 538,
+                                                            lineNumber: 575,
                                                             columnNumber: 19
                                                         }, this),
                                                         "Temperature (°C)"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 534,
+                                                    lineNumber: 571,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1423,13 +1452,13 @@ function SubmitData() {
                                                     onChange: (e)=>handleInputChange("temperature", e.target.value)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 541,
+                                                    lineNumber: 578,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 533,
+                                            lineNumber: 570,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1443,14 +1472,14 @@ function SubmitData() {
                                                             className: "h-4 w-4"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 555,
+                                                            lineNumber: 592,
                                                             columnNumber: 19
                                                         }, this),
                                                         "Humidity (%)"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 554,
+                                                    lineNumber: 591,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1463,13 +1492,13 @@ function SubmitData() {
                                                     onChange: (e)=>handleInputChange("humidity", e.target.value)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 558,
+                                                    lineNumber: 595,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 553,
+                                            lineNumber: 590,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1483,14 +1512,14 @@ function SubmitData() {
                                                             className: "h-4 w-4"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 574,
+                                                            lineNumber: 611,
                                                             columnNumber: 19
                                                         }, this),
                                                         "Rainfall (mm)"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 573,
+                                                    lineNumber: 610,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1501,13 +1530,13 @@ function SubmitData() {
                                                     onChange: (e)=>handleInputChange("rainfall", e.target.value)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 577,
+                                                    lineNumber: 614,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 572,
+                                            lineNumber: 609,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1521,14 +1550,14 @@ function SubmitData() {
                                                             className: "h-4 w-4"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 594,
+                                                            lineNumber: 631,
                                                             columnNumber: 19
                                                         }, this),
                                                         "GPS Coordinates (Optional)"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 590,
+                                                    lineNumber: 627,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1540,7 +1569,7 @@ function SubmitData() {
                                                             onChange: (e)=>handleInputChange("latitude", e.target.value)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 598,
+                                                            lineNumber: 635,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1549,25 +1578,25 @@ function SubmitData() {
                                                             onChange: (e)=>handleInputChange("longitude", e.target.value)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 605,
+                                                            lineNumber: 642,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 597,
+                                                    lineNumber: 634,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 589,
+                                            lineNumber: 626,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 531,
+                                    lineNumber: 568,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1581,14 +1610,14 @@ function SubmitData() {
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 619,
+                                                    lineNumber: 656,
                                                     columnNumber: 17
                                                 }, this),
                                                 "Farm Photo (Optional)"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 618,
+                                            lineNumber: 655,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1598,7 +1627,7 @@ function SubmitData() {
                                                     className: "h-8 w-8 text-gray-400 mx-auto mb-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 623,
+                                                    lineNumber: 660,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1606,7 +1635,7 @@ function SubmitData() {
                                                     children: "Upload a photo of your farm"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 624,
+                                                    lineNumber: 661,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1617,7 +1646,7 @@ function SubmitData() {
                                                     className: "max-w-xs mx-auto"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 627,
+                                                    lineNumber: 664,
                                                     columnNumber: 17
                                                 }, this),
                                                 formData.photo && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -1626,19 +1655,19 @@ function SubmitData() {
                                                     children: formData.photo.name
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/submit-data/page.tsx",
-                                                    lineNumber: 635,
+                                                    lineNumber: 672,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 622,
+                                            lineNumber: 659,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 617,
+                                    lineNumber: 654,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1652,7 +1681,7 @@ function SubmitData() {
                                                 className: "animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/submit-data/page.tsx",
-                                                lineNumber: 656,
+                                                lineNumber: 693,
                                                 columnNumber: 19
                                             }, this),
                                             "Submitting..."
@@ -1663,7 +1692,7 @@ function SubmitData() {
                                                 className: "mr-2 h-4 w-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/submit-data/page.tsx",
-                                                lineNumber: 661,
+                                                lineNumber: 698,
                                                 columnNumber: 19
                                             }, this),
                                             "Submit Data & Earn HBAR"
@@ -1671,24 +1700,24 @@ function SubmitData() {
                                     }, void 0, true)
                                 }, void 0, false, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 643,
+                                    lineNumber: 680,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/submit-data/page.tsx",
-                            lineNumber: 454,
+                            lineNumber: 491,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/submit-data/page.tsx",
-                        lineNumber: 453,
+                        lineNumber: 490,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/submit-data/page.tsx",
-                lineNumber: 443,
+                lineNumber: 480,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -1703,27 +1732,27 @@ function SubmitData() {
                                         className: "h-5 w-5"
                                     }, void 0, false, {
                                         fileName: "[project]/app/submit-data/page.tsx",
-                                        lineNumber: 674,
+                                        lineNumber: 711,
                                         columnNumber: 13
                                     }, this),
                                     "Your Recent Submissions"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/submit-data/page.tsx",
-                                lineNumber: 673,
+                                lineNumber: 710,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
                                 children: "Track your data contributions and rewards"
                             }, void 0, false, {
                                 fileName: "[project]/app/submit-data/page.tsx",
-                                lineNumber: 677,
+                                lineNumber: 714,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/submit-data/page.tsx",
-                        lineNumber: 672,
+                        lineNumber: 709,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -1742,12 +1771,12 @@ function SubmitData() {
                                                             className: "h-5 w-5 text-green-600"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/submit-data/page.tsx",
-                                                            lineNumber: 690,
+                                                            lineNumber: 727,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/submit-data/page.tsx",
-                                                        lineNumber: 689,
+                                                        lineNumber: 726,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1757,7 +1786,7 @@ function SubmitData() {
                                                                 children: data.cropType
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/submit-data/page.tsx",
-                                                                lineNumber: 693,
+                                                                lineNumber: 730,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1765,19 +1794,19 @@ function SubmitData() {
                                                                 children: data.location
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/submit-data/page.tsx",
-                                                                lineNumber: 694,
+                                                                lineNumber: 731,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/submit-data/page.tsx",
-                                                        lineNumber: 692,
+                                                        lineNumber: 729,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/submit-data/page.tsx",
-                                                lineNumber: 688,
+                                                lineNumber: 725,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1788,7 +1817,7 @@ function SubmitData() {
                                                         children: "+1 HBAR"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/submit-data/page.tsx",
-                                                        lineNumber: 700,
+                                                        lineNumber: 737,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1796,19 +1825,19 @@ function SubmitData() {
                                                         children: new Date(data.createdAt).toLocaleDateString()
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/submit-data/page.tsx",
-                                                        lineNumber: 703,
+                                                        lineNumber: 740,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/submit-data/page.tsx",
-                                                lineNumber: 699,
+                                                lineNumber: 736,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, data.id, true, {
                                         fileName: "[project]/app/submit-data/page.tsx",
-                                        lineNumber: 684,
+                                        lineNumber: 721,
                                         columnNumber: 15
                                     }, this)),
                                 recentSubmissions.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1818,7 +1847,7 @@ function SubmitData() {
                                             className: "h-12 w-12 text-muted-foreground mx-auto mb-4"
                                         }, void 0, false, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 711,
+                                            lineNumber: 748,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1826,30 +1855,30 @@ function SubmitData() {
                                             children: "No submissions yet. Submit your first farm data above!"
                                         }, void 0, false, {
                                             fileName: "[project]/app/submit-data/page.tsx",
-                                            lineNumber: 712,
+                                            lineNumber: 749,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/submit-data/page.tsx",
-                                    lineNumber: 710,
+                                    lineNumber: 747,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/submit-data/page.tsx",
-                            lineNumber: 682,
+                            lineNumber: 719,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/submit-data/page.tsx",
-                        lineNumber: 681,
+                        lineNumber: 718,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/submit-data/page.tsx",
-                lineNumber: 671,
+                lineNumber: 708,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -1864,7 +1893,7 @@ function SubmitData() {
                                 children: "Why Submit Data?"
                             }, void 0, false, {
                                 fileName: "[project]/app/submit-data/page.tsx",
-                                lineNumber: 725,
+                                lineNumber: 762,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1872,7 +1901,7 @@ function SubmitData() {
                                 children: "Your data helps improve AI predictions for all farmers. Earn HBAR tokens for each submission."
                             }, void 0, false, {
                                 fileName: "[project]/app/submit-data/page.tsx",
-                                lineNumber: 726,
+                                lineNumber: 763,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1886,7 +1915,7 @@ function SubmitData() {
                                                 children: "Better Predictions"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/submit-data/page.tsx",
-                                                lineNumber: 732,
+                                                lineNumber: 769,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1894,13 +1923,13 @@ function SubmitData() {
                                                 children: "Improve AI accuracy"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/submit-data/page.tsx",
-                                                lineNumber: 735,
+                                                lineNumber: 772,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/submit-data/page.tsx",
-                                        lineNumber: 731,
+                                        lineNumber: 768,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1911,7 +1940,7 @@ function SubmitData() {
                                                 children: "Earn Rewards"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/submit-data/page.tsx",
-                                                lineNumber: 738,
+                                                lineNumber: 775,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1919,13 +1948,13 @@ function SubmitData() {
                                                 children: "Get HBAR tokens"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/submit-data/page.tsx",
-                                                lineNumber: 739,
+                                                lineNumber: 776,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/submit-data/page.tsx",
-                                        lineNumber: 737,
+                                        lineNumber: 774,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1936,7 +1965,7 @@ function SubmitData() {
                                                 children: "Help Community"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/submit-data/page.tsx",
-                                                lineNumber: 742,
+                                                lineNumber: 779,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1944,41 +1973,41 @@ function SubmitData() {
                                                 children: "Support other farmers"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/submit-data/page.tsx",
-                                                lineNumber: 743,
+                                                lineNumber: 780,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/submit-data/page.tsx",
-                                        lineNumber: 741,
+                                        lineNumber: 778,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/submit-data/page.tsx",
-                                lineNumber: 730,
+                                lineNumber: 767,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/submit-data/page.tsx",
-                        lineNumber: 724,
+                        lineNumber: 761,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/submit-data/page.tsx",
-                    lineNumber: 723,
+                    lineNumber: 760,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/submit-data/page.tsx",
-                lineNumber: 722,
+                lineNumber: 759,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/submit-data/page.tsx",
-        lineNumber: 422,
+        lineNumber: 459,
         columnNumber: 5
     }, this);
 }

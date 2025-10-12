@@ -20,7 +20,7 @@ export default function Footer() {
                   <Leaf className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <span className="text-lg font-bold text-foreground">
-                  AgriYield
+                  ZaraHarvest
                 </span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -147,7 +147,7 @@ export default function Footer() {
           {/* Bottom Bar */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <span>© 2025 AgriYield</span>
+              <span>© 2025 ZaraHarvest</span>
               <span>•</span>
               <Button
                 variant="link"

@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
 import AgriYieldArtifact from "../artifacts/contracts/AgriYield.sol/AgriYield.json";
 
-// Contract configuration
-export const CONTRACT_ADDRESS = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"; // From deployment
+// Contract configuration - will be updated after Hedera Testnet deployment
+export const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"; // Placeholder - deploy to Hedera Testnet
 export const CONTRACT_ABI = AgriYieldArtifact.abi;
 
 // Contract interface for type safety
@@ -66,6 +66,21 @@ export interface AgriYieldContract {
     metadataURI: string;
   }>;
 
+  // Lending System
+  requestLoan: (collateralPredictionId: number, amount: bigint) => Promise<any>;
+  repayLoan: (loanId: number, options?: { value: bigint }) => Promise<any>;
+  loans: (id: number) => Promise<{
+    loanId: number;
+    borrower: string;
+    amount: number;
+    collateralPredictionId: number;
+    interestRate: number;
+    startDate: number;
+    dueDate: number;
+    status: number;
+    repaidAmount: number;
+  }>;
+
   // Supply Chain
   addSupplyChainEvent: (
     tokenId: number,
@@ -75,8 +90,8 @@ export interface AgriYieldContract {
   ) => Promise<any>;
 
   // Reward System
-  rewardFarmer: (farmer: string, amount: number) => Promise<any>;
-  fundRewards: () => Promise<any>;
+  rewardFarmer: (farmer: string, amount: bigint) => Promise<any>;
+  fundRewards: (amount?: bigint) => Promise<any>;
 
   // View Functions
   getFarmerPredictions: (farmer: string) => Promise<number[]>;
@@ -127,22 +142,6 @@ export class AgriYieldHelper {
     return await this.contract.farmers(address);
   }
 
-  // Yield prediction operations
-  async createYieldPrediction(
-    cropType: string,
-    predictedYield: number,
-    confidence: number,
-    harvestDate: number
-  ) {
-    const tx = await this.contract.createYieldPrediction(
-      cropType,
-      predictedYield,
-      confidence,
-      harvestDate
-    );
-    return await tx.wait();
-  }
-
   async getYieldPrediction(predictionId: number) {
     return await this.contract.yieldPredictions(predictionId);
   }
@@ -154,17 +153,115 @@ export class AgriYieldHelper {
     qualityGrade: string,
     metadataURI: string
   ) {
-    const tx = await this.contract.mintHarvestToken(
-      cropType,
-      quantity,
-      qualityGrade,
-      metadataURI
-    );
-    return await tx.wait();
+    try {
+      const tx = await this.contract.mintHarvestToken(
+        cropType,
+        quantity,
+        qualityGrade,
+        metadataURI
+      );
+      const receipt = await tx.wait();
+      return {
+        hash: tx.hash,
+        receipt,
+        success: true,
+      };
+    } catch (error) {
+      console.error("Error minting harvest token:", error);
+      throw error;
+    }
   }
 
   async getHarvestToken(tokenId: number) {
     return await this.contract.harvestTokens(tokenId);
+  }
+
+  // Yield Prediction operations
+  async createYieldPrediction(
+    cropType: string,
+    predictedYield: number,
+    confidence: number,
+    harvestDate: number
+  ) {
+    try {
+      console.log("Creating yield prediction with:", {
+        cropType,
+        predictedYield,
+        confidence,
+        harvestDate,
+      });
+
+      const tx = await this.contract.createYieldPrediction(
+        cropType,
+        predictedYield,
+        confidence,
+        harvestDate
+      );
+      const receipt = await tx.wait();
+      return {
+        hash: tx.hash,
+        receipt,
+        success: true,
+        predictionId: receipt.logs[0]?.args?.predictionId || 1,
+      };
+    } catch (error: any) {
+      console.error("Failed to create yield prediction:", error);
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  // Lending operations
+  async requestLoan(collateralPredictionId: number, amount: bigint) {
+    try {
+      console.log("Contract requestLoan called with:", {
+        collateralPredictionId,
+        amount,
+        amountType: typeof amount,
+        isNaN: Number.isNaN(amount),
+      });
+
+      const tx = await this.contract.requestLoan(
+        collateralPredictionId,
+        amount
+      );
+      const receipt = await tx.wait();
+      return {
+        hash: tx.hash,
+        receipt,
+        success: true,
+        loanId: receipt.logs[0]?.args?.loanId || null,
+      };
+    } catch (error) {
+      console.error("Error requesting loan:", error);
+      throw error;
+    }
+  }
+
+  async repayLoan(loanId: number, amount: bigint) {
+    try {
+      const tx = await this.contract.repayLoan(loanId, { value: amount });
+      const receipt = await tx.wait();
+      return {
+        hash: tx.hash,
+        receipt,
+        success: true,
+        amount: amount,
+      };
+    } catch (error) {
+      console.error("Error repaying loan:", error);
+      throw error;
+    }
+  }
+
+  async getLoan(loanId: number) {
+    return await this.contract.loans(loanId);
+  }
+
+  async getLoanDetails(loanId: number) {
+    return await this.contract.getLoanDetails(loanId);
   }
 
   // Supply chain operations
@@ -224,7 +321,7 @@ export class AgriYieldHelper {
 
   async fundRewards(amount?: bigint) {
     try {
-      const tx = await this.contract.fundRewards({ value: amount || 0n });
+      const tx = await this.contract.fundRewards(amount || 0n);
       await tx.wait();
       return {
         hash: tx.hash,
@@ -254,6 +351,23 @@ export class AgriYieldHelper {
       collateralRatio: Number(collateralRatio),
     };
   }
+}
+
+// Server-side contract helper for owner operations
+export function getServerContractHelper(): AgriYieldHelper {
+  // Use Hedera Testnet
+  const rpcUrl =
+    process.env.HEDERA_TESTNET_RPC_URL || "https://testnet.hashio.io/api";
+  const privateKey = process.env.HEDERA_TESTNET_PRIVATE_KEY;
+
+  if (!privateKey) {
+    throw new Error("HEDERA_TESTNET_PRIVATE_KEY not set in environment");
+  }
+
+  const provider = new ethers.JsonRpcProvider(rpcUrl);
+  const signer = new ethers.Wallet(privateKey, provider);
+
+  return new AgriYieldHelper(signer);
 }
 
 // Export contract address for easy access

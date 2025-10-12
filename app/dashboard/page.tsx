@@ -283,15 +283,14 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold text-foreground mb-2">
               Farm Dashboard
             </h1>
-            <p className="text-muted-foreground">
-              {isLoadingUser ? (
-                <Skeleton className="h-4 w-64" />
-              ) : (
-                `Welcome back${
-                  userData?.name ? `, ${userData.name}` : ""
-                }! Here's your agricultural overview.`
-              )}
-            </p>
+            {isLoadingUser ? (
+              <Skeleton className="h-4 w-64" />
+            ) : (
+              <p className="text-muted-foreground">
+                `Welcome back${userData?.name ? `, ${userData.name}` : ""}!
+                Here's your agricultural overview.`
+              </p>
+            )}
           </div>
           <div className="flex items-center gap-3">
             <Badge
@@ -336,8 +335,10 @@ export default function Dashboard() {
                       } in ${
                         userData?.location || "your location"
                       } is performing ${
-                        harvestData.totalTons > 0
-                          ? `excellently with ${harvestData.totalTons} tons of ${harvestData.primaryCrop} predicted`
+                        (Number(harvestData.totalTons) || 0) > 0
+                          ? `excellently with ${
+                              Number(harvestData.totalTons) || 0
+                            } tons of ${harvestData.primaryCrop} predicted`
                           : "ready for your first yield prediction"
                       }`
                     )}
@@ -348,13 +349,13 @@ export default function Dashboard() {
                     {isLoadingData ? (
                       <Skeleton className="h-8 w-12" />
                     ) : (
-                      harvestData.totalTons.toFixed(1)
+                      (Number(harvestData.totalTons) || 0).toFixed(1)
                     )}
                   </div>
                   <div className="text-sm text-green-600">
                     {isLoadingData ? (
                       <Skeleton className="h-3 w-16" />
-                    ) : harvestData.totalTons > 0 ? (
+                    ) : (Number(harvestData.totalTons) || 0) > 0 ? (
                       "tons predicted"
                     ) : (
                       "no predictions"

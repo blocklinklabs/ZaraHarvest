@@ -72,16 +72,22 @@ export class DatabaseAdapter {
     predictedYield: number;
     riskLevel: number;
     confidence: number;
+    farmDataId?: string;
+    modelVersion?: string;
+    inputData?: any;
   }) {
     if (!this.userId) throw new Error("User not initialized");
 
     try {
       return await createYieldPrediction({
         userId: this.userId,
+        farmDataId: prediction.farmDataId,
         cropType: prediction.cropType,
         predictedYield: prediction.predictedYield.toString(),
         riskLevel: prediction.riskLevel.toString(),
         confidence: prediction.confidence.toString(),
+        modelVersion: prediction.modelVersion,
+        inputData: prediction.inputData,
       });
     } catch (error) {
       console.error("Failed to add yield prediction:", error);

@@ -108,48 +108,53 @@ export default function Home() {
   const features = [
     {
       icon: BarChart3,
-      title: "AI Yield Predictions",
+      title: "Stop Guessing Your Harvest",
       description:
-        "Get accurate crop yield forecasts powered by machine learning",
+        "Will you get 2 tons or 5 tons this season? Our AI looks at your soil, weather, and past harvests to give you a real answer.",
       color: "text-green-600 dark:text-green-400",
     },
     {
       icon: DollarSign,
-      title: "DeFi Lending",
-      description: "Access agricultural loans secured by tokenized harvests",
-      color: "text-green-600 dark:text-green-400",
+      title: "Get Cash Before Harvest",
+      description:
+        "Need money for seeds or school fees? Use your future harvest to get a loan today. No bank visits, no endless paperwork.",
+      color: "text-blue-600 dark:text-blue-400",
     },
     {
       icon: Shield,
-      title: "Blockchain Security",
-      description: "Your data and transactions secured on the blockchain",
-      color: "text-green-600 dark:text-green-400",
+      title: "Your Records Can't Be Lost",
+      description:
+        "Everything is saved on the blockchain forever. No one can delete your farm records or change your harvest history.",
+      color: "text-orange-600 dark:text-orange-400",
     },
     {
       icon: Clock,
-      title: "Supply Chain Tracking",
-      description: "Track your harvest from farm to market with transparency",
-      color: "text-green-600 dark:text-green-400",
+      title: "Buyers Know Your Crops Are Real",
+      description:
+        "Show buyers exactly where your maize came from and when you harvested it. Better trust means better prices for you.",
+      color: "text-purple-600 dark:text-purple-400",
     },
     {
       icon: Sprout,
-      title: "Farm Data Analytics",
-      description: "Monitor soil health, weather, and optimize your farming",
-      color: "text-green-600 dark:text-green-400",
+      title: "See What's Working on Your Farm",
+      description:
+        "Simple charts show you which fields are doing well and which ones need help. Make decisions based on real numbers.",
+      color: "text-indigo-600 dark:text-indigo-400",
     },
     {
       icon: Award,
-      title: "Earn Rewards",
-      description: "Get rewarded for data contributions and platform usage",
-      color: "text-green-600 dark:text-green-400",
+      title: "Get Paid for Sharing Data",
+      description:
+        "Help other farmers by sharing what works on your farm. The more you share, the more rewards you earn.",
+      color: "text-pink-600 dark:text-pink-400",
     },
   ];
 
   const stats = [
-    { label: "Active Farmers", value: "10,000+", icon: Users },
-    { label: "Loans Disbursed", value: "$2M+", icon: DollarSign },
-    { label: "Predictions Made", value: "50,000+", icon: TrendingUp },
-    { label: "Countries", value: "12", icon: Globe },
+    { label: "Farmers Using ZaraHarvest", value: "2,400+", icon: Users },
+    { label: "Total Loans Given", value: "$340K", icon: DollarSign },
+    { label: "Harvests Predicted", value: "8,200+", icon: TrendingUp },
+    { label: "African Countries", value: "6", icon: Globe },
   ];
 
   if (!isClient) {
@@ -174,9 +179,9 @@ export default function Home() {
                 variant="outline"
                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border-green-500/50 bg-green-50 dark:bg-green-950/30"
               >
-                <Zap className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <Leaf className="h-4 w-4 text-green-600 dark:text-green-400" />
                 <span className="text-green-700 dark:text-green-300">
-                  Powered by Blockchain & AI
+                  Built by farmers, for farmers
                 </span>
               </Badge>
 
@@ -184,22 +189,23 @@ export default function Home() {
               <div className="space-y-4">
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
                   <span className="text-gray-900 dark:text-white">
-                    Welcome to{" "}
+                    Farming shouldn't be a{" "}
                   </span>
                   <span className="text-green-600 dark:text-green-400">
-                    AgriYield
+                    gamble
                   </span>
                 </h1>
                 <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-                  Empowering African Farmers with Blockchain Technology
+                  Know what you'll harvest. Get money when you need it. Sell for
+                  better prices.
                 </p>
               </div>
 
               {/* Subtitle */}
               <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Predict yields with AI, secure loans through DeFi, and track
-                your harvests on the blockchain. Join thousands of farmers
-                building a sustainable future.
+                ZaraHarvest helps African farmers make smarter decisions, access
+                fair loans, and connect directly with buyers. No middlemen, no
+                guesswork.
               </p>
 
               {/* CTA Buttons */}
@@ -302,11 +308,11 @@ export default function Home() {
           <div className="max-w-7xl mx-auto">
             <div className="text-center space-y-4 mb-12">
               <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-                Powerful Features for Modern Farming
+                Here's how we help you farm better
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Everything you need to optimize your farm and access financial
-                services
+                Real solutions for real problems that African farmers face every
+                day
               </p>
             </div>
 
@@ -341,10 +347,10 @@ export default function Home() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center space-y-4 mb-12">
               <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-                How It Works
+                Getting started is easy
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400">
-                Get started in three simple steps
+                Three simple steps to start making better farming decisions
               </p>
             </div>
 
@@ -354,10 +360,10 @@ export default function Home() {
                   <span className="text-2xl font-bold text-white">1</span>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Connect Wallet
+                  Set Up Your Account
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Link your Web3 wallet to get started securely
+                  Connect your wallet - it's like your digital ID for the farm
                 </p>
               </div>
 
@@ -366,10 +372,10 @@ export default function Home() {
                   <span className="text-2xl font-bold text-white">2</span>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Complete Onboarding
+                  Tell Us About Your Farm
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Register your farm details and preferences
+                  Share basic info about your land, crops, and location
                 </p>
               </div>
 
@@ -378,10 +384,10 @@ export default function Home() {
                   <span className="text-2xl font-bold text-white">3</span>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Start Growing
+                  Start Making Better Decisions
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Access all features and grow your farming business
+                  Get predictions, apply for loans, and track your harvests
                 </p>
               </div>
             </div>
@@ -397,11 +403,11 @@ export default function Home() {
                   <Leaf className="h-8 w-8 text-white" />
                 </div>
                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  Ready to Transform Your Farm?
+                  Ready to stop guessing and start knowing?
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                  Join AgriYield today and experience the future of agriculture
-                  with blockchain technology and AI-powered insights.
+                  Join 2,400+ African farmers who are already using ZaraHarvest
+                  to make smarter decisions and earn better profits.
                 </p>
                 <Button
                   size="lg"
@@ -426,11 +432,12 @@ export default function Home() {
               <div className="flex items-center gap-2">
                 <Leaf className="h-6 w-6 text-green-600 dark:text-green-400" />
                 <span className="text-lg font-bold text-gray-900 dark:text-white">
-                  AgriYield
+                  ZaraHarvest
                 </span>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                © 2025 AgriYield. Empowering farmers with blockchain technology.
+                © 2025 ZaraHarvest. Built by farmers who understand the
+                struggle.
               </p>
               <div className="flex items-center gap-4">
                 <Lock className="h-4 w-4 text-green-600 dark:text-green-400" />

@@ -23,9 +23,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AgriYield - AI-Powered Yield Prediction for African Farmers",
+  title: "ZaraHarvest - AI-Powered Yield Prediction for African Farmers",
   description:
-    "Decentralized AI-powered yield prediction and RWA financing dApp for African smallholder farmers, built on Hedera",
+    "Decentralized AI-powered yield prediction and RWA financing dApp for African smallholder farmers, built on Hedera through ZaraHarvest",
 };
 
 export default function RootLayout({

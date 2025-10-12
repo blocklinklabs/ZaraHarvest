@@ -1,7 +1,9 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Initialize Gemini AI
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const genAI = new GoogleGenerativeAI(
+  process.env.GEMINI_API_KEY || "AIzaSyCDjJOR9qH3WqatqCkZwb-XHE6lKu5XS1c"
+);
 
 export interface FarmDataAnalysis {
   cropHealth: "excellent" | "good" | "fair" | "poor";
@@ -197,24 +199,52 @@ Be precise and practical in your recommendations for African smallholder farmers
     temperature?: number;
     humidity?: number;
     rainfall?: number;
+    weatherNotes?: string;
+    location?: string;
     historicalData?: any[];
   }): Promise<{
     predictedYield: number;
     confidence: number;
     factors: string[];
+    recommendations: string[];
+    riskFactors: string[];
   }> {
     try {
       const prompt = `
-Based on the following farm data, predict the crop yield:
+You are an expert agricultural AI assistant specializing in yield prediction for African smallholder farmers. Analyze the following farm data and provide a comprehensive yield prediction:
 
-Crop: ${data.cropType}
-Soil Moisture: ${data.soilMoisture}%
-Temperature: ${data.temperature || "Unknown"}°C
-Humidity: ${data.humidity || "Unknown"}%
-Rainfall: ${data.rainfall || "Unknown"}mm
+CROP INFORMATION:
+- Crop Type: ${data.cropType}
+- Location: ${data.location || "Not specified"}
 
-Provide a yield prediction in tons per hectare with confidence level and key factors.
-Return as JSON: {"predictedYield": 0.0, "confidence": 0.0, "factors": ["factor1", "factor2"]}
+ENVIRONMENTAL DATA:
+- Soil Moisture: ${data.soilMoisture}%
+- Temperature: ${data.temperature || "Not provided"}°C
+- Humidity: ${data.humidity || "Not provided"}%
+- Rainfall: ${data.rainfall || "Not provided"}mm
+- Weather Notes: ${data.weatherNotes || "None"}
+
+Please provide a comprehensive yield prediction analysis in the following JSON format:
+{
+  "predictedYield": 0.0,
+  "confidence": 0.0,
+  "factors": ["factor1", "factor2", "factor3"],
+  "recommendations": ["recommendation1", "recommendation2"],
+  "riskFactors": ["risk1", "risk2"]
+}
+
+Focus on:
+1. Realistic yield prediction in tons per hectare for ${
+        data.cropType
+      } in African conditions
+2. Confidence level based on data completeness and quality
+3. Key factors affecting yield (soil, weather, crop-specific needs)
+4. Practical recommendations for the farmer
+5. Risk factors to monitor
+
+Be specific and practical for smallholder farmers in Africa. Consider typical yields for ${
+        data.cropType
+      } in similar conditions.
       `;
 
       const result = await this.model.generateContent(prompt);
@@ -223,23 +253,84 @@ Return as JSON: {"predictedYield": 0.0, "confidence": 0.0, "factors": ["factor1"
 
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        return JSON.parse(jsonMatch[0]);
+        const parsed = JSON.parse(jsonMatch[0]);
+
+        // Validate and normalize the response
+        return {
+          predictedYield: Math.max(
+            0.5,
+            Math.min(50, parseFloat(parsed.predictedYield) || 2.5)
+          ),
+          confidence: Math.max(
+            0.1,
+            Math.min(1, parseFloat(parsed.confidence) || 0.6)
+          ),
+          factors: Array.isArray(parsed.factors)
+            ? parsed.factors.slice(0, 5)
+            : ["Soil moisture levels", "Environmental conditions"],
+          recommendations: Array.isArray(parsed.recommendations)
+            ? parsed.recommendations.slice(0, 4)
+            : [
+                "Monitor soil moisture regularly",
+                "Check for pest and disease signs",
+              ],
+          riskFactors: Array.isArray(parsed.riskFactors)
+            ? parsed.riskFactors.slice(0, 3)
+            : ["Weather variability", "Pest pressure"],
+        };
       }
 
-      // Fallback prediction
+      // Fallback prediction with more realistic values
+      const baseYield = this.getBaseYieldForCrop(data.cropType);
+      const moistureFactor = Math.max(
+        0.5,
+        Math.min(1.5, data.soilMoisture / 70)
+      );
+      const predictedYield = baseYield * moistureFactor;
+
       return {
-        predictedYield: Math.max(1, Math.min(10, data.soilMoisture / 10)),
+        predictedYield: Math.round(predictedYield * 10) / 10,
         confidence: 0.6,
-        factors: ["Soil moisture levels", "Environmental conditions"],
+        factors: [
+          "Soil moisture levels",
+          "Crop-specific requirements",
+          "Environmental conditions",
+        ],
+        recommendations: [
+          "Monitor soil moisture regularly",
+          "Check for signs of disease or pest damage",
+          "Consider soil testing for better insights",
+        ],
+        riskFactors: [
+          "Weather variability",
+          "Pest and disease pressure",
+          "Soil nutrient levels",
+        ],
       };
     } catch (error) {
       console.error("Yield prediction error:", error);
       return {
-        predictedYield: 2.5,
+        predictedYield: this.getBaseYieldForCrop(data.cropType),
         confidence: 0.5,
         factors: ["Limited data available"],
+        recommendations: ["Gather more farm data for better predictions"],
+        riskFactors: ["Insufficient data for risk assessment"],
       };
     }
+  }
+
+  private getBaseYieldForCrop(cropType: string): number {
+    const baseYields: { [key: string]: number } = {
+      Maize: 3.5,
+      Cocoa: 0.8,
+      Rice: 4.2,
+      Wheat: 2.8,
+      Cassava: 12.0,
+      Sorghum: 2.5,
+      Millet: 1.8,
+      Groundnut: 1.2,
+    };
+    return baseYields[cropType] || 2.5;
   }
 }
 

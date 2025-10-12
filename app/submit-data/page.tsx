@@ -181,43 +181,43 @@ export default function SubmitData() {
         setYieldPrediction(result.data.yieldPrediction);
       }
 
-      // Reward user with 1 HBAR using real smart contract
+      // Reward user with 1 HBAR using backend API
       try {
-        // Check if we have a wallet provider
-        if (!window.ethereum) {
-          throw new Error("No wallet provider found");
+        console.log("🌾 Sending real HBAR reward via API...");
+
+        // Call the backend API to send HBAR reward
+        const rewardResponse = await fetch("/api/rewards/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            walletAddress: account?.address,
+            amount: "1", // 1 HBAR
+          }),
+        });
+
+        if (!rewardResponse.ok) {
+          const errorData = await rewardResponse.json();
+          throw new Error(errorData.error || "Failed to send reward");
         }
 
-        // Create provider and signer for Hedera Testnet
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner();
+        const rewardData = await rewardResponse.json();
 
-        // Initialize contract helper with signer
-        const contractHelper = new AgriYieldHelper(signer);
-
-        // Convert 1 HBAR to wei
-        const rewardAmount = ethers.parseEther("1"); // 1 HBAR in wei
-
-        console.log("🌾 Sending real HBAR reward via smart contract...");
-
-        // Call the smart contract to reward the farmer
-        const rewardTx = await contractHelper.rewardFarmer(
-          account.address,
-          rewardAmount
-        );
-
-        if (rewardTx.success) {
+        if (rewardData.success) {
           setReward(1); // 1 HBAR reward
           toast.success(
-            `🎉 Data submitted successfully! Earned 1 HBAR (Transaction: ${rewardTx.hash})`
+            `🎉 Data submitted successfully! Earned 1 HBAR (Transaction: ${rewardData.data.transactionHash})`
           );
-          console.log("✅ Real HBAR reward sent:", rewardTx);
+          console.log("✅ Real HBAR reward sent:", rewardData.data);
         } else {
           throw new Error("Reward transaction failed");
         }
-      } catch (contractError) {
-        console.error("❌ Smart contract reward failed:", contractError);
-        toast.error("Failed to send HBAR reward. Please try again.");
+      } catch (rewardError) {
+        console.error("❌ HBAR reward failed:", rewardError);
+        const errorMessage =
+          rewardError instanceof Error ? rewardError.message : "Unknown error";
+        toast.error(`Failed to send HBAR reward: ${errorMessage}`);
 
         // Still show success for data submission
         setReward(0);
@@ -276,7 +276,7 @@ export default function SubmitData() {
               Data Submitted Successfully!
             </CardTitle>
             <CardDescription>
-              Thank you for contributing to the AgriYield network
+              Thank you for contributing to the ZaraHarvest network
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">

@@ -224,8 +224,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ConditionalLay
 ;
 ;
 const metadata = {
-    title: "AgriYield - AI-Powered Yield Prediction for African Farmers",
-    description: "Decentralized AI-powered yield prediction and RWA financing dApp for African smallholder farmers, built on Hedera"
+    title: "ZaraHarvest - AI-Powered Yield Prediction for African Farmers",
+    description: "Decentralized AI-powered yield prediction and RWA financing dApp for African smallholder farmers, built on Hedera through ZaraHarvest"
 };
 function RootLayout({ children }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("html", {
