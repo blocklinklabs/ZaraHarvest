@@ -1,5 +1,6 @@
 node_modules
 .env
+exmp
 
 # Hardhat files
 /cache
@@ -15,3 +16,15 @@ node_modules
 
 # Hardhat Ignition default folder for deployments against a local node
 ignition/deployments/chain-31337
+
+# UGCS (Universal Git Commit Simulator) files
+ugcs.sh
+ugcs-helper.js
+ugcs-config.example
+UGCS-README.md
+example-usage.sh
+test-ugcs.sh
+*.ugcs-backup
+
+# Next.js build outputs
+.next/
