@@ -1,3 +1,4 @@
+// Polish wording in docs/comments.
 // chore: non-functional doc tweak start 2025-10-13T08:10:17.676Z
 // chore(auto): non-functional doc tweak start 2025-10-13T08:07:09.119Z
 import type { Metadata } from "next";
