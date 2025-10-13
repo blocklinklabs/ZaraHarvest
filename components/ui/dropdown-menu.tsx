@@ -1,23 +1,52 @@
 "use client";
 
-import * as React from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { Check, ChevronRight, Circle } from "lucide-react";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Represents the root of a dropdown menu. All other dropdown components are rendered inside it.
+ * @see https://www.radix-ui.com/primitives/docs/components/dropdown-menu#root
+ */
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
+/**
+ * The element that triggers the dropdown menu to open or close.
+ * @see https://www.radix-ui.com/primitives/docs/components/dropdown-menu#trigger
+ */
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 
+/**
+ * A grouping of related dropdown menu items.
+ * @see https://www.radix-ui.com/primitives/docs/components/dropdown-menu#group
+ */
 const DropdownMenuGroup = DropdownMenuPrimitive.Group;
 
+/**
+ * Renders the dropdown menu content outside of the DOM tree of its trigger,
+ * typically at the body level to prevent clipping and ensure proper positioning.
+ * @see https://www.radix-ui.com/primitives/docs/components/dropdown-menu#portal
+ */
 const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
 
+/**
+ * Represents a sub-menu within a dropdown menu.
+ * @see https://www.radix-ui.com/primitives/docs/components/dropdown-menu#sub
+ */
 const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 
+/**
+ * A group of radio items, where only one item can be selected at a time.
+ * @see https://www.radix-ui.com/primitives/docs/components/dropdown-menu#radiogroup
+ */
 const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 
+/**
+ * Displays a trigger for a sub-menu within a dropdown menu. 
+ * Renders a `ChevronRight` icon to indicate the presence of a sub-menu.
+ */
 const DropdownMenuSubTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & {
@@ -40,6 +69,10 @@ const DropdownMenuSubTrigger = React.forwardRef<
 DropdownMenuSubTrigger.displayName =
   DropdownMenuPrimitive.SubTrigger.displayName;
 
+/**
+ * Displays the content of a sub-menu within a dropdown menu.
+ * Handles animated transitions for opening and closing.
+ */
 const DropdownMenuSubContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
@@ -56,6 +89,11 @@ const DropdownMenuSubContent = React.forwardRef<
 DropdownMenuSubContent.displayName =
   DropdownMenuPrimitive.SubContent.displayName;
 
+/**
+ * Displays the main content of the dropdown menu.
+ * Renders within a Portal and handles animated transitions for opening and closing.
+ * @param sideOffset The distance in pixels between the trigger and the content. Defaults to 4.
+ */
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
@@ -74,6 +112,10 @@ const DropdownMenuContent = React.forwardRef<
 ));
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
 
+/**
+ * Represents an individual, selectable item within a dropdown menu.
+ * Supports an optional `inset` prop for indentation.
+ */
 const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
@@ -92,6 +134,10 @@ const DropdownMenuItem = React.forwardRef<
 ));
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 
+/**
+ * A checkbox item that can be checked or unchecked within a dropdown menu.
+ * Renders a `Check` icon when `checked`.
+ */
 const DropdownMenuCheckboxItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
@@ -116,6 +162,10 @@ const DropdownMenuCheckboxItem = React.forwardRef<
 DropdownMenuCheckboxItem.displayName =
   DropdownMenuPrimitive.CheckboxItem.displayName;
 
+/**
+ * A radio button item within a dropdown menu, typically used within a `DropdownMenuRadioGroup`.
+ * Renders a `Circle` icon when selected.
+ */
 const DropdownMenuRadioItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
@@ -138,6 +188,10 @@ const DropdownMenuRadioItem = React.forwardRef<
 ));
 DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName;
 
+/**
+ * A non-interactive label for a section within the dropdown menu.
+ * Supports an optional `inset` prop for indentation.
+ */
 const DropdownMenuLabel = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> & {
@@ -156,6 +210,9 @@ const DropdownMenuLabel = React.forwardRef<
 ));
 DropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName;
 
+/**
+ * A visual separator between dropdown menu items or groups.
+ */
 const DropdownMenuSeparator = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
@@ -168,6 +225,9 @@ const DropdownMenuSeparator = React.forwardRef<
 ));
 DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;
 
+/**
+ * Renders a shortcut label within a dropdown menu item, often right-aligned and less prominent.
+ */
 const DropdownMenuShortcut = ({
   className,
   ...props
@@ -183,20 +243,18 @@ DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
 
 export {
   DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuCheckboxItem,
-  DropdownMenuRadioItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuGroup,
-  DropdownMenuPortal,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-  DropdownMenuRadioGroup,
+  DropdownMenuTrigger,
 };
-
-
