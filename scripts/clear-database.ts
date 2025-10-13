@@ -1,21 +1,31 @@
-// Minor documentation improvement.
+/**
+ * @file Script to clear all data from the application database.
+ * Designed for development or testing environments to reset the database state.
+ */
 import { db } from "../lib/db/index";
 import {
-  users,
-  farmData,
-  yieldPredictions,
-  loans,
-  harvestTokens,
-  badges,
-  marketPrices,
-  supplyChainEvents,
+  badges, // Alphabetized
+  farmData, // Alphabetized
+  harvestTokens, // Alphabetized
+  loans, // Alphabetized
+  marketPrices, // Alphabetized
+  supplyChainEvents, // Alphabetized
+  users, // Alphabetized
+  yieldPredictions, // Alphabetized
 } from "../lib/db/schema";
 
+/**
+ * Asynchronously clears all data from the database.
+ * Tables are deleted in reverse order of their dependencies to prevent
+ * foreign key constraint errors, ensuring a clean reset.
+ * Logs the progress and outcome of the clearing operation to the console.
+ */
 async function clearDatabase() {
   try {
     console.log("🧹 Clearing database...");
 
-    // Delete in reverse order of dependencies
+    // Delete tables in reverse order of their foreign key dependencies
+    // to avoid constraint violations.
     await db.delete(supplyChainEvents);
     console.log("✅ Cleared supply_chain_events");
 
@@ -47,4 +57,5 @@ async function clearDatabase() {
   }
 }
 
+// Execute the database clearing function when the script is run.
 clearDatabase();
