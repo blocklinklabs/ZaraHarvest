@@ -1,3 +1,4 @@
+<!-- auto-commit-simulator-marker 2025-10-13T08:07:09.117Z -->
 # Sample Hardhat Project
 
 This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
