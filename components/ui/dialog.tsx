@@ -1,3 +1,4 @@
+// Polish wording in docs/comments.
 "use client"
 
 import * as React from "react"

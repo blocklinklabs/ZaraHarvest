@@ -1,3 +1,4 @@
+// Polish wording in docs/comments.
 import { db } from "../lib/db/index";
 import { users } from "../lib/db/schema";
 

@@ -1,3 +1,4 @@
+// Minor documentation improvement.
 import { db } from "../lib/db/index";
 import {
   users,
