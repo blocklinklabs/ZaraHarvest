@@ -202,6 +202,9 @@ __turbopack_context__.n(__TURBOPACK__imported__module__$5b$project$5d2f$componen
 "[project]/app/layout.tsx [app-rsc] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
+// Polish wording in docs/comments.
+// chore: non-functional doc tweak start 2025-10-13T08:10:17.676Z
+// chore(auto): non-functional doc tweak start 2025-10-13T08:07:09.119Z
 __turbopack_context__.s([
     "default",
     ()=>RootLayout,
@@ -240,32 +243,32 @@ function RootLayout({ children }) {
                             children: children
                         }, void 0, false, {
                             fileName: "[project]/app/layout.tsx",
-                            lineNumber: 45,
+                            lineNumber: 48,
                             columnNumber: 15
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/layout.tsx",
-                        lineNumber: 44,
+                        lineNumber: 47,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/layout.tsx",
-                    lineNumber: 43,
+                    lineNumber: 46,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/layout.tsx",
-                lineNumber: 42,
+                lineNumber: 45,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/layout.tsx",
-            lineNumber: 38,
+            lineNumber: 41,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/layout.tsx",
-        lineNumber: 37,
+        lineNumber: 40,
         columnNumber: 5
     }, this);
 }

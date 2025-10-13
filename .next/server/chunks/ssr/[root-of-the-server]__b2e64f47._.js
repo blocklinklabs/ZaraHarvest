@@ -1473,34 +1473,53 @@ const useWalletStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_
             });
         }
     }), {
+    // Unique name for the storage item in localStorage.
     name: "wallet-storage",
+    // Specifies which parts of the state should be persisted across sessions.
+    // In this case, only `account` and `isConnected` are stored to maintain session state.
     partialize: (state)=>({
             account: state.account,
             isConnected: state.isConnected
         })
 }));
 class WalletProvider {
-    static instance;
-    static getInstance() {
+    /**
+   * The single instance of the WalletProvider class, enforcing the singleton pattern.
+   * @private
+   */ static instance;
+    /**
+   * Returns the singleton instance of WalletProvider.
+   * If an instance does not already exist, it creates one.
+   * @returns The singleton WalletProvider instance.
+   */ static getInstance() {
         if (!WalletProvider.instance) {
             WalletProvider.instance = new WalletProvider();
         }
         return WalletProvider.instance;
     }
-    async connectWallet() {
+    /**
+   * Initiates a connection request to the user's Web3 wallet.
+   * This method requests account access and fetches the primary account's balance.
+   *
+   * @returns A Promise that resolves with the connected `WalletAccount` information.
+   * @throws {Error} If no Web3 wallet is found or if the connection fails (e.g., user rejects connection).
+   */ async connectWallet() {
+        // Ensure the code is running in a browser environment and a Web3 provider (like MetaMask) is available.
         if ("TURBOPACK compile-time truthy", 1) {
             throw new Error("No Web3 wallet found. Please install MetaMask or another Web3 wallet.");
         }
         try {
-            // Request account access
+            // Request account access from the Web3 provider.
+            // This will prompt the user to connect their wallet.
             const accounts = await window.ethereum.request({
                 method: "eth_requestAccounts"
             });
             if (!accounts || accounts.length === 0) {
                 throw new Error("No accounts found. Please unlock your wallet.");
             }
-            const address = accounts[0];
-            // Get balance
+            const address = accounts[0]; // Take the first connected account as the primary one.
+            // Attempt to get the balance for the connected account.
+            // This is an optional step and failure should not prevent connection.
             let balance = "0";
             try {
                 const balanceHex = await window.ethereum.request({
@@ -1510,9 +1529,11 @@ class WalletProvider {
                         "latest"
                     ]
                 });
+                // Convert hexadecimal balance to a human-readable format (e.g., Wei to Ether/HBAR).
                 balance = (parseInt(balanceHex, 16) / Math.pow(10, 18)).toFixed(4);
             } catch (error) {
                 console.warn("Could not fetch balance:", error);
+            // Balance will remain "0" or default, as defined.
             }
             const account = {
                 address,
@@ -1521,13 +1542,22 @@ class WalletProvider {
             };
             return account;
         } catch (error) {
+            // Re-throw with a more descriptive error message if available, otherwise a generic one.
             throw new Error(error.message || "Failed to connect wallet");
         }
     }
-    async getAccountInfo(address) {
+    /**
+   * Fetches the account information for a given Ethereum address.
+   * Specifically, it retrieves the balance.
+   *
+   * @param address The Ethereum-style address of the account to query.
+   * @returns A Promise that resolves with the `WalletAccount` information including balance.
+   * @throws {Error} If no Web3 wallet is found.
+   */ async getAccountInfo(address) {
         if ("TURBOPACK compile-time truthy", 1) {
             throw new Error("No Web3 wallet found");
         }
+        // Attempt to get the balance for the specified account.
         let balance = "0";
         try {
             const balanceHex = await window.ethereum.request({
@@ -1537,6 +1567,7 @@ class WalletProvider {
                     "latest"
                 ]
             });
+            // Convert hexadecimal balance to a human-readable format.
             balance = (parseInt(balanceHex, 16) / Math.pow(10, 18)).toFixed(4);
         } catch (error) {
             console.warn("Could not fetch balance:", error);
@@ -1547,7 +1578,13 @@ class WalletProvider {
             balance
         };
     }
-    async switchNetwork(chainId) {
+    /**
+   * Requests the user's wallet to switch to a specified Ethereum chain ID.
+   * If the chain is not recognized by the wallet, it attempts to add the Hedera Testnet.
+   *
+   * @param chainId The hexadecimal chain ID of the network to switch to (e.g., "0x128" for Hedera Testnet).
+   * @throws {Error} If no Web3 wallet is found or if switching/adding the network fails.
+   */ async switchNetwork(chainId) {
         if ("TURBOPACK compile-time truthy", 1) {
             throw new Error("No Web3 wallet found");
         }
@@ -1561,19 +1598,24 @@ class WalletProvider {
                 ]
             });
         } catch (error) {
-            // If the chain doesn't exist, add it
+            // Error code 4902 indicates that the chain has not been added to MetaMask.
             if (error.code === 4902) {
-                await this.addNetwork();
+                await this.addNetwork(); // Attempt to add the predefined Hedera Testnet.
             } else {
-                throw error;
+                throw error; // Re-throw other types of errors.
             }
         }
     }
-    async addNetwork() {
+    /**
+   * Prompts the user's Web3 wallet to add a predefined network (currently Hedera Testnet).
+   * This is typically called when `switchNetwork` fails because the target chain is unknown.
+   *
+   * @throws {Error} If no Web3 wallet is found or if adding the network fails.
+   */ async addNetwork() {
         if ("TURBOPACK compile-time truthy", 1) {
             throw new Error("No Web3 wallet found");
         }
-        // Add Hedera Testnet
+        // Parameters for adding the Hedera Testnet to the wallet using `wallet_addEthereumChain` RPC method.
         await window.ethereum.request({
             method: "wallet_addEthereumChain",
             params: [
