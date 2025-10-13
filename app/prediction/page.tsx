@@ -1,7 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { toast } from "sonner";
+
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,35 +25,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { useWalletStore } from "@/lib/wallet-provider";
 import { formatDate } from "@/lib/utils";
-import { toast } from "sonner";
+import { useWalletStore } from "@/lib/wallet-provider";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-} from "recharts";
-import {
-  TrendingUp,
-  ArrowLeft,
-  RefreshCw,
   AlertTriangle,
-  CheckCircle,
+  ArrowLeft,
   BarChart3,
+  CheckCircle,
+  Cloud,
+  Droplets,
   Leaf,
   MapPin,
-  Droplets,
-  Cloud,
+  RefreshCw,
+  TrendingUp,
 } from "lucide-react";
 
 interface FarmData {
@@ -70,13 +69,12 @@ export default function Prediction() {
   const { isConnected, account } = useWalletStore();
 
   const [farmData, setFarmData] = useState<FarmData[]>([]);
-  const [yieldPredictions, setYieldPredictions] = useState<YieldPrediction[]>(
-    []
-  );
+  const [yieldPredictions, setYieldPredictions] = useState<YieldPrediction[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedFarmData, setSelectedFarmData] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
 
+  // Effect to handle wallet connection status and data fetching
   useEffect(() => {
     if (!isConnected) {
       router.push("/");
@@ -85,12 +83,16 @@ export default function Prediction() {
     }
   }, [isConnected, router, account]);
 
+  /**
+   * Fetches farm data and yield predictions for the connected wallet address.
+   * Sets loading state during the fetch operation.
+   */
   const fetchData = async () => {
     if (!account?.address) return;
 
     setIsLoading(true);
     try {
-      // Fetch user's farm data
+      // Fetch farm data submitted by the user
       const farmDataResponse = await fetch(
         `/api/farm-data?walletAddress=${account.address}`
       );
@@ -99,7 +101,7 @@ export default function Prediction() {
         setFarmData(farmDataResult.data || []);
       }
 
-      // Fetch user's yield predictions
+      // Fetch yield predictions associated with the user's farm data
       const predictionsResponse = await fetch(
         `/api/yield-predictions?walletAddress=${account.address}`
       );
@@ -115,6 +117,10 @@ export default function Prediction() {
     }
   };
 
+  /**
+   * Handles the generation of a new yield prediction.
+   * Requires selected farm data and a connected wallet.
+   */
   const handleGeneratePrediction = async () => {
     if (!selectedFarmData) {
       toast.error("Please select farm data to analyze");
@@ -146,10 +152,10 @@ export default function Prediction() {
       const result = await response.json();
 
       if (result.success) {
-        // Add the new prediction to the list
+        // Prepend the new prediction to the existing list to show it first
         setYieldPredictions((prev) => [result.data, ...prev]);
         toast.success("Yield prediction generated successfully!");
-        setSelectedFarmData(""); // Reset selection
+        setSelectedFarmData(""); // Reset selected farm data after successful generation
       } else {
         throw new Error(result.error || "Failed to generate prediction");
       }
@@ -161,7 +167,7 @@ export default function Prediction() {
     }
   };
 
-  // Chart data
+  // Prepare data for the yield vs. risk chart
   const yieldData = yieldPredictions.map((pred, index) => ({
     name: `${pred.cropType} ${index + 1}`,
     yield: pred.predictedYield,
@@ -170,6 +176,7 @@ export default function Prediction() {
     date: new Date(pred.createdAt).toLocaleDateString(),
   }));
 
+  // Calculate distribution of risk levels for the pie chart
   const riskData = [
     {
       name: "Low Risk",
@@ -188,7 +195,7 @@ export default function Prediction() {
       value: yieldPredictions.filter((p) => p.riskLevel >= 25).length,
       color: "#ef4444",
     },
-  ].filter((item) => item.value > 0); // Only show categories with data
+  ].filter((item) => item.value > 0); // Only include risk categories that have predictions
 
   if (!isConnected) {
     return null;
@@ -222,7 +229,7 @@ export default function Prediction() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header section for the Yield Predictions page */}
       <div className="flex items-center gap-4">
         <Button
           variant="outline"
@@ -242,7 +249,7 @@ export default function Prediction() {
         </div>
       </div>
 
-      {/* Generate New Prediction */}
+      {/* Card to generate new yield predictions */}
       <Card className="dashboard-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -293,6 +300,7 @@ export default function Prediction() {
 
               {selectedFarmData && (
                 <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  {/* Display details of the currently selected farm data */}
                   {(() => {
                     const selectedData = farmData.find(
                       (d) => d.id === selectedFarmData
@@ -381,7 +389,7 @@ export default function Prediction() {
             </CardContent>
           </Card>
 
-          {/* Risk Distribution */}
+          {/* Risk Distribution Chart */}
           <Card className="dashboard-card">
             <CardHeader>
               <CardTitle>Risk Distribution</CardTitle>
@@ -454,7 +462,7 @@ export default function Prediction() {
         </Card>
       )}
 
-      {/* Recent Predictions */}
+      {/* Recent Predictions List */}
       <Card className="dashboard-card">
         <CardHeader>
           <CardTitle>Recent Predictions</CardTitle>
@@ -465,6 +473,7 @@ export default function Prediction() {
         <CardContent>
           {yieldPredictions.length > 0 ? (
             <div className="space-y-4">
+              {/* Display the 5 most recent predictions, newest first */}
               {yieldPredictions
                 .slice(-5)
                 .reverse()
@@ -493,6 +502,8 @@ export default function Prediction() {
                         </Badge>
                       </div>
                       <span className="text-sm text-gray-500">
+                        {/* Note: The interface defines 'createdAt', but the code uses 'timestamp'. */}
+                        {/* This might result in 'N/A' if prediction.timestamp is not provided by the API. */}
                         {prediction.timestamp
                           ? formatDate(prediction.timestamp)
                           : "N/A"}
@@ -526,7 +537,7 @@ export default function Prediction() {
                       </div>
                     </div>
 
-                    {/* AI Insights */}
+                    {/* AI Insights and Recommendations */}
                     <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       <div className="flex items-start gap-2">
                         {prediction.riskLevel < 15 ? (
@@ -586,7 +597,7 @@ export default function Prediction() {
         </CardContent>
       </Card>
 
-      {/* AI Insights Summary */}
+      {/* AI Insights Summary Card */}
       {yieldPredictions.length > 0 && (
         <Card className="dashboard-card">
           <CardHeader>
@@ -630,7 +641,8 @@ export default function Prediction() {
                     yieldPredictions.reduce(
                       (acc, p) => acc + p.predictedYield,
                       0
-                    ) / yieldPredictions.length
+                    ) /
+                    yieldPredictions.length
                   ).toFixed(1)}{" "}
                   tons/ha
                 </div>

@@ -1,19 +1,19 @@
 import { db } from "./index";
 import {
-  users,
-  farmData,
-  yieldPredictions,
-  loans,
-  harvestTokens,
   badges,
+  farmData,
+  harvestTokens,
+  loans,
   marketPrices,
+  users,
+  yieldPredictions,
 } from "./schema";
 
 export async function seedDatabase() {
   try {
     console.log("🌱 Seeding database...");
 
-    // Create a demo user
+    // Create a demo user entry in the database.
     const [demoUser] = await db
       .insert(users)
       .values({
@@ -28,7 +28,7 @@ export async function seedDatabase() {
 
     console.log("✅ Created demo user:", demoUser.name);
 
-    // Create farm data entries
+    // Insert multiple farm data entries for the demo user.
     const farmDataEntries = await db
       .insert(farmData)
       .values([
@@ -67,7 +67,7 @@ export async function seedDatabase() {
 
     console.log("✅ Created farm data entries:", farmDataEntries.length);
 
-    // Create yield predictions
+    // Insert yield predictions for different crops for the demo user.
     const predictions = await db
       .insert(yieldPredictions)
       .values([
@@ -100,7 +100,7 @@ export async function seedDatabase() {
 
     console.log("✅ Created yield predictions:", predictions.length);
 
-    // Create a loan
+    // Create a demo loan entry for the user.
     const [loan] = await db
       .insert(loans)
       .values({
@@ -116,7 +116,7 @@ export async function seedDatabase() {
 
     console.log("✅ Created loan:", loan.id);
 
-    // Create harvest tokens
+    // Insert harvest tokens for various crops.
     const tokens = await db
       .insert(harvestTokens)
       .values([
@@ -151,7 +151,7 @@ export async function seedDatabase() {
 
     console.log("✅ Created harvest tokens:", tokens.length);
 
-    // Create badges
+    // Insert various badges earned by the demo user.
     const badgeEntries = await db
       .insert(badges)
       .values([
@@ -192,7 +192,7 @@ export async function seedDatabase() {
 
     console.log("✅ Created badges:", badgeEntries.length);
 
-    // Create market prices
+    // Insert current market prices for various crop types.
     const prices = await db
       .insert(marketPrices)
       .values([
@@ -252,7 +252,7 @@ export async function seedDatabase() {
   }
 }
 
-// Run seed if this file is executed directly
+// Run the seed function if this file is executed directly (e.g., via `node seed.ts`).
 if (require.main === module) {
   seedDatabase()
     .then(() => process.exit(0))
