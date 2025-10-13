@@ -1,4 +1,7 @@
 {
+  "/api/farm-data/submit/route": "app/api/farm-data/submit/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/page": "app/page.js"
+  "/my-submissions/page": "app/my-submissions/page.js",
+  "/page": "app/page.js",
+  "/submit-data/page": "app/submit-data/page.js"
 }
