@@ -22,7 +22,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils.ts [app-client] (ecmascript)");
 ;
 ;
-function Card(param) {
+/**
+ * A flexible and extensible content container.
+ * This is the main Card component, providing a consistent layout for grouped content.
+ * It supports standard div props and additional class names for styling.
+ */ function Card(param) {
     let { className, ...props } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         "data-slot": "card",
@@ -30,12 +34,15 @@ function Card(param) {
         ...props
     }, void 0, false, {
         fileName: "[project]/components/ui/card.tsx",
-        lineNumber: 7,
+        lineNumber: 12,
         columnNumber: 5
     }, this);
 }
 _c = Card;
-function CardHeader(param) {
+/**
+ * Renders the header section of a Card.
+ * Typically used for titles, descriptions, and actions at the top of the card.
+ */ function CardHeader(param) {
     let { className, ...props } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         "data-slot": "card-header",
@@ -43,12 +50,15 @@ function CardHeader(param) {
         ...props
     }, void 0, false, {
         fileName: "[project]/components/ui/card.tsx",
-        lineNumber: 20,
+        lineNumber: 29,
         columnNumber: 5
     }, this);
 }
 _c1 = CardHeader;
-function CardTitle(param) {
+/**
+ * Renders the main title for the Card or its header.
+ * Designed for prominent text within the CardHeader.
+ */ function CardTitle(param) {
     let { className, ...props } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         "data-slot": "card-title",
@@ -56,12 +66,15 @@ function CardTitle(param) {
         ...props
     }, void 0, false, {
         fileName: "[project]/components/ui/card.tsx",
-        lineNumber: 33,
+        lineNumber: 46,
         columnNumber: 5
     }, this);
 }
 _c2 = CardTitle;
-function CardDescription(param) {
+/**
+ * Renders a descriptive subtitle or secondary text for the Card.
+ * Often used in conjunction with `CardTitle` within the `CardHeader`.
+ */ function CardDescription(param) {
     let { className, ...props } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         "data-slot": "card-description",
@@ -69,12 +82,15 @@ function CardDescription(param) {
         ...props
     }, void 0, false, {
         fileName: "[project]/components/ui/card.tsx",
-        lineNumber: 43,
+        lineNumber: 60,
         columnNumber: 5
     }, this);
 }
 _c3 = CardDescription;
-function CardAction(param) {
+/**
+ * Renders an action element within the CardHeader.
+ * It's typically positioned to the right of the title/description.
+ */ function CardAction(param) {
     let { className, ...props } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         "data-slot": "card-action",
@@ -82,12 +98,15 @@ function CardAction(param) {
         ...props
     }, void 0, false, {
         fileName: "[project]/components/ui/card.tsx",
-        lineNumber: 53,
+        lineNumber: 74,
         columnNumber: 5
     }, this);
 }
 _c4 = CardAction;
-function CardContent(param) {
+/**
+ * Renders the main content area of the Card.
+ * Use this for the primary information or elements within the card.
+ */ function CardContent(param) {
     let { className, ...props } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         "data-slot": "card-content",
@@ -95,12 +114,15 @@ function CardContent(param) {
         ...props
     }, void 0, false, {
         fileName: "[project]/components/ui/card.tsx",
-        lineNumber: 66,
+        lineNumber: 91,
         columnNumber: 5
     }, this);
 }
 _c5 = CardContent;
-function CardFooter(param) {
+/**
+ * Renders the footer section of a Card.
+ * Typically used for supplementary actions, links, or status indicators.
+ */ function CardFooter(param) {
     let { className, ...props } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         "data-slot": "card-footer",
@@ -108,7 +130,7 @@ function CardFooter(param) {
         ...props
     }, void 0, false, {
         fileName: "[project]/components/ui/card.tsx",
-        lineNumber: 76,
+        lineNumber: 105,
         columnNumber: 5
     }, this);
 }
@@ -438,15 +460,23 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$
 ;
 ;
 ;
-function Label(param) {
+/**
+ * Renders a custom label component based on Radix UI's Label primitive.
+ * It provides styling for accessibility, alignment, and disabled states.
+ *
+ * @param {object} props - Component props.
+ * @param {string} [props.className] - Optional additional CSS classes to apply.
+ * @param {React.ComponentProps<typeof LabelPrimitive.Root>} props - All other props supported by Radix UI's Label.Root component.
+ * @returns {JSX.Element} The rendered Label component.
+ */ function Label(param) {
     let { className, ...props } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$radix$2d$ui$2f$react$2d$label$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Root"], {
         "data-slot": "label",
-        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50", className),
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex items-center gap-2 text-sm leading-none font-medium select-none", "group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50", "peer-disabled:cursor-not-allowed peer-disabled:opacity-50", className),
         ...props
     }, void 0, false, {
         fileName: "[project]/components/ui/label.tsx",
-        lineNumber: 13,
+        lineNumber: 22,
         columnNumber: 5
     }, this);
 }
