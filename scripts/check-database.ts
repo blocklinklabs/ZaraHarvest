@@ -14,7 +14,7 @@ async function checkDatabase() {
   try {
     console.log("🔍 Checking database connection...");
 
-    // Execute a select query on the 'users' table to verify database accessibility and retrieve user records.
+    // Query the 'users' table to verify database accessibility and retrieve any existing records.
     const usersRecords = await db.select().from(users);
     console.log("✅ Database connection successful!");
     console.log(`📊 Users table has ${usersRecords.length} records`);
