@@ -118,7 +118,7 @@ export const useWalletStore = create<WalletState>()(
 /**
  * A singleton utility class for interacting with Web3 wallets (e.g., MetaMask).
  * It encapsulates common wallet operations like connecting, getting account info,
- * and managing network switches.
+ * managing network switches, and automatic reconnection.
  */
 export class WalletProvider {
   /**
@@ -126,6 +126,18 @@ export class WalletProvider {
    * @private
    */
   private static instance: WalletProvider;
+
+  /**
+   * Event listeners for wallet events
+   * @private
+   */
+  private eventListeners: (() => void)[] = [];
+
+  /**
+   * Flag to track if the provider has been initialized
+   * @private
+   */
+  private initialized = false;
 
   /**
    * Returns the singleton instance of WalletProvider.
@@ -137,6 +149,175 @@ export class WalletProvider {
       WalletProvider.instance = new WalletProvider();
     }
     return WalletProvider.instance;
+  }
+
+  /**
+   * Initializes the wallet provider with event listeners for automatic reconnection
+   * This should be called once when the app starts
+   */
+  initialize() {
+    if (this.initialized || typeof window === "undefined") {
+      return;
+    }
+
+    this.initialized = true;
+    this.setupEventListeners();
+    this.attemptAutoReconnection();
+  }
+
+  /**
+   * Sets up event listeners for wallet state changes
+   * @private
+   */
+  private setupEventListeners() {
+    if (typeof window === "undefined" || !window.ethereum) {
+      return;
+    }
+
+    // Listen for account changes (user switches accounts in wallet)
+    const handleAccountsChanged = (accounts: string[]) => {
+      if (accounts.length === 0) {
+        // User disconnected wallet
+        useWalletStore.getState().disconnect();
+      } else {
+        // User switched accounts, update with new account
+        this.handleAccountSwitch(accounts[0]);
+      }
+    };
+
+    // Listen for network changes
+    const handleChainChanged = (chainId: string) => {
+      console.log("Network changed to:", chainId);
+      this.handleNetworkChange(chainId);
+    };
+
+    // Listen for wallet connection/disconnection
+    const handleConnect = (connectInfo: { chainId: string }) => {
+      console.log("Wallet connected:", connectInfo);
+    };
+
+    const handleDisconnect = (error: any) => {
+      console.log("Wallet disconnected:", error);
+      useWalletStore.getState().disconnect();
+    };
+
+    // Add event listeners
+    window.ethereum.on("accountsChanged", handleAccountsChanged);
+    window.ethereum.on("chainChanged", handleChainChanged);
+    window.ethereum.on("connect", handleConnect);
+    window.ethereum.on("disconnect", handleDisconnect);
+
+    // Store cleanup functions
+    this.eventListeners = [
+      () =>
+        window.ethereum?.removeListener(
+          "accountsChanged",
+          handleAccountsChanged
+        ),
+      () => window.ethereum?.removeListener("chainChanged", handleChainChanged),
+      () => window.ethereum?.removeListener("connect", handleConnect),
+      () => window.ethereum?.removeListener("disconnect", handleDisconnect),
+    ];
+  }
+
+  /**
+   * Attempts to automatically reconnect to a previously connected wallet
+   * @private
+   */
+  private async attemptAutoReconnection() {
+    const { isConnected, account } = useWalletStore.getState();
+
+    // Only attempt reconnection if we have a stored connection
+    if (!isConnected || !account || !window.ethereum) {
+      return;
+    }
+
+    try {
+      // Check if the wallet is still connected and accessible
+      const accounts = await window.ethereum.request({
+        method: "eth_accounts",
+      });
+
+      if (accounts.length === 0) {
+        // Wallet is no longer connected, clear our state
+        useWalletStore.getState().disconnect();
+        return;
+      }
+
+      // Check if the current account is still the same
+      const currentAccount = accounts[0];
+      if (currentAccount.toLowerCase() !== account.address.toLowerCase()) {
+        // Account changed, update our state
+        await this.handleAccountSwitch(currentAccount);
+        return;
+      }
+
+      // Verify the account is still accessible by getting updated info
+      const updatedAccount = await this.getAccountInfo(currentAccount);
+      useWalletStore.getState().connect(updatedAccount);
+
+      console.log("Wallet automatically reconnected");
+    } catch (error) {
+      console.warn("Failed to auto-reconnect wallet:", error);
+      // Clear the connection state if auto-reconnection fails
+      useWalletStore.getState().disconnect();
+    }
+  }
+
+  /**
+   * Handles account switching when user changes accounts in their wallet
+   * @private
+   */
+  private async handleAccountSwitch(newAddress: string) {
+    try {
+      const updatedAccount = await this.getAccountInfo(newAddress);
+      useWalletStore.getState().connect(updatedAccount);
+      console.log("Account switched to:", newAddress);
+    } catch (error) {
+      console.error("Failed to handle account switch:", error);
+      useWalletStore.getState().disconnect();
+    }
+  }
+
+  /**
+   * Handles network changes when user switches networks in their wallet
+   * @private
+   */
+  private handleNetworkChange(chainId: string) {
+    const { isConnected } = useWalletStore.getState();
+
+    if (!isConnected) {
+      return;
+    }
+
+    // Define supported networks (you can customize these)
+    const supportedNetworks = {
+      "0x128": "Hedera Testnet", // 296 in decimal
+      "0x1": "Ethereum Mainnet", // 1 in decimal
+      "0x89": "Polygon Mainnet", // 137 in decimal
+    };
+
+    const networkName =
+      supportedNetworks[chainId as keyof typeof supportedNetworks];
+
+    if (networkName) {
+      console.log(`Switched to supported network: ${networkName}`);
+      // Optionally show a toast notification
+      // toast.success(`Connected to ${networkName}`);
+    } else {
+      console.warn(`Switched to unsupported network: ${chainId}`);
+      // Optionally show a warning and suggest switching to a supported network
+      // toast.warning("Please switch to a supported network (Hedera Testnet recommended)");
+    }
+  }
+
+  /**
+   * Cleans up event listeners when the provider is destroyed
+   */
+  destroy() {
+    this.eventListeners.forEach((cleanup) => cleanup());
+    this.eventListeners = [];
+    this.initialized = false;
   }
 
   /**
@@ -229,6 +410,35 @@ export class WalletProvider {
   }
 
   /**
+   * Checks if the current network is supported by the application
+   * @returns The network name if supported, null otherwise
+   */
+  async getCurrentNetwork(): Promise<string | null> {
+    if (typeof window === "undefined" || !window.ethereum) {
+      return null;
+    }
+
+    try {
+      const chainId = await window.ethereum.request({
+        method: "eth_chainId",
+      });
+
+      const supportedNetworks = {
+        "0x128": "Hedera Testnet",
+        "0x1": "Ethereum Mainnet",
+        "0x89": "Polygon Mainnet",
+      };
+
+      return (
+        supportedNetworks[chainId as keyof typeof supportedNetworks] || null
+      );
+    } catch (error) {
+      console.error("Failed to get current network:", error);
+      return null;
+    }
+  }
+
+  /**
    * Requests the user's wallet to switch to a specified Ethereum chain ID.
    * If the chain is not recognized by the wallet, it attempts to add the Hedera Testnet.
    *
@@ -253,6 +463,13 @@ export class WalletProvider {
         throw error; // Re-throw other types of errors.
       }
     }
+  }
+
+  /**
+   * Switches to the recommended network (Hedera Testnet) for the application
+   */
+  async switchToRecommendedNetwork() {
+    await this.switchNetwork("0x128"); // Hedera Testnet
   }
 
   /**

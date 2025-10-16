@@ -20,11 +20,37 @@ const Toaster = ({ ...props }: ToasterProps) => {
     <Sonner
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
+      toastOptions={{
+        style: {
+          background:
+            theme === "dark" ? "hsl(var(--background))" : "hsl(var(--card))",
+          color:
+            theme === "dark"
+              ? "hsl(var(--foreground))"
+              : "hsl(var(--card-foreground))",
+          border: `1px solid hsl(var(--border))`,
+        },
+        className: "toast-content",
+      }}
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
+          "--normal-bg":
+            theme === "dark" ? "hsl(var(--background))" : "hsl(var(--card))",
+          "--normal-text":
+            theme === "dark"
+              ? "hsl(var(--foreground))"
+              : "hsl(var(--card-foreground))",
+          "--normal-border": "hsl(var(--border))",
+          "--success-bg":
+            theme === "dark" ? "hsl(142 76% 36%)" : "hsl(142 76% 36%)",
+          "--success-text":
+            theme === "dark" ? "hsl(0 0% 98%)" : "hsl(0 0% 98%)",
+          "--error-bg": theme === "dark" ? "hsl(0 84% 60%)" : "hsl(0 84% 60%)",
+          "--error-text": theme === "dark" ? "hsl(0 0% 98%)" : "hsl(0 0% 98%)",
+          "--warning-bg":
+            theme === "dark" ? "hsl(38 92% 50%)" : "hsl(38 92% 50%)",
+          "--warning-text":
+            theme === "dark" ? "hsl(0 0% 98%)" : "hsl(0 0% 98%)",
         } as React.CSSProperties
       }
       {...props}

@@ -327,7 +327,7 @@ export default function Dashboard() {
                       `Welcome back, ${userData?.name || "Farmer"}!`
                     )}
                   </h2>
-                  <p className="text-green-700 dark:text-green-300">
+                  <div className="text-green-700 dark:text-green-300">
                     {isLoadingUser ? (
                       <Skeleton className="h-4 w-64" />
                     ) : (
@@ -345,7 +345,7 @@ export default function Dashboard() {
                           : "ready for your first yield prediction"
                       }`
                     )}
-                  </p>
+                  </div>
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-bold text-green-600">

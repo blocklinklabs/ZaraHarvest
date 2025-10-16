@@ -23,6 +23,8 @@ import {
 import { useWalletStore, walletProvider } from "@/lib/wallet-provider";
 import { hederaWallet } from "@/lib/hedera";
 import { toast } from "sonner";
+import NetworkStatus from "@/components/NetworkStatus";
+import NotificationCenter from "@/components/NotificationCenter";
 import {
   Leaf,
   Search,
@@ -162,27 +164,7 @@ export default function Header() {
             </Tooltip>
 
             {/* Notifications */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-9 w-9 p-0 relative"
-                  aria-label="Notifications"
-                >
-                  <Bell className="h-4 w-4" />
-                  <Badge
-                    variant="destructive"
-                    className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center text-xs"
-                  >
-                    3
-                  </Badge>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>You have 3 new notifications</p>
-              </TooltipContent>
-            </Tooltip>
+            <NotificationCenter />
 
             {/* Wallet Status */}
             {isConnected ? (
@@ -194,6 +176,9 @@ export default function Header() {
                     {account?.address?.slice(0, 6)}...
                   </span>
                 </Badge>
+
+                {/* Network Status */}
+                <NetworkStatus />
 
                 {/* User Menu */}
                 <DropdownMenu>

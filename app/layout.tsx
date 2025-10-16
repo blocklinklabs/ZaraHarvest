@@ -14,6 +14,8 @@ import DatabaseProvider from "@/components/DatabaseProvider";
 import ClientToaster from "@/components/ClientToaster";
 import ClientOnly from "@/components/ClientOnly";
 import ConditionalLayout from "@/components/ConditionalLayout";
+import WalletInitializer from "@/components/WalletInitializer";
+import NotificationInitializer from "@/components/NotificationInitializer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,6 +45,8 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ClientOnly>
+          <WalletInitializer />
+          <NotificationInitializer />
           <DatabaseProvider>
             <SimulationProvider>
               <ConditionalLayout>{children}</ConditionalLayout>

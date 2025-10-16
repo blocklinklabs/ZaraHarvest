@@ -151,10 +151,10 @@ export default function Home() {
   ];
 
   const stats = [
-    { label: "Farmers Using ZaraHarvest", value: "2,400+", icon: Users },
-    { label: "Total Loans Given", value: "$340K", icon: DollarSign },
-    { label: "Harvests Predicted", value: "8,200+", icon: TrendingUp },
-    { label: "African Countries", value: "6", icon: Globe },
+    { label: "Farmers Using ZaraHarvest", value: "150+", icon: Users },
+    { label: "Total Loans Given", value: "$45K", icon: DollarSign },
+    { label: "Harvests Predicted", value: "320+", icon: TrendingUp },
+    { label: "African Countries", value: "3", icon: Globe },
   ];
 
   if (!isClient) {
@@ -163,13 +163,13 @@ export default function Home() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 dark:from-gray-950 dark:via-black dark:to-gray-950">
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 dark:from-gray-950 dark:via-black dark:to-gray-950 scroll-smooth">
         {/* Hero Section */}
         <section className="relative overflow-hidden pt-20 pb-16 px-4 sm:px-6 lg:px-8">
           {/* Background decorative elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-500/10 dark:bg-green-500/5 rounded-full blur-3xl"></div>
-            <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-green-500/10 dark:bg-green-500/5 rounded-full blur-3xl"></div>
+          <div className="absolute inset-0 overflow-hidden pointer-events-none will-change-transform">
+            <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-500/10 dark:bg-green-500/5 rounded-full blur-3xl transform-gpu"></div>
+            <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-green-500/10 dark:bg-green-500/5 rounded-full blur-3xl transform-gpu"></div>
           </div>
 
           <div className="relative max-w-7xl mx-auto">
@@ -213,10 +213,10 @@ export default function Home() {
                 <Button
                   size="lg"
                   onClick={handleGetStarted}
-                  className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-lg shadow-green-600/30 dark:shadow-green-600/20 group min-w-[200px]"
+                  className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-lg shadow-green-600/30 dark:shadow-green-600/20 group min-w-[200px] transform-gpu will-change-transform"
                 >
                   <span>Get Started</span>
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform transform-gpu will-change-transform" />
                 </Button>
 
                 {!isConnected && (
@@ -227,7 +227,7 @@ export default function Home() {
                         variant="outline"
                         onClick={handleConnectWallet}
                         disabled={isConnecting || !hasWeb3}
-                        className="border-green-600/50 hover:bg-green-50 dark:hover:bg-green-950/30 dark:border-green-600/50 min-w-[200px]"
+                        className="border-green-600/50 hover:bg-green-50 dark:hover:bg-green-950/30 dark:border-green-600/50 min-w-[200px] transform-gpu will-change-transform"
                       >
                         <Wallet className="mr-2 h-5 w-5" />
                         <span>
@@ -285,7 +285,7 @@ export default function Home() {
                 return (
                   <Card
                     key={index}
-                    className="text-center border-green-500/20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm hover:shadow-lg hover:shadow-green-500/10 transition-all duration-300"
+                    className="text-center border-green-500/20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm hover:shadow-lg hover:shadow-green-500/10 transition-all duration-300 transform-gpu will-change-transform"
                   >
                     <CardContent className="pt-6 space-y-2">
                       <Icon className="h-8 w-8 mx-auto text-green-600 dark:text-green-400" />
@@ -322,10 +322,10 @@ export default function Home() {
                 return (
                   <Card
                     key={index}
-                    className="border-green-500/20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm hover:shadow-xl hover:shadow-green-500/10 hover:-translate-y-1 transition-all duration-300 group"
+                    className="border-green-500/20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm hover:shadow-xl hover:shadow-green-500/10 hover:-translate-y-1 transition-all duration-300 group transform-gpu will-change-transform"
                   >
                     <CardHeader>
-                      <div className="w-12 h-12 rounded-lg bg-green-100 dark:bg-green-950/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <div className="w-12 h-12 rounded-lg bg-green-100 dark:bg-green-950/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform transform-gpu will-change-transform">
                         <Icon className={`h-6 w-6 ${feature.color}`} />
                       </div>
                       <CardTitle className="text-xl text-gray-900 dark:text-white">
@@ -356,7 +356,7 @@ export default function Home() {
 
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center space-y-4">
-                <div className="w-16 h-16 mx-auto rounded-full bg-green-600 dark:bg-green-600 flex items-center justify-center shadow-lg shadow-green-600/30">
+                <div className="w-16 h-16 mx-auto rounded-full bg-green-600 dark:bg-green-600 flex items-center justify-center shadow-lg shadow-green-600/30 transform-gpu will-change-transform">
                   <span className="text-2xl font-bold text-white">1</span>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -368,7 +368,7 @@ export default function Home() {
               </div>
 
               <div className="text-center space-y-4">
-                <div className="w-16 h-16 mx-auto rounded-full bg-green-600 dark:bg-green-600 flex items-center justify-center shadow-lg shadow-green-600/30">
+                <div className="w-16 h-16 mx-auto rounded-full bg-green-600 dark:bg-green-600 flex items-center justify-center shadow-lg shadow-green-600/30 transform-gpu will-change-transform">
                   <span className="text-2xl font-bold text-white">2</span>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -380,7 +380,7 @@ export default function Home() {
               </div>
 
               <div className="text-center space-y-4">
-                <div className="w-16 h-16 mx-auto rounded-full bg-green-600 dark:bg-green-600 flex items-center justify-center shadow-lg shadow-green-600/30">
+                <div className="w-16 h-16 mx-auto rounded-full bg-green-600 dark:bg-green-600 flex items-center justify-center shadow-lg shadow-green-600/30 transform-gpu will-change-transform">
                   <span className="text-2xl font-bold text-white">3</span>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -397,27 +397,27 @@ export default function Home() {
         {/* CTA Section */}
         <section className="py-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
-            <Card className="border-green-500/30 bg-gradient-to-br from-green-50 to-white dark:from-green-950/30 dark:to-gray-900 shadow-2xl shadow-green-500/10">
+            <Card className="border-green-500/30 bg-gradient-to-br from-green-50 to-white dark:from-green-950/30 dark:to-gray-900 shadow-2xl shadow-green-500/10 transform-gpu will-change-transform">
               <CardContent className="p-12 text-center space-y-6">
-                <div className="w-16 h-16 mx-auto rounded-full bg-green-600 dark:bg-green-600 flex items-center justify-center shadow-lg shadow-green-600/30">
+                <div className="w-16 h-16 mx-auto rounded-full bg-green-600 dark:bg-green-600 flex items-center justify-center shadow-lg shadow-green-600/30 transform-gpu will-change-transform">
                   <Leaf className="h-8 w-8 text-white" />
                 </div>
                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
                   Ready to stop guessing and start knowing?
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                  Join 2,400+ African farmers who are already using ZaraHarvest
-                  to make smarter decisions and earn better profits.
+                  Join 150+ African farmers who are already using ZaraHarvest to
+                  make smarter decisions and earn better profits.
                 </p>
                 <Button
                   size="lg"
                   onClick={handleGetStarted}
-                  className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-lg shadow-green-600/30 dark:shadow-green-600/20 group"
+                  className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-lg shadow-green-600/30 dark:shadow-green-600/20 group transform-gpu will-change-transform"
                 >
                   <span>
                     {isConnected ? "Go to Dashboard" : "Get Started Now"}
                   </span>
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform transform-gpu will-change-transform" />
                 </Button>
               </CardContent>
             </Card>

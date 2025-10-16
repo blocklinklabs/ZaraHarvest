@@ -25,6 +25,7 @@ export default function ConditionalLayout({
     "/prediction",
     "/lending",
     "/tracker",
+    "/notifications",
     "/settings",
   ];
 

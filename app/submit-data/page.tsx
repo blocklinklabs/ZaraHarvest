@@ -26,6 +26,7 @@ import { mockHBARReward } from "@/lib/utils";
 import { toast } from "sonner";
 import { AgriYieldHelper } from "@/lib/contract";
 import { ethers } from "ethers";
+import { notificationService } from "@/lib/notification-service";
 import {
   Leaf,
   MapPin,
@@ -210,6 +211,15 @@ export default function SubmitData() {
             `🎉 Data submitted successfully! Earned 1 HBAR (Transaction: ${rewardData.data.transactionHash})`
           );
           console.log("✅ Real HBAR reward sent:", rewardData.data);
+
+          // Create notification for successful data submission
+          notificationService.notifyDataSubmitted(
+            formData.cropType,
+            formData.location
+          );
+
+          // Create reward notification
+          notificationService.notifyRewardEarned(1, "submitting farm data");
         } else {
           throw new Error("Reward transaction failed");
         }
@@ -223,6 +233,12 @@ export default function SubmitData() {
         setReward(0);
         toast.success(
           "Data submitted successfully! (Reward failed - contact support)"
+        );
+
+        // Create notification for successful data submission (even without reward)
+        notificationService.notifyDataSubmitted(
+          formData.cropType,
+          formData.location
         );
       }
 
@@ -786,4 +802,3 @@ export default function SubmitData() {
     </div>
   );
 }
-

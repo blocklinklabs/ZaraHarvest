@@ -7,6 +7,7 @@ import {
   integer,
   boolean,
   jsonb,
+  varchar,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -261,3 +262,25 @@ export type MarketPrice = typeof marketPrices.$inferSelect;
 export type NewMarketPrice = typeof marketPrices.$inferInsert;
 export type SupplyChainEvent = typeof supplyChainEvents.$inferSelect;
 export type NewSupplyChainEvent = typeof supplyChainEvents.$inferInsert;
+
+// Notifications table
+export const notifications = pgTable("notifications", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  type: varchar("type", { length: 50 }).notNull(),
+  priority: varchar("priority", { length: 20 }).notNull().default("medium"),
+  title: text("title").notNull(),
+  message: text("message").notNull(),
+  actionUrl: text("action_url"),
+  actionText: text("action_text"),
+  icon: varchar("icon", { length: 10 }),
+  read: boolean("read").default(false),
+  data: jsonb("data"), // Additional notification data
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type Notification = typeof notifications.$inferSelect;
+export type NewNotification = typeof notifications.$inferInsert;
