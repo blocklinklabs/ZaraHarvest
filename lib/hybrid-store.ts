@@ -53,6 +53,17 @@ export interface Badge {
   earnedDate?: Date;
 }
 
+export interface Notification {
+  id: string;
+  type: string;
+  title: string;
+  message: string;
+  read: boolean;
+  actionUrl?: string;
+  createdAt: string;
+  readAt?: string;
+}
+
 export interface AppState {
   // Wallet
   wallet: WalletState;
@@ -85,6 +96,16 @@ export interface AppState {
   // Badges
   badges: Badge[];
   earnBadge: (badgeId: string) => Promise<void>;
+
+  // Notifications
+  notifications: Notification[];
+  unreadNotificationCount: number;
+  addNotification: (
+    notification: Omit<Notification, "id" | "createdAt">
+  ) => Promise<void>;
+  markNotificationAsRead: (notificationId: string) => Promise<void>;
+  markAllNotificationsAsRead: () => Promise<void>;
+  fetchNotifications: () => Promise<void>;
 
   // Offline
   isOnline: boolean;
@@ -172,6 +193,15 @@ export const useHybridStore = create<AppState>()(
         } catch (error) {
           console.error("Failed to save yield prediction to database:", error);
         }
+
+        // Trigger notification
+        await get().addNotification({
+          type: "yield_prediction",
+          title: "📊 Yield Prediction Ready!",
+          message: `Your ${prediction.cropType} yield prediction is ready. Predicted yield: ${prediction.predictedYield} tons with ${prediction.confidence}% confidence.`,
+          read: false,
+          actionUrl: "/prediction",
+        });
       },
 
       // Loans
@@ -196,8 +226,19 @@ export const useHybridStore = create<AppState>()(
         } catch (error) {
           console.error("Failed to save loan to database:", error);
         }
+
+        // Trigger notification
+        await get().addNotification({
+          type: "loan_approved",
+          title: "💰 Loan Approved!",
+          message: `Your loan request for $${loan.amount} has been approved and is now active.`,
+          read: false,
+          actionUrl: "/lending",
+        });
       },
       updateLoanStatus: async (loanId, status) => {
+        const loan = get().loans.find((l) => l.id === loanId);
+
         set((state) => ({
           loans: state.loans.map((loan) =>
             loan.id === loanId ? { ...loan, status } : loan
@@ -209,6 +250,25 @@ export const useHybridStore = create<AppState>()(
           // Database update would go here
         } catch (error) {
           console.error("Failed to update loan status in database:", error);
+        }
+
+        // Trigger notification for status changes
+        if (loan && status === "completed") {
+          await get().addNotification({
+            type: "loan_due",
+            title: "✅ Loan Completed!",
+            message: `Congratulations! Your loan for $${loan.amount} has been successfully repaid.`,
+            read: false,
+            actionUrl: "/lending",
+          });
+        } else if (loan && status === "defaulted") {
+          await get().addNotification({
+            type: "loan_due",
+            title: "⚠️ Loan Defaulted",
+            message: `Your loan for $${loan.amount} has been marked as defaulted. Please contact support.`,
+            read: false,
+            actionUrl: "/lending",
+          });
         }
       },
 
@@ -304,6 +364,107 @@ export const useHybridStore = create<AppState>()(
         } catch (error) {
           console.error("Failed to save badge to database:", error);
         }
+
+        // Trigger notification
+        await get().addNotification({
+          type: "badge_earned",
+          title: "🏆 Badge Earned!",
+          message: `Congratulations! You've earned the "${badge.name}" badge. ${badge.description}`,
+          read: false,
+          actionUrl: "/dashboard",
+        });
+      },
+
+      // Notifications
+      notifications: [],
+      unreadNotificationCount: 0,
+      addNotification: async (notification) => {
+        const newNotification = {
+          ...notification,
+          id: crypto.randomUUID(),
+          createdAt: new Date().toISOString(),
+        };
+
+        set((state) => ({
+          notifications: [newNotification, ...state.notifications],
+          unreadNotificationCount: state.unreadNotificationCount + 1,
+        }));
+
+        // Save to database
+        try {
+          await fetch("/api/notifications", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              walletAddress: get().wallet.accountId,
+              ...notification,
+            }),
+          });
+        } catch (error) {
+          console.error("Failed to save notification to database:", error);
+        }
+      },
+      markNotificationAsRead: async (notificationId) => {
+        set((state) => ({
+          notifications: state.notifications.map((n) =>
+            n.id === notificationId
+              ? { ...n, read: true, readAt: new Date().toISOString() }
+              : n
+          ),
+          unreadNotificationCount: Math.max(
+            0,
+            state.unreadNotificationCount - 1
+          ),
+        }));
+
+        try {
+          await fetch(`/api/notifications/${notificationId}/read`, {
+            method: "PUT",
+          });
+        } catch (error) {
+          console.error("Failed to mark notification as read:", error);
+        }
+      },
+      markAllNotificationsAsRead: async () => {
+        set((state) => ({
+          notifications: state.notifications.map((n) => ({
+            ...n,
+            read: true,
+            readAt: new Date().toISOString(),
+          })),
+          unreadNotificationCount: 0,
+        }));
+
+        try {
+          await fetch("/api/notifications/read-all", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ walletAddress: get().wallet.accountId }),
+          });
+        } catch (error) {
+          console.error("Failed to mark all notifications as read:", error);
+        }
+      },
+      fetchNotifications: async () => {
+        if (!get().wallet.accountId) return;
+
+        try {
+          const response = await fetch(
+            `/api/notifications?walletAddress=${
+              get().wallet.accountId
+            }&limit=50`
+          );
+          const data = await response.json();
+
+          if (data.success) {
+            set({
+              notifications: data.notifications,
+              unreadNotificationCount: data.unreadCount,
+            });
+          }
+        } catch (error) {
+          console.error("Failed to fetch notifications:", error);
+        }
       },
 
       // Offline
@@ -324,6 +485,9 @@ export const useHybridStore = create<AppState>()(
             badges: userData.badges,
             isDatabaseConnected: true,
           });
+
+          // Also fetch notifications
+          await get().fetchNotifications();
         } catch (error) {
           console.error("Failed to sync with database:", error);
           set({ isDatabaseConnected: false });
@@ -339,6 +503,8 @@ export const useHybridStore = create<AppState>()(
         loans: state.loans,
         harvestTokens: state.harvestTokens,
         badges: state.badges,
+        notifications: state.notifications,
+        unreadNotificationCount: state.unreadNotificationCount,
         isDatabaseConnected: state.isDatabaseConnected,
       }),
     }

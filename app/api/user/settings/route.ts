@@ -20,6 +20,11 @@ export async function POST(request: NextRequest) {
       .set({
         // Map settings to user fields
         notifications: settings.notifications,
+        badgeNotifications: settings.badgeNotifications,
+        loanNotifications: settings.loanNotifications,
+        yieldNotifications: settings.yieldNotifications,
+        priceNotifications: settings.priceNotifications,
+        systemNotifications: settings.systemNotifications,
         darkMode: settings.darkMode,
         language: settings.language,
         currency: settings.currency,

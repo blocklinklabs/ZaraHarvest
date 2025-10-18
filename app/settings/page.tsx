@@ -57,6 +57,11 @@ export default function SettingsPage() {
   // Settings state
   const [settings, setSettings] = useState({
     notifications: true,
+    badgeNotifications: true,
+    loanNotifications: true,
+    yieldNotifications: true,
+    priceNotifications: true,
+    systemNotifications: true,
     darkMode: false,
     language: "en",
     currency: "USD",
@@ -316,25 +321,108 @@ export default function SettingsPage() {
               <CardDescription>Customize your experience</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label className="text-sm font-medium">Notifications</Label>
-                  <p className="text-xs text-muted-foreground">
-                    Receive updates about your farm
-                  </p>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="text-sm font-medium">
+                      All Notifications
+                    </Label>
+                    <p className="text-xs text-muted-foreground">
+                      Master toggle for all notification types
+                    </p>
+                  </div>
+                  <Button
+                    variant={settings.notifications ? "default" : "outline"}
+                    size="sm"
+                    onClick={() =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        notifications: !prev.notifications,
+                      }))
+                    }
+                  >
+                    {settings.notifications ? "On" : "Off"}
+                  </Button>
                 </div>
-                <Button
-                  variant={settings.notifications ? "default" : "outline"}
-                  size="sm"
-                  onClick={() =>
-                    setSettings((prev) => ({
-                      ...prev,
-                      notifications: !prev.notifications,
-                    }))
-                  }
-                >
-                  {settings.notifications ? "On" : "Off"}
-                </Button>
+
+                {settings.notifications && (
+                  <>
+                    <Separator />
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">
+                        Notification Types
+                      </Label>
+                      <div className="grid grid-cols-1 gap-2">
+                        {[
+                          {
+                            key: "badgeNotifications",
+                            label: "🏆 Badge Earned",
+                            desc: "When you earn new badges",
+                          },
+                          {
+                            key: "loanNotifications",
+                            label: "💰 Loan Updates",
+                            desc: "Loan approvals, payments, and status changes",
+                          },
+                          {
+                            key: "yieldNotifications",
+                            label: "📊 Yield Predictions",
+                            desc: "When AI predictions are ready",
+                          },
+                          {
+                            key: "priceNotifications",
+                            label: "📈 Price Alerts",
+                            desc: "Market price changes for your crops",
+                          },
+                          {
+                            key: "systemNotifications",
+                            label: "🔔 System Updates",
+                            desc: "Important app updates and maintenance",
+                          },
+                        ].map((notificationType) => (
+                          <div
+                            key={notificationType.key}
+                            className="flex items-center justify-between p-2 rounded border"
+                          >
+                            <div>
+                              <p className="text-sm font-medium">
+                                {notificationType.label}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {notificationType.desc}
+                              </p>
+                            </div>
+                            <Button
+                              variant={
+                                settings[
+                                  notificationType.key as keyof typeof settings
+                                ]
+                                  ? "default"
+                                  : "outline"
+                              }
+                              size="sm"
+                              onClick={() =>
+                                setSettings((prev) => ({
+                                  ...prev,
+                                  [notificationType.key]:
+                                    !prev[
+                                      notificationType.key as keyof typeof settings
+                                    ],
+                                }))
+                              }
+                            >
+                              {settings[
+                                notificationType.key as keyof typeof settings
+                              ]
+                                ? "On"
+                                : "Off"}
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
               <Separator />
               <div className="flex items-center justify-between">
@@ -624,4 +712,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-

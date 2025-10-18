@@ -43,7 +43,6 @@ import {
   Plus,
   Award,
   BarChart3,
-  Wallet,
   AlertCircle,
   Activity,
   Target,
@@ -70,6 +69,12 @@ export default function Dashboard() {
     harvestTokens: [] as any[],
   });
   const [isLoadingData, setIsLoadingData] = useState(true);
+
+  // Market prices state
+  const [marketPrices, setMarketPrices] = useState<any[]>([]);
+  const [isLoadingPrices, setIsLoadingPrices] = useState(true);
+  const [userCountry, setUserCountry] = useState("Ghana");
+  const [currency, setCurrency] = useState("GHS");
 
   // Use real data from database
   const farmData = dashboardData.farmData;
@@ -129,6 +134,63 @@ export default function Dashboard() {
 
   const earnBadge = (badgeId: string) => {
     console.log("Earning badge:", badgeId);
+  };
+
+  // Function to detect user country from location data
+  const detectUserCountry = (location: string) => {
+    if (!location) return "Ghana"; // Default fallback
+
+    const locationLower = location.toLowerCase();
+    if (
+      locationLower.includes("nigeria") ||
+      locationLower.includes("lagos") ||
+      locationLower.includes("abuja")
+    ) {
+      return "Nigeria";
+    } else if (
+      locationLower.includes("kenya") ||
+      locationLower.includes("nairobi")
+    ) {
+      return "Kenya";
+    } else if (
+      locationLower.includes("uganda") ||
+      locationLower.includes("kampala")
+    ) {
+      return "Uganda";
+    } else if (
+      locationLower.includes("tanzania") ||
+      locationLower.includes("dar es salaam")
+    ) {
+      return "Tanzania";
+    } else if (
+      locationLower.includes("ethiopia") ||
+      locationLower.includes("addis ababa")
+    ) {
+      return "Ethiopia";
+    }
+    return "Ghana"; // Default to Ghana
+  };
+
+  // Function to fetch market prices
+  const fetchMarketPrices = async (country: string) => {
+    try {
+      const response = await fetch(
+        `/api/market-prices?country=${encodeURIComponent(country)}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setMarketPrices(data.data || []);
+        setCurrency(data.currency || "GHS");
+      } else {
+        console.error("Failed to fetch market prices");
+        setMarketPrices([]);
+      }
+    } catch (error) {
+      console.error("Error fetching market prices:", error);
+      setMarketPrices([]);
+    } finally {
+      setIsLoadingPrices(false);
+    }
   };
 
   const [isLoading, setIsLoading] = useState(false);
@@ -236,6 +298,15 @@ export default function Dashboard() {
     fetchDashboardData();
   }, [isConnected, account?.address]);
 
+  // Fetch market prices when user data is available
+  useEffect(() => {
+    if (userData && userData.location) {
+      const country = detectUserCountry(userData.location);
+      setUserCountry(country);
+      fetchMarketPrices(country);
+    }
+  }, [userData]);
+
   const handleRequestPrediction = async () => {
     setIsLoading(true);
     try {
@@ -280,33 +351,19 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="flex items-center justify-between"
+          className="text-left mb-8"
         >
-          <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              Farm Dashboard
-            </h1>
-            {isLoadingUser ? (
-              <Skeleton className="h-4 w-64" />
-            ) : (
-              <p className="text-muted-foreground">
-                `Welcome back${userData?.name ? `, ${userData.name}` : ""}!
-                Here's your agricultural overview.`
-              </p>
-            )}
-          </div>
-          <div className="flex items-center gap-3">
-            <Badge
-              variant="default"
-              className="flex items-center gap-2 px-3 py-1"
-            >
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <Wallet className="h-3 w-3" />
-              <span className="text-xs">
-                {account?.address?.slice(0, 8)}...
-              </span>
-            </Badge>
-          </div>
+          <h1 className="text-4xl font-bold text-foreground mb-3">
+            Farm Dashboard
+          </h1>
+          {isLoadingUser ? (
+            <Skeleton className="h-5 w-96" />
+          ) : (
+            <p className="text-lg text-muted-foreground max-w-2xl">
+              Welcome back{userData?.name ? `, ${userData.name}` : ""}! Here's
+              your agricultural overview.
+            </p>
+          )}
         </motion.div>
 
         {/* Welcome Message */}
@@ -316,18 +373,18 @@ export default function Dashboard() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mb-6"
         >
-          <Card className="dashboard-card bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950 dark:to-emerald-950 border-green-200 dark:border-green-800">
+          <Card className="dashboard-card bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 border-primary/20 dark:border-primary/30">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-green-800 dark:text-green-200 mb-2">
+                  <h2 className="text-2xl font-bold text-primary dark:text-primary mb-2">
                     {isLoadingUser ? (
                       <Skeleton className="h-8 w-48" />
                     ) : (
                       `Welcome back, ${userData?.name || "Farmer"}!`
                     )}
                   </h2>
-                  <div className="text-green-700 dark:text-green-300">
+                  <div className="text-primary/80 dark:text-primary/90">
                     {isLoadingUser ? (
                       <Skeleton className="h-4 w-64" />
                     ) : (
@@ -348,14 +405,14 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-green-600">
+                  <div className="text-3xl font-bold text-primary">
                     {isLoadingData ? (
                       <Skeleton className="h-8 w-12" />
                     ) : (
                       (Number(harvestData.totalTons) || 0).toFixed(1)
                     )}
                   </div>
-                  <div className="text-sm text-green-600">
+                  <div className="text-sm text-primary/80">
                     {isLoadingData ? (
                       <Skeleton className="h-3 w-16" />
                     ) : (Number(harvestData.totalTons) || 0) > 0 ? (
@@ -370,6 +427,54 @@ export default function Dashboard() {
           </Card>
         </motion.div>
 
+        {/* Test Notification Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="mb-6"
+        >
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold">🔔 Notification System</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Test the notification system with sample notifications
+                  </p>
+                </div>
+                <Button
+                  onClick={async () => {
+                    try {
+                      const response = await fetch("/api/notifications/test", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          walletAddress: account?.address,
+                        }),
+                      });
+                      const data = await response.json();
+                      if (data.success) {
+                        // Refresh notifications
+                        window.location.reload();
+                      }
+                    } catch (error) {
+                      console.error(
+                        "Failed to create test notifications:",
+                        error
+                      );
+                    }
+                  }}
+                  variant="outline"
+                  className="gap-2"
+                >
+                  Create Test Notifications
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
         {/* Farm Profile - Similar to Welcome Banner */}
         {userData && !isLoadingUser && (
           <motion.div
@@ -378,15 +483,15 @@ export default function Dashboard() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mb-6"
           >
-            <Card className="dashboard-card bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 border-blue-200 dark:border-blue-800">
+            <Card className="dashboard-card bg-gradient-to-r from-secondary/5 to-secondary/10 dark:from-secondary/10 dark:to-secondary/20 border-secondary/20 dark:border-secondary/30">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-2xl font-bold text-blue-800 dark:text-blue-200 mb-2 flex items-center gap-2">
-                      <BarChart3 className="h-6 w-6 text-blue-600" />
+                    <h2 className="text-2xl font-bold text-foreground mb-2 flex items-center gap-2">
+                      <BarChart3 className="h-6 w-6 text-primary" />
                       Your Farm Profile
                     </h2>
-                    <p className="text-blue-700 dark:text-blue-300">
+                    <p className="text-foreground/80 dark:text-foreground/70">
                       {userData.farmSize
                         ? `${userData.farmSize} acres`
                         : "Farm"}{" "}
@@ -399,12 +504,12 @@ export default function Dashboard() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <div className="text-3xl font-bold text-blue-600">
+                    <div className="text-3xl font-bold text-primary">
                       {farmData.length +
                         yieldPredictions.length +
                         harvestTokens.length}
                     </div>
-                    <div className="text-sm text-blue-600">
+                    <div className="text-sm text-foreground/70">
                       total activities
                     </div>
                   </div>
@@ -961,45 +1066,74 @@ export default function Dashboard() {
               <CardTitle className="flex items-center gap-2 text-primary">
                 <TrendingUp className="h-5 w-5" />
                 Market Prices
-                <Badge variant="secondary" className="ml-auto">
-                  Live
-                </Badge>
+                <div className="ml-auto flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fetchMarketPrices(userCountry)}
+                    disabled={isLoadingPrices}
+                    className="h-7 px-2 text-xs"
+                  >
+                    {isLoadingPrices ? (
+                      <div className="animate-spin rounded-full h-3 w-3 border-b border-primary"></div>
+                    ) : (
+                      <TrendingUp className="h-3 w-3" />
+                    )}
+                  </Button>
+                  <Badge variant="secondary">Live</Badge>
+                </div>
               </CardTitle>
               <CardDescription>
-                Current crop prices in Ghana Cedis (GHS)
+                Current crop prices in {userCountry} ({currency})
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                {[
-                  { crop: "Maize", price: 450, change: 5.2, color: "green" },
-                  { crop: "Cocoa", price: 1200, change: -2.1, color: "orange" },
-                  { crop: "Rice", price: 380, change: 3.8, color: "blue" },
-                  { crop: "Wheat", price: 520, change: 1.5, color: "purple" },
-                  { crop: "Cassava", price: 280, change: 4.3, color: "red" },
-                ].map((item, index) => (
-                  <motion.div
-                    key={item.crop}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg text-center"
-                  >
-                    <h3 className="font-semibold text-lg">{item.crop}</h3>
-                    <p className="text-2xl font-bold text-primary">
-                      GHS {item.price}
-                    </p>
-                    <p
-                      className={`text-sm ${
-                        item.change > 0 ? "text-green-600" : "text-red-600"
-                      }`}
+              {isLoadingPrices ? (
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                  {[...Array(5)].map((_, index) => (
+                    <div
+                      key={index}
+                      className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg text-center"
                     >
-                      {item.change > 0 ? "+" : ""}
-                      {item.change}%
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
+                      <Skeleton className="h-6 w-16 mx-auto mb-2" />
+                      <Skeleton className="h-8 w-20 mx-auto mb-2" />
+                      <Skeleton className="h-4 w-12 mx-auto" />
+                    </div>
+                  ))}
+                </div>
+              ) : marketPrices.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                  {marketPrices.map((item, index) => (
+                    <motion.div
+                      key={item.crop}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg text-center"
+                    >
+                      <h3 className="font-semibold text-lg">{item.crop}</h3>
+                      <p className="text-2xl font-bold text-primary">
+                        {currency} {item.price}
+                      </p>
+                      <p
+                        className={`text-sm ${
+                          item.change > 0 ? "text-green-600" : "text-red-600"
+                        }`}
+                      >
+                        {item.change > 0 ? "+" : ""}
+                        {item.change.toFixed(1)}%
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600 dark:text-gray-300">
+                    Unable to load market prices. Please try again later.
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </motion.div>

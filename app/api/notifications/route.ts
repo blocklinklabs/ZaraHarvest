@@ -1,33 +1,53 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { notifications } from "@/lib/db/schema";
+import { notifications, users } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 
+// GET notifications for a user
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
+    const walletAddress = searchParams.get("walletAddress");
     const limit = parseInt(searchParams.get("limit") || "50");
-    const offset = parseInt(searchParams.get("offset") || "0");
+    const unreadOnly = searchParams.get("unreadOnly") === "true";
 
-    if (!userId) {
+    if (!walletAddress) {
       return NextResponse.json(
-        { error: "User ID is required" },
+        { error: "Wallet address is required" },
         { status: 400 }
       );
     }
 
-    const userNotifications = await db
+    // Find user by wallet address
+    const user = await db
+      .select()
+      .from(users)
+      .where(eq(users.walletAddress, walletAddress))
+      .limit(1);
+
+    if (user.length === 0) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // Build query
+    let query = db
       .select()
       .from(notifications)
-      .where(eq(notifications.userId, userId))
+      .where(eq(notifications.userId, user[0].id))
       .orderBy(desc(notifications.createdAt))
-      .limit(limit)
-      .offset(offset);
+      .limit(limit);
+
+    // Add unread filter if requested
+    if (unreadOnly) {
+      query = query.where(eq(notifications.read, false));
+    }
+
+    const userNotifications = await query;
 
     return NextResponse.json({
+      success: true,
       notifications: userNotifications,
-      total: userNotifications.length,
+      unreadCount: userNotifications.filter((n) => !n.read).length,
     });
   } catch (error) {
     console.error("Error fetching notifications:", error);
@@ -38,47 +58,46 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// POST create a new notification
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const {
-      userId,
-      type,
-      priority,
-      title,
-      message,
-      actionUrl,
-      actionText,
-      icon,
-    } = body;
+    const { walletAddress, type, title, message, actionUrl, metadata } =
+      await request.json();
 
-    if (!userId || !type || !title || !message) {
+    if (!walletAddress || !type || !title || !message) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Wallet address, type, title, and message are required" },
         { status: 400 }
       );
     }
 
+    // Find user by wallet address
+    const user = await db
+      .select()
+      .from(users)
+      .where(eq(users.walletAddress, walletAddress))
+      .limit(1);
+
+    if (user.length === 0) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // Create notification
     const newNotification = await db
       .insert(notifications)
       .values({
-        userId,
+        userId: user[0].id,
         type,
-        priority: priority || "medium",
         title,
         message,
         actionUrl,
-        actionText,
-        icon,
-        read: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        metadata,
       })
       .returning();
 
     return NextResponse.json({
+      success: true,
       notification: newNotification[0],
-      message: "Notification created successfully",
     });
   } catch (error) {
     console.error("Error creating notification:", error);

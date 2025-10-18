@@ -24,7 +24,7 @@ import { useWalletStore, walletProvider } from "@/lib/wallet-provider";
 import { hederaWallet } from "@/lib/hedera";
 import { toast } from "sonner";
 import NetworkStatus from "@/components/NetworkStatus";
-import NotificationCenter from "@/components/NotificationCenter";
+import NotificationCenter from "./NotificationCenter";
 import {
   Leaf,
   Search,

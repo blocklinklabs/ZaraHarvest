@@ -24,7 +24,6 @@ import {
   UserPlus,
   Settings,
   FileText,
-  Bell,
 } from "lucide-react";
 
 const navigation = [
@@ -76,12 +75,6 @@ const navigation = [
     href: "/tracker",
     icon: Clock,
     description: "Supply chain tracking",
-  },
-  {
-    name: "Notifications",
-    href: "/notifications",
-    icon: Bell,
-    description: "View all notifications",
   },
   {
     name: "Settings",
