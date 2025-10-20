@@ -16,6 +16,7 @@ import ClientOnly from "@/components/ClientOnly";
 import ConditionalLayout from "@/components/ConditionalLayout";
 import WalletInitializer from "@/components/WalletInitializer";
 import NotificationInitializer from "@/components/NotificationInitializer";
+import { SidebarProvider } from "@/lib/sidebar-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,7 +50,9 @@ export default function RootLayout({
           <NotificationInitializer />
           <DatabaseProvider>
             <SimulationProvider>
-              <ConditionalLayout>{children}</ConditionalLayout>
+              <SidebarProvider>
+                <ConditionalLayout>{children}</ConditionalLayout>
+              </SidebarProvider>
             </SimulationProvider>
           </DatabaseProvider>
         </ClientOnly>

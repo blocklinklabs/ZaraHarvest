@@ -268,36 +268,38 @@ export default function SubmitData() {
 
   if (isSuccess) {
     return (
-      <div className="w-full space-y-6">
-        <Card className="dashboard-card text-center">
-          <CardHeader>
-            <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
-            <CardTitle className="text-2xl">
+      <div className="w-full space-y-8">
+        <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden text-center">
+          <CardHeader className="p-8 pb-6">
+            <div className="w-24 h-24 mx-auto rounded-3xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-2xl shadow-green-600/30 dark:shadow-green-600/20 mb-6">
+              <CheckCircle className="h-12 w-12 text-white" />
+            </div>
+            <CardTitle className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4">
               Data Submitted Successfully!
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-xl text-gray-600 dark:text-gray-300 font-medium">
               Thank you for contributing to the ZaraHarvest network
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg">
-              <p className="text-lg font-semibold text-green-600">
+          <CardContent className="p-8 pt-0 space-y-8">
+            <div className="p-6 bg-gradient-to-br from-green-50/80 to-emerald-50/80 dark:from-green-950/30 dark:to-emerald-950/30 backdrop-blur-sm rounded-2xl border border-green-200/50 dark:border-green-800/50">
+              <p className="text-2xl font-black text-green-600 dark:text-green-400 mb-2">
                 Earned {reward} HBAR
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-base text-gray-600 dark:text-gray-300 font-medium">
                 Rewards have been sent to your wallet via smart contract
               </p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-4">
               <Button
-                className="flex-1 btn-primary"
+                className="flex-1 bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-xl shadow-green-600/30 dark:shadow-green-600/20 rounded-2xl px-8 py-4 font-semibold text-lg transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                 onClick={() => router.push("/dashboard")}
               >
                 View Dashboard
               </Button>
               <Button
                 variant="outline"
-                className="flex-1"
+                className="flex-1 h-12 px-6 border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-2xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                 onClick={() => setIsSuccess(false)}
               >
                 Submit More Data
@@ -308,69 +310,75 @@ export default function SubmitData() {
 
         {/* AI Analysis Results */}
         {(aiAnalysis || yieldPrediction) && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* AI Analysis */}
             {aiAnalysis && (
-              <Card className="dashboard-card">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Leaf className="h-5 w-5" />
+              <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+                <CardHeader className="p-8 pb-6">
+                  <CardTitle className="flex items-center gap-3 text-2xl font-black text-gray-900 dark:text-white">
+                    <div className="w-10 h-10 rounded-2xl bg-green-100 dark:bg-green-950/50 flex items-center justify-center">
+                      <Leaf className="h-5 w-5 text-green-600 dark:text-green-400" />
+                    </div>
                     AI Farm Analysis
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-lg text-gray-600 dark:text-gray-300 font-medium">
                     AI-powered insights about your farm
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="p-8 pt-0 space-y-6">
                   <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label className="text-sm font-medium">Crop Health</Label>
+                    <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                      <Label className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+                        Crop Health
+                      </Label>
                       <Badge
-                        variant={
+                        className={`mt-2 ${
                           aiAnalysis.cropHealth === "excellent"
-                            ? "default"
-                            : "secondary"
-                        }
+                            ? "bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300"
+                            : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+                        }`}
                       >
                         {aiAnalysis.cropHealth}
                       </Badge>
                     </div>
-                    <div>
-                      <Label className="text-sm font-medium">
+                    <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                      <Label className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
                         Soil Quality
                       </Label>
                       <Badge
-                        variant={
+                        className={`mt-2 ${
                           aiAnalysis.soilQuality === "excellent"
-                            ? "default"
-                            : "secondary"
-                        }
+                            ? "bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300"
+                            : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+                        }`}
                       >
                         {aiAnalysis.soilQuality}
                       </Badge>
                     </div>
-                    <div>
-                      <Label className="text-sm font-medium">
+                    <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                      <Label className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
                         Disease Risk
                       </Label>
                       <Badge
-                        variant={
+                        className={`mt-2 ${
                           aiAnalysis.diseaseRisk === "low"
-                            ? "default"
-                            : "destructive"
-                        }
+                            ? "bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300"
+                            : "bg-red-100 dark:bg-red-950/50 text-red-700 dark:text-red-300"
+                        }`}
                       >
                         {aiAnalysis.diseaseRisk}
                       </Badge>
                     </div>
-                    <div>
-                      <Label className="text-sm font-medium">Pest Risk</Label>
+                    <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                      <Label className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+                        Pest Risk
+                      </Label>
                       <Badge
-                        variant={
+                        className={`mt-2 ${
                           aiAnalysis.pestRisk === "low"
-                            ? "default"
-                            : "destructive"
-                        }
+                            ? "bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300"
+                            : "bg-red-100 dark:bg-red-950/50 text-red-700 dark:text-red-300"
+                        }`}
                       >
                         {aiAnalysis.pestRisk}
                       </Badge>
@@ -379,18 +387,20 @@ export default function SubmitData() {
 
                   {aiAnalysis.recommendations &&
                     aiAnalysis.recommendations.length > 0 && (
-                      <div>
-                        <Label className="text-sm font-medium">
+                      <div className="p-6 bg-gradient-to-br from-green-50/80 to-emerald-50/80 dark:from-green-950/30 dark:to-emerald-950/30 backdrop-blur-sm rounded-2xl border border-green-200/50 dark:border-green-800/50">
+                        <Label className="text-base font-semibold text-gray-900 dark:text-white mb-4">
                           Recommendations
                         </Label>
-                        <ul className="text-sm text-muted-foreground mt-1">
+                        <ul className="space-y-3">
                           {aiAnalysis.recommendations.map(
                             (rec: string, index: number) => (
                               <li
                                 key={index}
-                                className="flex items-start gap-2"
+                                className="flex items-start gap-3 text-gray-700 dark:text-gray-300 font-medium"
                               >
-                                <span className="text-green-600">•</span>
+                                <span className="text-green-600 dark:text-green-400 font-bold text-lg">
+                                  •
+                                </span>
                                 {rec}
                               </li>
                             )
@@ -404,22 +414,24 @@ export default function SubmitData() {
 
             {/* Yield Prediction */}
             {yieldPrediction && (
-              <Card className="dashboard-card">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Cloud className="h-5 w-5" />
+              <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+                <CardHeader className="p-8 pb-6">
+                  <CardTitle className="flex items-center gap-3 text-2xl font-black text-gray-900 dark:text-white">
+                    <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center">
+                      <Cloud className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                    </div>
                     Yield Prediction
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-lg text-gray-600 dark:text-gray-300 font-medium">
                     AI-predicted crop yield for your farm
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-primary">
+                <CardContent className="p-8 pt-0 space-y-6">
+                  <div className="text-center p-6 bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-950/30 dark:to-indigo-950/30 backdrop-blur-sm rounded-2xl border border-blue-200/50 dark:border-blue-800/50">
+                    <div className="text-4xl font-black text-blue-600 dark:text-blue-400 mb-2">
                       {yieldPrediction.predictedYield.toFixed(1)} tons/ha
                     </div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-base text-gray-600 dark:text-gray-300 font-medium">
                       Confidence:{" "}
                       {(yieldPrediction.confidence * 100).toFixed(0)}%
                     </div>
@@ -427,18 +439,20 @@ export default function SubmitData() {
 
                   {yieldPrediction.factors &&
                     yieldPrediction.factors.length > 0 && (
-                      <div>
-                        <Label className="text-sm font-medium">
+                      <div className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                        <Label className="text-base font-semibold text-gray-900 dark:text-white mb-4">
                           Key Factors
                         </Label>
-                        <ul className="text-sm text-muted-foreground mt-1">
+                        <ul className="space-y-3">
                           {yieldPrediction.factors.map(
                             (factor: string, index: number) => (
                               <li
                                 key={index}
-                                className="flex items-start gap-2"
+                                className="flex items-start gap-3 text-gray-700 dark:text-gray-300 font-medium"
                               >
-                                <span className="text-blue-600">•</span>
+                                <span className="text-blue-600 dark:text-blue-400 font-bold text-lg">
+                                  •
+                                </span>
                                 {factor}
                               </li>
                             )
@@ -456,55 +470,58 @@ export default function SubmitData() {
   }
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-8">
       {/* Header */}
-      <div className="flex items-center gap-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => router.push("/dashboard")}
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
-        </Button>
+      <div className="flex items-center gap-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white tracking-tight">
             Submit Farm Data
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-xl text-gray-600 dark:text-gray-300 font-medium mt-2">
             Help improve yield predictions by sharing your farm data
           </p>
         </div>
       </div>
 
-      <Card className="dashboard-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Leaf className="h-5 w-5" />
+      <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+        <CardHeader className="p-8 pb-6">
+          <CardTitle className="flex items-center gap-3 text-3xl font-black text-gray-900 dark:text-white">
+            <div className="w-12 h-12 rounded-2xl bg-green-100 dark:bg-green-950/50 flex items-center justify-center">
+              <Leaf className="h-6 w-6 text-green-600 dark:text-green-400" />
+            </div>
             Farm Data Collection
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-lg text-gray-600 dark:text-gray-300 font-medium">
             Earn HBAR tokens by contributing data to the network
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <CardContent className="p-8 pt-0">
+          <form onSubmit={handleSubmit} className="space-y-8">
             {/* Crop Type */}
-            <div className="space-y-2">
-              <Label htmlFor="cropType" className="flex items-center gap-2">
-                <Leaf className="h-4 w-4" />
+            <div className="space-y-3">
+              <Label
+                htmlFor="cropType"
+                className="flex items-center gap-3 text-base font-semibold text-gray-900 dark:text-white"
+              >
+                <div className="w-8 h-8 rounded-xl bg-green-100 dark:bg-green-950/50 flex items-center justify-center">
+                  <Leaf className="h-4 w-4 text-green-600 dark:text-green-400" />
+                </div>
                 Crop Type
               </Label>
               <Select
                 value={formData.cropType}
                 onValueChange={(value) => handleInputChange("cropType", value)}
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform">
                   <SelectValue placeholder="Select crop type" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl rounded-xl">
                   {cropTypes.map((crop) => (
-                    <SelectItem key={crop} value={crop}>
+                    <SelectItem
+                      key={crop}
+                      value={crop}
+                      className="rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
                       {crop}
                     </SelectItem>
                   ))}
@@ -513,9 +530,14 @@ export default function SubmitData() {
             </div>
 
             {/* Location */}
-            <div className="space-y-2">
-              <Label htmlFor="location" className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" />
+            <div className="space-y-3">
+              <Label
+                htmlFor="location"
+                className="flex items-center gap-3 text-base font-semibold text-gray-900 dark:text-white"
+              >
+                <div className="w-8 h-8 rounded-xl bg-green-100 dark:bg-green-950/50 flex items-center justify-center">
+                  <MapPin className="h-4 w-4 text-green-600 dark:text-green-400" />
+                </div>
                 Location
               </Label>
               <Input
@@ -524,13 +546,19 @@ export default function SubmitData() {
                 value={formData.location}
                 onChange={(e) => handleInputChange("location", e.target.value)}
                 required
+                className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
               />
             </div>
 
             {/* Soil Moisture */}
-            <div className="space-y-2">
-              <Label htmlFor="soilMoisture" className="flex items-center gap-2">
-                <Droplets className="h-4 w-4" />
+            <div className="space-y-3">
+              <Label
+                htmlFor="soilMoisture"
+                className="flex items-center gap-3 text-base font-semibold text-gray-900 dark:text-white"
+              >
+                <div className="w-8 h-8 rounded-xl bg-green-100 dark:bg-green-950/50 flex items-center justify-center">
+                  <Droplets className="h-4 w-4 text-green-600 dark:text-green-400" />
+                </div>
                 Soil Moisture (%)
               </Label>
               <Input
@@ -544,13 +572,19 @@ export default function SubmitData() {
                   handleInputChange("soilMoisture", e.target.value)
                 }
                 required
+                className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
               />
             </div>
 
             {/* Weather Notes */}
-            <div className="space-y-2">
-              <Label htmlFor="weatherNotes" className="flex items-center gap-2">
-                <Cloud className="h-4 w-4" />
+            <div className="space-y-3">
+              <Label
+                htmlFor="weatherNotes"
+                className="flex items-center gap-3 text-base font-semibold text-gray-900 dark:text-white"
+              >
+                <div className="w-8 h-8 rounded-xl bg-green-100 dark:bg-green-950/50 flex items-center justify-center">
+                  <Cloud className="h-4 w-4 text-green-600 dark:text-green-400" />
+                </div>
                 Weather Notes
               </Label>
               <Textarea
@@ -561,18 +595,21 @@ export default function SubmitData() {
                   handleInputChange("weatherNotes", e.target.value)
                 }
                 rows={3}
+                className="min-h-[120px] px-4 py-3 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform resize-none"
               />
             </div>
 
             {/* Additional Environmental Data */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Temperature */}
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label
                   htmlFor="temperature"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-3 text-base font-semibold text-gray-900 dark:text-white"
                 >
-                  <Cloud className="h-4 w-4" />
+                  <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center">
+                    <Cloud className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  </div>
                   Temperature (°C)
                 </Label>
                 <Input
@@ -583,13 +620,19 @@ export default function SubmitData() {
                   onChange={(e) =>
                     handleInputChange("temperature", e.target.value)
                   }
+                  className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                 />
               </div>
 
               {/* Humidity */}
-              <div className="space-y-2">
-                <Label htmlFor="humidity" className="flex items-center gap-2">
-                  <Droplets className="h-4 w-4" />
+              <div className="space-y-3">
+                <Label
+                  htmlFor="humidity"
+                  className="flex items-center gap-3 text-base font-semibold text-gray-900 dark:text-white"
+                >
+                  <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center">
+                    <Droplets className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  </div>
                   Humidity (%)
                 </Label>
                 <Input
@@ -602,13 +645,19 @@ export default function SubmitData() {
                   onChange={(e) =>
                     handleInputChange("humidity", e.target.value)
                   }
+                  className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                 />
               </div>
 
               {/* Rainfall */}
-              <div className="space-y-2">
-                <Label htmlFor="rainfall" className="flex items-center gap-2">
-                  <Cloud className="h-4 w-4" />
+              <div className="space-y-3">
+                <Label
+                  htmlFor="rainfall"
+                  className="flex items-center gap-3 text-base font-semibold text-gray-900 dark:text-white"
+                >
+                  <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center">
+                    <Cloud className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  </div>
                   Rainfall (mm)
                 </Label>
                 <Input
@@ -619,25 +668,29 @@ export default function SubmitData() {
                   onChange={(e) =>
                     handleInputChange("rainfall", e.target.value)
                   }
+                  className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                 />
               </div>
 
               {/* Coordinates */}
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label
                   htmlFor="coordinates"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-3 text-base font-semibold text-gray-900 dark:text-white"
                 >
-                  <MapPin className="h-4 w-4" />
+                  <div className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                    <MapPin className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                  </div>
                   GPS Coordinates (Optional)
                 </Label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-3">
                   <Input
                     placeholder="Latitude"
                     value={formData.latitude}
                     onChange={(e) =>
                       handleInputChange("latitude", e.target.value)
                     }
+                    className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                   />
                   <Input
                     placeholder="Longitude"
@@ -645,20 +698,26 @@ export default function SubmitData() {
                     onChange={(e) =>
                       handleInputChange("longitude", e.target.value)
                     }
+                    className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                   />
                 </div>
               </div>
             </div>
 
             {/* Photo Upload */}
-            <div className="space-y-2">
-              <Label htmlFor="photo" className="flex items-center gap-2">
-                <Camera className="h-4 w-4" />
+            <div className="space-y-3">
+              <Label
+                htmlFor="photo"
+                className="flex items-center gap-3 text-base font-semibold text-gray-900 dark:text-white"
+              >
+                <div className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                  <Camera className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                </div>
                 Farm Photo (Optional)
               </Label>
-              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
-                <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+              <div className="border-2 border-dashed border-gray-200/50 dark:border-gray-700/50 rounded-2xl p-8 text-center bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm hover:border-green-300/50 dark:hover:border-green-700/50 transition-all duration-200">
+                <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-base text-gray-600 dark:text-gray-300 font-medium mb-4">
                   Upload a photo of your farm
                 </p>
                 <Input
@@ -666,10 +725,10 @@ export default function SubmitData() {
                   type="file"
                   accept="image/*"
                   onChange={handlePhotoChange}
-                  className="max-w-xs mx-auto"
+                  className="max-w-xs mx-auto h-12 px-4 bg-white dark:bg-gray-900 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                 />
                 {formData.photo && (
-                  <Badge variant="secondary" className="mt-2">
+                  <Badge className="mt-4 bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300 border-0 px-4 py-2 rounded-xl font-semibold">
                     {formData.photo.name}
                   </Badge>
                 )}
@@ -679,7 +738,7 @@ export default function SubmitData() {
             {/* Submit Button */}
             <Button
               type="submit"
-              className="w-full btn-primary"
+              className="w-full bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-xl shadow-green-600/30 dark:shadow-green-600/20 rounded-2xl px-8 py-4 font-semibold text-lg transition-all duration-200 transform-gpu will-change-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
               size="lg"
               disabled={
                 isSubmitting ||
@@ -690,12 +749,12 @@ export default function SubmitData() {
             >
               {isSubmitting ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3" />
                   Submitting...
                 </>
               ) : (
                 <>
-                  <Leaf className="mr-2 h-4 w-4" />
+                  <Leaf className="mr-3 h-6 w-6" />
                   Submit Data & Earn HBAR
                 </>
               )}
@@ -705,48 +764,54 @@ export default function SubmitData() {
       </Card>
 
       {/* Recent Submissions */}
-      <Card className="dashboard-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CheckCircle className="h-5 w-5" />
+      <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+        <CardHeader className="p-8 pb-6">
+          <CardTitle className="flex items-center gap-3 text-2xl font-black text-gray-900 dark:text-white">
+            <div className="w-10 h-10 rounded-2xl bg-green-100 dark:bg-green-950/50 flex items-center justify-center">
+              <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+            </div>
             Your Recent Submissions
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-lg text-gray-600 dark:text-gray-300 font-medium">
             Track your data contributions and rewards
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
+        <CardContent className="p-8 pt-0">
+          <div className="space-y-4">
             {recentSubmissions.slice(0, 3).map((data, index) => (
               <div
                 key={data.id}
-                className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
+                className="flex items-center justify-between p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 transform-gpu will-change-transform hover:scale-[1.02] transition-all duration-300"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                    <Leaf className="h-5 w-5 text-green-600" />
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-950/50 dark:to-emerald-950/50 rounded-2xl flex items-center justify-center shadow-lg shadow-green-500/20">
+                    <Leaf className="h-6 w-6 text-green-600 dark:text-green-400" />
                   </div>
                   <div>
-                    <p className="font-semibold">{data.cropType}</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">
+                      {data.cropType}
+                    </p>
+                    <p className="text-base text-gray-600 dark:text-gray-300 font-medium">
                       {data.location}
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-semibold text-green-600">
+                  <p className="text-lg font-bold text-green-600 dark:text-green-400">
                     +1 HBAR
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                     {new Date(data.createdAt).toLocaleDateString()}
                   </p>
                 </div>
               </div>
             ))}
             {recentSubmissions.length === 0 && (
-              <div className="text-center py-8">
-                <Leaf className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">
+              <div className="text-center py-12">
+                <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                  <Leaf className="h-10 w-10 text-gray-400 dark:text-gray-500" />
+                </div>
+                <p className="text-lg text-gray-600 dark:text-gray-300 font-medium">
                   No submissions yet. Submit your first farm data above!
                 </p>
               </div>
@@ -756,28 +821,40 @@ export default function SubmitData() {
       </Card>
 
       {/* Info Card */}
-      <Card className="dashboard-card">
-        <CardContent className="pt-6">
+      <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+        <CardContent className="p-8">
           <div className="text-center">
-            <h3 className="font-semibold mb-2">Why Submit Data?</h3>
-            <p className="text-sm text-muted-foreground mb-4">
+            <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-4">
+              Why Submit Data?
+            </h3>
+            <p className="text-lg text-gray-600 dark:text-gray-300 font-medium mb-8 max-w-2xl mx-auto">
               Your data helps improve AI predictions for all farmers. Earn HBAR
               tokens for each submission.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-              <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg">
-                <p className="font-semibold text-blue-600">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="p-6 bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-950/30 dark:to-indigo-950/30 backdrop-blur-sm rounded-2xl border border-blue-200/50 dark:border-blue-800/50 transform-gpu will-change-transform hover:scale-105 transition-all duration-300">
+                <p className="text-lg font-bold text-blue-600 dark:text-blue-400 mb-2">
                   Better Predictions
                 </p>
-                <p className="text-muted-foreground">Improve AI accuracy</p>
+                <p className="text-base text-gray-600 dark:text-gray-300 font-medium">
+                  Improve AI accuracy
+                </p>
               </div>
-              <div className="p-3 bg-green-50 dark:bg-green-950 rounded-lg">
-                <p className="font-semibold text-green-600">Earn Rewards</p>
-                <p className="text-muted-foreground">Get HBAR tokens</p>
+              <div className="p-6 bg-gradient-to-br from-green-50/80 to-emerald-50/80 dark:from-green-950/30 dark:to-emerald-950/30 backdrop-blur-sm rounded-2xl border border-green-200/50 dark:border-green-800/50 transform-gpu will-change-transform hover:scale-105 transition-all duration-300">
+                <p className="text-lg font-bold text-green-600 dark:text-green-400 mb-2">
+                  Earn Rewards
+                </p>
+                <p className="text-base text-gray-600 dark:text-gray-300 font-medium">
+                  Get HBAR tokens
+                </p>
               </div>
-              <div className="p-3 bg-purple-50 dark:bg-purple-950 rounded-lg">
-                <p className="font-semibold text-purple-600">Help Community</p>
-                <p className="text-muted-foreground">Support other farmers</p>
+              <div className="p-6 bg-gradient-to-br from-purple-50/80 to-violet-50/80 dark:from-purple-950/30 dark:to-violet-950/30 backdrop-blur-sm rounded-2xl border border-purple-200/50 dark:border-purple-800/50 transform-gpu will-change-transform hover:scale-105 transition-all duration-300">
+                <p className="text-lg font-bold text-purple-600 dark:text-purple-400 mb-2">
+                  Help Community
+                </p>
+                <p className="text-base text-gray-600 dark:text-gray-300 font-medium">
+                  Support other farmers
+                </p>
               </div>
             </div>
           </div>

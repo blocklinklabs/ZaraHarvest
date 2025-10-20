@@ -109,6 +109,15 @@ export default function SettingsPage() {
         if (settingsData.success && settingsData.settings) {
           setSettings({
             notifications: settingsData.settings.notifications ?? true,
+            badgeNotifications:
+              settingsData.settings.badgeNotifications ?? true,
+            loanNotifications: settingsData.settings.loanNotifications ?? true,
+            yieldNotifications:
+              settingsData.settings.yieldNotifications ?? true,
+            priceNotifications:
+              settingsData.settings.priceNotifications ?? true,
+            systemNotifications:
+              settingsData.settings.systemNotifications ?? true,
             darkMode: settingsData.settings.darkMode ?? false,
             language: settingsData.settings.language ?? "en",
             currency: settingsData.settings.currency ?? "USD",
@@ -198,75 +207,102 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <Settings className="h-8 w-8 text-primary" />
-          <h1 className="text-3xl font-bold text-foreground">Settings</h1>
+      <div className="space-y-6">
+        <div className="flex items-center gap-6">
+          <div>
+            <h1 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white tracking-tight">
+              Settings
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300 font-medium mt-2">
+              Manage your account settings and preferences
+            </p>
+          </div>
         </div>
-        <p className="text-muted-foreground">
-          Manage your account settings and preferences
-        </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Account Information */}
-        <div className="lg:col-span-2 space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5" />
+        <div className="lg:col-span-2 space-y-8">
+          <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+            <CardHeader className="p-8 pb-6">
+              <CardTitle className="flex items-center gap-4 text-2xl font-black text-gray-900 dark:text-white">
+                <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center">
+                  <User className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                </div>
                 Account Information
               </CardTitle>
-              <CardDescription>Your personal and farm details</CardDescription>
+              <CardDescription className="text-lg text-gray-600 dark:text-gray-300 font-medium">
+                Your personal and farm details
+              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="p-8 pt-0">
               {isLoading ? (
-                <div className="space-y-3">
-                  <div className="h-4 bg-muted rounded animate-pulse"></div>
-                  <div className="h-4 bg-muted rounded animate-pulse w-3/4"></div>
-                  <div className="h-4 bg-muted rounded animate-pulse w-1/2"></div>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {[...Array(6)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50"
+                      >
+                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mb-3"></div>
+                        <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse w-3/4"></div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label className="text-sm font-medium">Full Name</Label>
-                    <p className="text-sm text-muted-foreground mt-1">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                    <Label className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block">
+                      Full Name
+                    </Label>
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">
                       {userData?.name || "Not specified"}
                     </p>
                   </div>
-                  <div>
-                    <Label className="text-sm font-medium">Email</Label>
-                    <p className="text-sm text-muted-foreground mt-1">
+                  <div className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                    <Label className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block">
+                      Email
+                    </Label>
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">
                       {userData?.email || "Not specified"}
                     </p>
                   </div>
-                  <div>
-                    <Label className="text-sm font-medium">Location</Label>
-                    <p className="text-sm text-muted-foreground mt-1">
+                  <div className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                    <Label className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block">
+                      Location
+                    </Label>
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">
                       {userData?.location || "Not specified"}
                     </p>
                   </div>
-                  <div>
-                    <Label className="text-sm font-medium">Farm Size</Label>
-                    <p className="text-sm text-muted-foreground mt-1">
+                  <div className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                    <Label className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block">
+                      Farm Size
+                    </Label>
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">
                       {userData?.farmSize
                         ? `${userData.farmSize} acres`
                         : "Not specified"}
                     </p>
                   </div>
-                  <div>
-                    <Label className="text-sm font-medium">Experience</Label>
-                    <p className="text-sm text-muted-foreground mt-1">
+                  <div className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                    <Label className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block">
+                      Experience
+                    </Label>
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">
                       {userData?.experience
                         ? `${userData.experience} years`
                         : "Not specified"}
                     </p>
                   </div>
-                  <div>
-                    <Label className="text-sm font-medium">Primary Crop</Label>
-                    <p className="text-sm text-muted-foreground mt-1">
+                  <div className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                    <Label className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block">
+                      Primary Crop
+                    </Label>
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">
                       {userData?.cropType || "Not specified"}
                     </p>
                   </div>
@@ -276,35 +312,39 @@ export default function SettingsPage() {
           </Card>
 
           {/* Wallet Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Wallet className="h-5 w-5" />
+          <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+            <CardHeader className="p-8 pb-6">
+              <CardTitle className="flex items-center gap-4 text-2xl font-black text-gray-900 dark:text-white">
+                <div className="w-12 h-12 rounded-2xl bg-green-100 dark:bg-green-950/50 flex items-center justify-center">
+                  <Wallet className="h-6 w-6 text-green-600 dark:text-green-400" />
+                </div>
                 Wallet Information
               </CardTitle>
-              <CardDescription>Your connected wallet details</CardDescription>
+              <CardDescription className="text-lg text-gray-600 dark:text-gray-300 font-medium">
+                Your connected wallet details
+              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label className="text-sm font-medium">Wallet Address</Label>
-                <p className="text-sm text-muted-foreground mt-1 font-mono">
+            <CardContent className="p-8 pt-0 space-y-6">
+              <div className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                <Label className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block">
+                  Wallet Address
+                </Label>
+                <p className="text-lg font-bold text-gray-900 dark:text-white font-mono break-all">
                   {account?.address || "Not connected"}
                 </p>
               </div>
-              <div className="flex items-center gap-2">
-                <Badge
-                  variant="outline"
-                  className="text-green-600 border-green-600"
-                >
+              <div className="flex items-center gap-4">
+                <Badge className="bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300 border-0 px-4 py-2 rounded-xl font-bold text-lg">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                   Connected
                 </Badge>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={handleDisconnect}
-                  className="text-red-600 hover:text-red-700"
+                  className="h-12 px-6 border-red-200/50 dark:border-red-700/50 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                 >
-                  <LogOut className="h-4 w-4 mr-2" />
+                  <LogOut className="h-5 w-5 mr-2" />
                   Disconnect
                 </Button>
               </div>
@@ -312,85 +352,105 @@ export default function SettingsPage() {
           </Card>
 
           {/* Preferences */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Palette className="h-5 w-5" />
+          <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+            <CardHeader className="p-8 pb-6">
+              <CardTitle className="flex items-center gap-4 text-2xl font-black text-gray-900 dark:text-white">
+                <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-950/50 flex items-center justify-center">
+                  <Palette className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                </div>
                 Preferences
               </CardTitle>
-              <CardDescription>Customize your experience</CardDescription>
+              <CardDescription className="text-lg text-gray-600 dark:text-gray-300 font-medium">
+                Customize your experience
+              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label className="text-sm font-medium">
-                      All Notifications
-                    </Label>
-                    <p className="text-xs text-muted-foreground">
-                      Master toggle for all notification types
-                    </p>
+            <CardContent className="p-8 pt-0 space-y-8">
+              <div className="space-y-6">
+                <div className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-lg font-bold text-gray-900 dark:text-white">
+                        All Notifications
+                      </Label>
+                      <p className="text-base text-gray-600 dark:text-gray-300 font-medium mt-1">
+                        Master toggle for all notification types
+                      </p>
+                    </div>
+                    <Button
+                      variant={settings.notifications ? "default" : "outline"}
+                      size="sm"
+                      onClick={() =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          notifications: !prev.notifications,
+                        }))
+                      }
+                      className={`h-12 px-6 rounded-xl font-bold text-lg transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95 ${
+                        settings.notifications
+                          ? "bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-xl shadow-green-600/30 dark:shadow-green-600/20"
+                          : "border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }`}
+                    >
+                      {settings.notifications ? "On" : "Off"}
+                    </Button>
                   </div>
-                  <Button
-                    variant={settings.notifications ? "default" : "outline"}
-                    size="sm"
-                    onClick={() =>
-                      setSettings((prev) => ({
-                        ...prev,
-                        notifications: !prev.notifications,
-                      }))
-                    }
-                  >
-                    {settings.notifications ? "On" : "Off"}
-                  </Button>
                 </div>
 
                 {settings.notifications && (
-                  <>
-                    <Separator />
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium">
-                        Notification Types
-                      </Label>
-                      <div className="grid grid-cols-1 gap-2">
-                        {[
-                          {
-                            key: "badgeNotifications",
-                            label: "🏆 Badge Earned",
-                            desc: "When you earn new badges",
-                          },
-                          {
-                            key: "loanNotifications",
-                            label: "💰 Loan Updates",
-                            desc: "Loan approvals, payments, and status changes",
-                          },
-                          {
-                            key: "yieldNotifications",
-                            label: "📊 Yield Predictions",
-                            desc: "When AI predictions are ready",
-                          },
-                          {
-                            key: "priceNotifications",
-                            label: "📈 Price Alerts",
-                            desc: "Market price changes for your crops",
-                          },
-                          {
-                            key: "systemNotifications",
-                            label: "🔔 System Updates",
-                            desc: "Important app updates and maintenance",
-                          },
-                        ].map((notificationType) => (
-                          <div
-                            key={notificationType.key}
-                            className="flex items-center justify-between p-2 rounded border"
-                          >
-                            <div>
-                              <p className="text-sm font-medium">
-                                {notificationType.label}
-                              </p>
-                              <p className="text-xs text-muted-foreground">
-                                {notificationType.desc}
-                              </p>
+                  <div className="space-y-4">
+                    <Label className="text-lg font-bold text-gray-900 dark:text-white">
+                      Notification Types
+                    </Label>
+                    <div className="grid grid-cols-1 gap-4">
+                      {[
+                        {
+                          key: "badgeNotifications",
+                          label: "Badge Earned",
+                          desc: "When you earn new badges",
+                          icon: "🏆",
+                        },
+                        {
+                          key: "loanNotifications",
+                          label: "Loan Updates",
+                          desc: "Loan approvals, payments, and status changes",
+                          icon: "💰",
+                        },
+                        {
+                          key: "yieldNotifications",
+                          label: "Yield Predictions",
+                          desc: "When AI predictions are ready",
+                          icon: "📊",
+                        },
+                        {
+                          key: "priceNotifications",
+                          label: "Price Alerts",
+                          desc: "Market price changes for your crops",
+                          icon: "📈",
+                        },
+                        {
+                          key: "systemNotifications",
+                          label: "System Updates",
+                          desc: "Important app updates and maintenance",
+                          icon: "🔔",
+                        },
+                      ].map((notificationType) => (
+                        <div
+                          key={notificationType.key}
+                          className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                              <div className="text-2xl">
+                                {notificationType.icon}
+                              </div>
+                              <div>
+                                <p className="text-lg font-bold text-gray-900 dark:text-white">
+                                  {notificationType.label}
+                                </p>
+                                <p className="text-base text-gray-600 dark:text-gray-300 font-medium">
+                                  {notificationType.desc}
+                                </p>
+                              </div>
                             </div>
                             <Button
                               variant={
@@ -410,6 +470,13 @@ export default function SettingsPage() {
                                     ],
                                 }))
                               }
+                              className={`h-12 px-6 rounded-xl font-bold text-lg transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95 ${
+                                settings[
+                                  notificationType.key as keyof typeof settings
+                                ]
+                                  ? "bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-xl shadow-green-600/30 dark:shadow-green-600/20"
+                                  : "border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                              }`}
                             >
                               {settings[
                                 notificationType.key as keyof typeof settings
@@ -418,83 +485,101 @@ export default function SettingsPage() {
                                 : "Off"}
                             </Button>
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
-                  </>
+                  </div>
                 )}
               </div>
-              <Separator />
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label className="text-sm font-medium">Dark Mode</Label>
-                  <p className="text-xs text-muted-foreground">
-                    Switch between light and dark themes
-                  </p>
+
+              <div className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="text-lg font-bold text-gray-900 dark:text-white">
+                      Dark Mode
+                    </Label>
+                    <p className="text-base text-gray-600 dark:text-gray-300 font-medium mt-1">
+                      Switch between light and dark themes
+                    </p>
+                  </div>
+                  <Button
+                    variant={settings.darkMode ? "default" : "outline"}
+                    size="sm"
+                    onClick={() =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        darkMode: !prev.darkMode,
+                      }))
+                    }
+                    className={`h-12 px-6 rounded-xl font-bold text-lg transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95 ${
+                      settings.darkMode
+                        ? "bg-gray-800 hover:bg-gray-900 dark:bg-gray-200 dark:hover:bg-gray-100 text-white dark:text-gray-900 shadow-xl shadow-gray-800/30 dark:shadow-gray-200/20"
+                        : "border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    }`}
+                  >
+                    {settings.darkMode ? "Dark" : "Light"}
+                  </Button>
                 </div>
-                <Button
-                  variant={settings.darkMode ? "default" : "outline"}
-                  size="sm"
-                  onClick={() =>
-                    setSettings((prev) => ({
-                      ...prev,
-                      darkMode: !prev.darkMode,
-                    }))
-                  }
-                >
-                  {settings.darkMode ? "Dark" : "Light"}
-                </Button>
               </div>
-              <Separator />
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label className="text-sm font-medium">Currency</Label>
-                  <p className="text-xs text-muted-foreground">
-                    Display prices in your preferred currency
-                  </p>
+
+              <div className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="text-lg font-bold text-gray-900 dark:text-white">
+                      Currency
+                    </Label>
+                    <p className="text-base text-gray-600 dark:text-gray-300 font-medium mt-1">
+                      Display prices in your preferred currency
+                    </p>
+                  </div>
+                  <select
+                    value={settings.currency}
+                    onChange={(e) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        currency: e.target.value,
+                      }))
+                    }
+                    className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white font-bold text-lg transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
+                  >
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="GHS">GHS</option>
+                  </select>
                 </div>
-                <select
-                  value={settings.currency}
-                  onChange={(e) =>
-                    setSettings((prev) => ({
-                      ...prev,
-                      currency: e.target.value,
-                    }))
-                  }
-                  className="px-3 py-1 border rounded-md text-sm"
-                >
-                  <option value="USD">USD</option>
-                  <option value="EUR">EUR</option>
-                  <option value="GBP">GBP</option>
-                  <option value="GHS">GHS</option>
-                </select>
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className="space-y-8">
           {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Quick Actions</CardTitle>
+          <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+            <CardHeader className="p-8 pb-6">
+              <CardTitle className="flex items-center gap-4 text-2xl font-black text-gray-900 dark:text-white">
+                <div className="w-12 h-12 rounded-2xl bg-orange-100 dark:bg-orange-950/50 flex items-center justify-center">
+                  <Settings className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+                </div>
+                Quick Actions
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
+            <CardContent className="p-8 pt-0 space-y-4">
               <Button
                 variant="outline"
-                className="w-full justify-start"
+                className="w-full justify-start h-12 px-6 border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                 onClick={() => setShowProfileForm(!showProfileForm)}
               >
-                <User className="h-4 w-4 mr-2" />
+                <User className="h-5 w-5 mr-3" />
                 {showProfileForm ? "Hide Profile Form" : "Update Profile"}
               </Button>
               <Button
                 variant="outline"
-                className="w-full justify-start"
+                className="w-full justify-start h-12 px-6 border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                 onClick={() => router.push("/dashboard")}
               >
-                <Database className="h-4 w-4 mr-2" />
+                <Database className="h-5 w-5 mr-3" />
                 View Dashboard
               </Button>
             </CardContent>
@@ -502,17 +587,27 @@ export default function SettingsPage() {
 
           {/* Profile Update Form */}
           {showProfileForm && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Update Profile</CardTitle>
-                <CardDescription>
+            <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+              <CardHeader className="p-8 pb-6">
+                <CardTitle className="flex items-center gap-4 text-2xl font-black text-gray-900 dark:text-white">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center">
+                    <User className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  Update Profile
+                </CardTitle>
+                <CardDescription className="text-lg text-gray-600 dark:text-gray-300 font-medium">
                   Update your personal and farm information
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CardContent className="p-8 pt-0 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <Label htmlFor="fullName">Full Name</Label>
+                    <Label
+                      htmlFor="fullName"
+                      className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block"
+                    >
+                      Full Name
+                    </Label>
                     <Input
                       id="fullName"
                       value={profileForm.fullName}
@@ -522,10 +617,16 @@ export default function SettingsPage() {
                           fullName: e.target.value,
                         }))
                       }
+                      className="h-12 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="email">Email</Label>
+                    <Label
+                      htmlFor="email"
+                      className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block"
+                    >
+                      Email
+                    </Label>
                     <Input
                       id="email"
                       type="email"
@@ -536,10 +637,16 @@ export default function SettingsPage() {
                           email: e.target.value,
                         }))
                       }
+                      className="h-12 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="phone">Phone</Label>
+                    <Label
+                      htmlFor="phone"
+                      className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block"
+                    >
+                      Phone
+                    </Label>
                     <Input
                       id="phone"
                       value={profileForm.phone}
@@ -549,10 +656,16 @@ export default function SettingsPage() {
                           phone: e.target.value,
                         }))
                       }
+                      className="h-12 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="location">Location</Label>
+                    <Label
+                      htmlFor="location"
+                      className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block"
+                    >
+                      Location
+                    </Label>
                     <Input
                       id="location"
                       value={profileForm.location}
@@ -562,10 +675,16 @@ export default function SettingsPage() {
                           location: e.target.value,
                         }))
                       }
+                      className="h-12 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="country">Country</Label>
+                    <Label
+                      htmlFor="country"
+                      className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block"
+                    >
+                      Country
+                    </Label>
                     <Input
                       id="country"
                       value={profileForm.country}
@@ -575,10 +694,16 @@ export default function SettingsPage() {
                           country: e.target.value,
                         }))
                       }
+                      className="h-12 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="cropType">Crop Type</Label>
+                    <Label
+                      htmlFor="cropType"
+                      className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block"
+                    >
+                      Crop Type
+                    </Label>
                     <Input
                       id="cropType"
                       value={profileForm.cropType}
@@ -588,10 +713,16 @@ export default function SettingsPage() {
                           cropType: e.target.value,
                         }))
                       }
+                      className="h-12 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="farmSize">Farm Size (acres)</Label>
+                    <Label
+                      htmlFor="farmSize"
+                      className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block"
+                    >
+                      Farm Size (acres)
+                    </Label>
                     <Input
                       id="farmSize"
                       type="number"
@@ -602,10 +733,14 @@ export default function SettingsPage() {
                           farmSize: e.target.value,
                         }))
                       }
+                      className="h-12 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="farmingExperience">
+                    <Label
+                      htmlFor="farmingExperience"
+                      className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block"
+                    >
                       Farming Experience (years)
                     </Label>
                     <Input
@@ -618,11 +753,17 @@ export default function SettingsPage() {
                           farmingExperience: e.target.value,
                         }))
                       }
+                      className="h-12 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                     />
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="additionalInfo">Additional Information</Label>
+                  <Label
+                    htmlFor="additionalInfo"
+                    className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2 block"
+                  >
+                    Additional Information
+                  </Label>
                   <Textarea
                     id="additionalInfo"
                     value={profileForm.additionalInfo}
@@ -633,20 +774,22 @@ export default function SettingsPage() {
                       }))
                     }
                     rows={3}
+                    className="bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                   />
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-4">
                   <Button
                     onClick={handleUpdateProfile}
                     disabled={isUpdatingProfile}
-                    className="flex-1"
+                    className="flex-1 h-12 bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-xl shadow-green-600/30 dark:shadow-green-600/20 rounded-xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                   >
-                    <Save className="h-4 w-4 mr-2" />
+                    <Save className="h-5 w-5 mr-2" />
                     {isUpdatingProfile ? "Updating..." : "Update Profile"}
                   </Button>
                   <Button
                     variant="outline"
                     onClick={() => setShowProfileForm(false)}
+                    className="h-12 px-6 border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                   >
                     Cancel
                   </Button>
@@ -656,54 +799,70 @@ export default function SettingsPage() {
           )}
 
           {/* Save Settings */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Save Changes</CardTitle>
+          <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+            <CardHeader className="p-8 pb-6">
+              <CardTitle className="flex items-center gap-4 text-2xl font-black text-gray-900 dark:text-white">
+                <div className="w-12 h-12 rounded-2xl bg-green-100 dark:bg-green-950/50 flex items-center justify-center">
+                  <Save className="h-6 w-6 text-green-600 dark:text-green-400" />
+                </div>
+                Save Changes
+              </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-8 pt-0">
               <Button
-                className="w-full"
+                className="w-full h-12 bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-xl shadow-green-600/30 dark:shadow-green-600/20 rounded-xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                 onClick={handleSaveSettings}
                 disabled={isSaving}
               >
-                <Save className="h-4 w-4 mr-2" />
+                <Save className="h-5 w-5 mr-2" />
                 {isSaving ? "Saving..." : "Save Settings"}
               </Button>
             </CardContent>
           </Card>
 
           {/* System Status */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">System Status</CardTitle>
+          <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+            <CardHeader className="p-8 pb-6">
+              <CardTitle className="flex items-center gap-4 text-2xl font-black text-gray-900 dark:text-white">
+                <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center">
+                  <Shield className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                System Status
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Database</span>
-                <Badge
-                  variant="outline"
-                  className="text-green-600 border-green-600"
-                >
-                  Connected
-                </Badge>
+            <CardContent className="p-8 pt-0 space-y-4">
+              <div className="p-4 bg-gradient-to-br from-green-50/80 to-emerald-50/80 dark:from-green-950/30 dark:to-emerald-950/30 backdrop-blur-sm rounded-2xl border border-green-200/50 dark:border-green-800/50">
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-bold text-gray-900 dark:text-white">
+                    Database
+                  </span>
+                  <Badge className="bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300 border-0 px-4 py-2 rounded-xl font-bold">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                    Connected
+                  </Badge>
+                </div>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Wallet</span>
-                <Badge
-                  variant="outline"
-                  className="text-green-600 border-green-600"
-                >
-                  Connected
-                </Badge>
+              <div className="p-4 bg-gradient-to-br from-green-50/80 to-emerald-50/80 dark:from-green-950/30 dark:to-emerald-950/30 backdrop-blur-sm rounded-2xl border border-green-200/50 dark:border-green-800/50">
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-bold text-gray-900 dark:text-white">
+                    Wallet
+                  </span>
+                  <Badge className="bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300 border-0 px-4 py-2 rounded-xl font-bold">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                    Connected
+                  </Badge>
+                </div>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Notifications</span>
-                <Badge
-                  variant="outline"
-                  className="text-blue-600 border-blue-600"
-                >
-                  Active
-                </Badge>
+              <div className="p-4 bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-950/30 dark:to-indigo-950/30 backdrop-blur-sm rounded-2xl border border-blue-200/50 dark:border-blue-800/50">
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-bold text-gray-900 dark:text-white">
+                    Notifications
+                  </span>
+                  <Badge className="bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border-0 px-4 py-2 rounded-xl font-bold">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                    Active
+                  </Badge>
+                </div>
               </div>
             </CardContent>
           </Card>

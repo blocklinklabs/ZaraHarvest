@@ -453,9 +453,7 @@ export default function Lending() {
             setSelectedToken("");
             setLoanAmount("");
           } else {
-            throw new Error(
-              `Blockchain transaction failed: ${blockchainResult.error}`
-            );
+            throw new Error(`Blockchain transaction failed`);
           }
         } catch (blockchainError) {
           console.error("Blockchain error:", blockchainError);
@@ -589,14 +587,28 @@ export default function Lending() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading lending data...</p>
-            </div>
+      <div className="space-y-8">
+        <div className="flex items-center gap-6">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => router.push("/dashboard")}
+            className="h-12 px-6 border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
+          >
+            <ArrowLeft className="h-5 w-5 mr-2" />
+            Back
+          </Button>
+          <div>
+            <h1 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white tracking-tight">
+              Lending & Tokenization
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300 font-medium mt-2">
+              Loading lending data...
+            </p>
           </div>
+        </div>
+        <div className="flex items-center justify-center py-16">
+          <div className="w-16 h-16 border-4 border-gray-200 dark:border-gray-700 border-t-green-600 rounded-full animate-spin"></div>
         </div>
       </div>
     );
@@ -607,22 +619,14 @@ export default function Lending() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center gap-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => router.push("/dashboard")}
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
-        </Button>
+      <div className="flex items-center gap-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white tracking-tight">
             Lending & Tokenization
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-xl text-gray-600 dark:text-gray-300 font-medium mt-2">
             Access loans using your harvest as collateral
           </p>
         </div>
@@ -633,50 +637,54 @@ export default function Lending() {
 
       {/* Quick Actions for Loans */}
       {loans.length > 0 && (
-        <Card className="dashboard-card border-l-4 border-l-green-500">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5" />
+        <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden border-l-4">
+          <CardHeader className="p-8 pb-6">
+            <CardTitle className="flex items-center gap-3 text-2xl font-black text-gray-900 dark:text-white">
+              <div className="w-10 h-10 rounded-2xl bg-green-100 dark:bg-green-950/50 flex items-center justify-center">
+                <DollarSign className="h-5 w-5 text-green-600 dark:text-green-400" />
+              </div>
               Loan Quick Actions
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-lg text-gray-600 dark:text-gray-300 font-medium">
               Manage your loans and make payments
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <CardContent className="p-8 pt-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {loans.map((loan) => (
                 <div
                   key={loan.id}
-                  className={`p-4 rounded-lg border-2 ${
+                  className={`p-6 rounded-2xl border-2 transform-gpu will-change-transform hover:scale-[1.02] transition-all duration-300 ${
                     loan.status === "active"
-                      ? "border-green-200 bg-green-50 dark:bg-green-950 dark:border-green-800"
+                      ? "border-green-200/50 bg-gradient-to-br from-green-50/80 to-emerald-50/80 dark:from-green-950/30 dark:to-emerald-950/30 dark:border-green-800/50"
                       : loan.status === "completed"
-                      ? "border-blue-200 bg-blue-50 dark:bg-blue-950 dark:border-blue-800"
-                      : "border-yellow-200 bg-yellow-50 dark:bg-yellow-950 dark:border-yellow-800"
+                      ? "border-blue-200/50 bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-950/30 dark:to-indigo-950/30 dark:border-blue-800/50"
+                      : "border-yellow-200/50 bg-gradient-to-br from-yellow-50/80 to-orange-50/80 dark:from-yellow-950/30 dark:to-orange-950/30 dark:border-yellow-800/50"
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-black text-gray-900 dark:text-white">
                       {formatCurrency(loan.amount)}
                     </h3>
                     <Badge
-                      variant={
+                      className={`${
                         loan.status === "active"
-                          ? "default"
+                          ? "bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300"
                           : loan.status === "completed"
-                          ? "secondary"
+                          ? "bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300"
                           : loan.status === "defaulted"
-                          ? "destructive"
-                          : "outline"
-                      }
+                          ? "bg-red-100 dark:bg-red-950/50 text-red-700 dark:text-red-300"
+                          : "bg-yellow-100 dark:bg-yellow-950/50 text-yellow-700 dark:text-yellow-300"
+                      } border-0 px-4 py-2 rounded-xl font-bold`}
                     >
                       {loan.status}
                     </Badge>
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-                    <p>Repaid: {formatCurrency(loan.repaidAmount || 0)}</p>
-                    <p>
+                  <div className="text-base text-gray-600 dark:text-gray-300 mb-6 space-y-2">
+                    <p className="font-semibold">
+                      Repaid: {formatCurrency(loan.repaidAmount || 0)}
+                    </p>
+                    <p className="font-semibold">
                       Remaining:{" "}
                       {formatCurrency(
                         (loan.amount || 0) - (loan.repaidAmount || 0)
@@ -689,9 +697,9 @@ export default function Lending() {
                       <DialogTrigger asChild>
                         <Button
                           size="sm"
-                          className="w-full bg-green-600 hover:bg-green-700"
+                          className="w-full bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-xl shadow-green-600/30 dark:shadow-green-600/20 rounded-2xl px-6 py-3 font-semibold text-base transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                         >
-                          <DollarSign className="h-3 w-3 mr-1" />
+                          <DollarSign className="h-4 w-4 mr-2" />
                           Make Payment
                         </Button>
                       </DialogTrigger>
@@ -783,7 +791,7 @@ export default function Lending() {
                   {loan.status === "completed" && (
                     <Button
                       size="sm"
-                      className="w-full"
+                      className="w-full h-12 px-6 border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-2xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                       variant="outline"
                       disabled
                     >
@@ -799,54 +807,64 @@ export default function Lending() {
 
       {/* Active Loan Status */}
       {activeLoan && (
-        <Card className="dashboard-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CreditCard className="h-5 w-5" />
+        <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+          <CardHeader className="p-8 pb-6">
+            <CardTitle className="flex items-center gap-3 text-2xl font-black text-gray-900 dark:text-white">
+              <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center">
+                <CreditCard className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              </div>
               Active Loan
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
-              <div className="flex items-center justify-between mb-4">
+          <CardContent className="p-8 pt-0">
+            <div className="p-6 bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-950/30 dark:to-indigo-950/30 backdrop-blur-sm rounded-2xl border border-blue-200/50 dark:border-blue-800/50">
+              <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="font-semibold text-lg">
+                  <h3 className="text-2xl font-black text-gray-900 dark:text-white">
                     {formatCurrency(activeLoan.amount)}
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                  <p className="text-base text-gray-600 dark:text-gray-300 font-medium">
                     Interest Rate: {activeLoan.interestRate}% APR
                   </p>
                 </div>
-                <Badge variant="default">Active</Badge>
+                <Badge className="bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300 border-0 px-4 py-2 rounded-xl font-bold">
+                  Active
+                </Badge>
               </div>
-              <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="grid grid-cols-2 gap-6 text-base">
                 <div>
-                  <p className="text-gray-600 dark:text-gray-300">Start Date</p>
-                  <p className="font-semibold">
+                  <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
+                    Start Date
+                  </p>
+                  <p className="text-lg font-bold text-gray-900 dark:text-white">
                     {activeLoan.startDate
                       ? formatDate(activeLoan.startDate)
                       : "N/A"}
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-600 dark:text-gray-300">Due Date</p>
-                  <p className="font-semibold">
+                  <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
+                    Due Date
+                  </p>
+                  <p className="text-lg font-bold text-gray-900 dark:text-white">
                     {activeLoan.endDate
                       ? formatDate(activeLoan.endDate)
                       : "N/A"}
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-600 dark:text-gray-300">
+                  <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
                     Repaid Amount
                   </p>
-                  <p className="font-semibold">
+                  <p className="text-lg font-bold text-gray-900 dark:text-white">
                     {formatCurrency(activeLoan.repaidAmount || 0)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-600 dark:text-gray-300">Remaining</p>
-                  <p className="font-semibold">
+                  <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
+                    Remaining
+                  </p>
+                  <p className="text-lg font-bold text-gray-900 dark:text-white">
                     {formatCurrency(
                       (activeLoan.amount || 0) - (activeLoan.repaidAmount || 0)
                     )}
@@ -855,16 +873,18 @@ export default function Lending() {
               </div>
 
               {/* Repayment Section */}
-              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="mt-6 pt-6 border-t border-gray-200/50 dark:border-gray-700/50">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-semibold">Loan Management</h4>
+                  <h4 className="text-lg font-bold text-gray-900 dark:text-white">
+                    Loan Management
+                  </h4>
                   <Dialog
                     open={repayModalOpen}
                     onOpenChange={setRepayModalOpen}
                   >
                     <DialogTrigger asChild>
-                      <Button className="bg-green-600 hover:bg-green-700">
-                        <DollarSign className="h-4 w-4 mr-2" />
+                      <Button className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-xl shadow-green-600/30 dark:shadow-green-600/20 rounded-2xl px-6 py-3 font-semibold text-base transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95">
+                        <DollarSign className="h-5 w-5 mr-2" />
                         Make Payment
                       </Button>
                     </DialogTrigger>
@@ -961,7 +981,7 @@ export default function Lending() {
                   </Dialog>
                 </div>
                 {activeLoan.blockchainTxHash && (
-                  <div className="mt-3">
+                  <div className="mt-4">
                     <Button
                       size="sm"
                       variant="outline"
@@ -971,8 +991,9 @@ export default function Lending() {
                           "_blank"
                         )
                       }
+                      className="h-10 px-4 border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                     >
-                      <ExternalLink className="h-3 w-3 mr-1" />
+                      <ExternalLink className="h-4 w-4 mr-2" />
                       View Loan on HashScan
                     </Button>
                   </div>
@@ -983,33 +1004,39 @@ export default function Lending() {
         </Card>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Tokenize Harvest */}
-        <Card className="dashboard-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Coins className="h-5 w-5" />
+        <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+          <CardHeader className="p-8 pb-6">
+            <CardTitle className="flex items-center gap-3 text-2xl font-black text-gray-900 dark:text-white">
+              <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-950/50 flex items-center justify-center">
+                <Coins className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+              </div>
               Tokenize Your Harvest
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-lg text-gray-600 dark:text-gray-300 font-medium">
               Convert your harvest into tradeable tokens for collateral
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">
+          <CardContent className="p-8 pt-0 space-y-6">
+            <div className="space-y-3">
+              <label className="block text-base font-semibold text-gray-900 dark:text-white">
                 Select Yield Prediction
               </label>
               <Select
                 value={selectedPrediction}
                 onValueChange={setSelectedPrediction}
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform">
                   <SelectValue placeholder="Choose prediction to tokenize" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl rounded-xl">
                   {yieldPredictions.map((prediction) => (
-                    <SelectItem key={prediction.id} value={prediction.id}>
+                    <SelectItem
+                      key={prediction.id}
+                      value={prediction.id}
+                      className="rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
                       {prediction.cropType} - {prediction.predictedYield} tons
                     </SelectItem>
                   ))}
@@ -1017,9 +1044,9 @@ export default function Lending() {
               </Select>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <label className="block text-base font-semibold text-gray-900 dark:text-white">
                   Harvest Amount (tons)
                 </label>
                 <Input
@@ -1027,64 +1054,91 @@ export default function Lending() {
                   placeholder="Enter amount"
                   value={harvestAmount}
                   onChange={(e) => setHarvestAmount(e.target.value)}
+                  className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">
+              <div className="space-y-3">
+                <label className="block text-base font-semibold text-gray-900 dark:text-white">
                   Quality Grade
                 </label>
                 <Select value={qualityGrade} onValueChange={setQualityGrade}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="A">Grade A (Premium)</SelectItem>
-                    <SelectItem value="B">Grade B (Standard)</SelectItem>
-                    <SelectItem value="C">Grade C (Basic)</SelectItem>
+                  <SelectContent className="bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl rounded-xl">
+                    <SelectItem
+                      value="A"
+                      className="rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      Grade A (Premium)
+                    </SelectItem>
+                    <SelectItem
+                      value="B"
+                      className="rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      Grade B (Standard)
+                    </SelectItem>
+                    <SelectItem
+                      value="C"
+                      className="rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      Grade C (Basic)
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
             {selectedPrediction && (
-              <div className="p-3 bg-green-50 dark:bg-green-950 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <TrendingUp className="h-4 w-4 text-green-600" />
-                  <span className="text-sm font-medium">
+              <div className="p-6 bg-gradient-to-br from-green-50/80 to-emerald-50/80 dark:from-green-950/30 dark:to-emerald-950/30 backdrop-blur-sm rounded-2xl border border-green-200/50 dark:border-green-800/50">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 rounded-xl bg-green-100 dark:bg-green-950/50 flex items-center justify-center">
+                    <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
+                  </div>
+                  <span className="text-base font-semibold text-gray-900 dark:text-white">
                     Yield Prediction Details
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Predicted yield:{" "}
-                  {
-                    yieldPredictions.find((p) => p.id === selectedPrediction)
-                      ?.predictedYield
-                  }{" "}
-                  tons
-                  <br />
-                  Confidence:{" "}
-                  {(
-                    (yieldPredictions.find((p) => p.id === selectedPrediction)
-                      ?.confidence || 0) * 100
-                  ).toFixed(1)}
-                  %
-                </p>
+                <div className="space-y-2">
+                  <p className="text-base text-gray-700 dark:text-gray-300 font-medium">
+                    Predicted yield:{" "}
+                    <span className="font-bold text-green-600 dark:text-green-400">
+                      {
+                        yieldPredictions.find(
+                          (p) => p.id === selectedPrediction
+                        )?.predictedYield
+                      }{" "}
+                      tons
+                    </span>
+                  </p>
+                  <p className="text-base text-gray-700 dark:text-gray-300 font-medium">
+                    Confidence:{" "}
+                    <span className="font-bold text-green-600 dark:text-green-400">
+                      {(
+                        (yieldPredictions.find(
+                          (p) => p.id === selectedPrediction
+                        )?.confidence || 0) * 100
+                      ).toFixed(1)}
+                      %
+                    </span>
+                  </p>
+                </div>
               </div>
             )}
 
             <Button
-              className="w-full btn-primary"
+              className="w-full bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-xl shadow-green-600/30 dark:shadow-green-600/20 rounded-2xl px-8 py-4 font-semibold text-lg transition-all duration-200 transform-gpu will-change-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
               onClick={handleTokenizeHarvest}
               disabled={isTokenizing || !selectedPrediction || !harvestAmount}
             >
               {isTokenizing ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3" />
                   Tokenizing...
                 </>
               ) : (
                 <>
-                  <Coins className="mr-2 h-4 w-4" />
+                  <Coins className="mr-3 h-6 w-6" />
                   Tokenize Harvest
                 </>
               )}
@@ -1093,42 +1147,59 @@ export default function Lending() {
         </Card>
 
         {/* Loan Application */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5" />
+        <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+          <CardHeader className="p-8 pb-6">
+            <CardTitle className="flex items-center gap-3 text-2xl font-black text-gray-900 dark:text-white">
+              <div className="w-10 h-10 rounded-2xl bg-green-100 dark:bg-green-950/50 flex items-center justify-center">
+                <DollarSign className="h-5 w-5 text-green-600 dark:text-green-400" />
+              </div>
               Apply for Loan
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-lg text-gray-600 dark:text-gray-300 font-medium">
               Request a loan using your tokenized harvest as collateral
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <Shield className="h-4 w-4 text-blue-600" />
-                <span className="text-sm font-medium">
+          <CardContent className="p-8 pt-0 space-y-6">
+            <div className="p-6 bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-950/30 dark:to-indigo-950/30 backdrop-blur-sm rounded-2xl border border-blue-200/50 dark:border-blue-800/50">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center">
+                  <Shield className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                </div>
+                <span className="text-base font-semibold text-gray-900 dark:text-white">
                   Available Collateral
                 </span>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                Total Value: {formatCurrency(totalCollateralValue)}
-                <br />
-                Max Loan Amount: {formatCurrency(maxLoanAmount)}
-              </p>
+              <div className="space-y-2">
+                <p className="text-base text-gray-700 dark:text-gray-300 font-medium">
+                  Total Value:{" "}
+                  <span className="font-bold text-blue-600 dark:text-blue-400">
+                    {formatCurrency(totalCollateralValue)}
+                  </span>
+                </p>
+                <p className="text-base text-gray-700 dark:text-gray-300 font-medium">
+                  Max Loan Amount:{" "}
+                  <span className="font-bold text-blue-600 dark:text-blue-400">
+                    {formatCurrency(maxLoanAmount)}
+                  </span>
+                </p>
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">
+            <div className="space-y-3">
+              <label className="block text-base font-semibold text-gray-900 dark:text-white">
                 Select Collateral Token
               </label>
               <Select value={selectedToken} onValueChange={setSelectedToken}>
-                <SelectTrigger>
+                <SelectTrigger className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform">
                   <SelectValue placeholder="Choose harvest token" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl rounded-xl">
                   {availableCollateral.map((token) => (
-                    <SelectItem key={token.id} value={token.id}>
+                    <SelectItem
+                      key={token.id}
+                      value={token.id}
+                      className="rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
                       {token.cropType} - {token.amount} tons (Grade{" "}
                       {token.qualityGrade})
                     </SelectItem>
@@ -1137,8 +1208,8 @@ export default function Lending() {
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">
+            <div className="space-y-3">
+              <label className="block text-base font-semibold text-gray-900 dark:text-white">
                 Loan Amount (USD)
               </label>
               <Input
@@ -1147,28 +1218,43 @@ export default function Lending() {
                 value={loanAmount}
                 onChange={(e) => setLoanAmount(e.target.value)}
                 max={maxLoanAmount}
+                className="h-12 px-4 bg-gray-50/80 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/50 focus:bg-white dark:focus:bg-gray-900 focus:border-green-500/50 dark:focus:border-green-400/50 focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/20 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium transition-all duration-200 shadow-sm hover:shadow-md transform-gpu will-change-transform"
               />
-              <p className="text-xs text-gray-500">
+              <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                 Maximum: {formatCurrency(maxLoanAmount)}
               </p>
             </div>
 
-            <div className="p-3 bg-yellow-50 dark:bg-yellow-950 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <AlertTriangle className="h-4 w-4 text-yellow-600" />
-                <span className="text-sm font-medium">Loan Terms</span>
+            <div className="p-6 bg-gradient-to-br from-yellow-50/80 to-orange-50/80 dark:from-yellow-950/30 dark:to-orange-950/30 backdrop-blur-sm rounded-2xl border border-yellow-200/50 dark:border-yellow-800/50">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-xl bg-yellow-100 dark:bg-yellow-950/50 flex items-center justify-center">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+                </div>
+                <span className="text-base font-semibold text-gray-900 dark:text-white">
+                  Loan Terms
+                </span>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                Interest Rate: 12% APR
-                <br />
-                Term: 12 months
-                <br />
-                Collateral will be locked during loan period
-              </p>
+              <div className="space-y-2">
+                <p className="text-base text-gray-700 dark:text-gray-300 font-medium">
+                  Interest Rate:{" "}
+                  <span className="font-bold text-yellow-600 dark:text-yellow-400">
+                    12% APR
+                  </span>
+                </p>
+                <p className="text-base text-gray-700 dark:text-gray-300 font-medium">
+                  Term:{" "}
+                  <span className="font-bold text-yellow-600 dark:text-yellow-400">
+                    12 months
+                  </span>
+                </p>
+                <p className="text-base text-gray-700 dark:text-gray-300 font-medium">
+                  Collateral will be locked during loan period
+                </p>
+              </div>
             </div>
 
             <Button
-              className="w-full"
+              className="w-full bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-xl shadow-green-600/30 dark:shadow-green-600/20 rounded-2xl px-8 py-4 font-semibold text-lg transition-all duration-200 transform-gpu will-change-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
               onClick={handleRequestLoan}
               disabled={
                 isProcessing || !!activeLoan || !selectedToken || !loanAmount
@@ -1176,12 +1262,12 @@ export default function Lending() {
             >
               {isProcessing ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3" />
                   Processing...
                 </>
               ) : (
                 <>
-                  <CreditCard className="mr-2 h-4 w-4" />
+                  <CreditCard className="mr-3 h-6 w-6" />
                   Request Loan
                 </>
               )}
@@ -1192,91 +1278,105 @@ export default function Lending() {
 
       {/* Tokenized Assets */}
       {harvestTokens.length > 0 && (
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5" />
+        <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+          <CardHeader className="p-8 pb-6">
+            <CardTitle className="flex items-center gap-3 text-2xl font-black text-gray-900 dark:text-white">
+              <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-950/50 flex items-center justify-center">
+                <Shield className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+              </div>
               Your Tokenized Assets
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-lg text-gray-600 dark:text-gray-300 font-medium">
               Manage your tokenized harvest assets
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="p-8 pt-0">
+            <div className="space-y-6">
               {harvestTokens.map((token) => (
                 <div
                   key={token.id}
-                  className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
+                  className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 transform-gpu will-change-transform hover:scale-[1.02] transition-all duration-300"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold">{token.cropType}</h3>
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-xl font-black text-gray-900 dark:text-white">
+                        {token.cropType}
+                      </h3>
                       <Badge
-                        variant={
+                        className={`${
                           token.status === "tokenized"
-                            ? "default"
+                            ? "bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300"
                             : token.status === "locked"
-                            ? "destructive"
-                            : "secondary"
-                        }
+                            ? "bg-red-100 dark:bg-red-950/50 text-red-700 dark:text-red-300"
+                            : "bg-gray-100 dark:bg-gray-950/50 text-gray-700 dark:text-gray-300"
+                        } border-0 px-4 py-2 rounded-xl font-bold`}
                       >
                         {token.status}
                       </Badge>
                       {token.isLocked && (
-                        <Badge variant="outline" className="text-red-600">
-                          <Lock className="h-3 w-3 mr-1" />
+                        <Badge className="bg-red-100 dark:bg-red-950/50 text-red-700 dark:text-red-300 border-0 px-4 py-2 rounded-xl font-bold">
+                          <Lock className="h-4 w-4 mr-1" />
                           Locked
                         </Badge>
                       )}
                     </div>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-base text-gray-600 dark:text-gray-400 font-medium">
                       {token.createdAt
                         ? formatDate(new Date(token.createdAt))
                         : "N/A"}
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-2 gap-6 text-base mb-6">
                     <div>
-                      <p className="text-gray-600 dark:text-gray-300">
+                      <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
                         Physical Amount
                       </p>
-                      <p className="font-semibold">{token.amount} tons</p>
+                      <p className="text-lg font-bold text-gray-900 dark:text-white">
+                        {token.amount} tons
+                      </p>
                     </div>
                     <div>
-                      <p className="text-gray-600 dark:text-gray-300">
+                      <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
                         Tokenized Amount
                       </p>
-                      <p className="font-semibold">
+                      <p className="text-lg font-bold text-gray-900 dark:text-white">
                         {formatCurrency(token.tokenizedAmount)}
                       </p>
                     </div>
                     {token.qualityGrade && (
                       <div>
-                        <p className="text-gray-600 dark:text-gray-300">
+                        <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
                           Quality Grade
                         </p>
-                        <p className="font-semibold">
+                        <p className="text-lg font-bold text-gray-900 dark:text-white">
                           Grade {token.qualityGrade}
                         </p>
                       </div>
                     )}
                     {token.blockchainTokenId && (
                       <div>
-                        <p className="text-gray-600 dark:text-gray-300">
+                        <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
                           Token ID
                         </p>
-                        <p className="font-semibold">
+                        <p className="text-lg font-bold text-gray-900 dark:text-white">
                           #{token.blockchainTokenId}
                         </p>
                       </div>
                     )}
                   </div>
-                  <div className="mt-3 flex gap-2">
-                    <Button size="sm" variant="outline">
+                  <div className="flex gap-3">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-10 px-4 border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
+                    >
                       View QR Code
                     </Button>
-                    <Button size="sm" variant="outline">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-10 px-4 border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
+                    >
                       Track Supply Chain
                     </Button>
                     {token.blockchainTxHash && (
@@ -1289,8 +1389,9 @@ export default function Lending() {
                             "_blank"
                           )
                         }
+                        className="h-10 px-4 border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                       >
-                        <ExternalLink className="h-3 w-3 mr-1" />
+                        <ExternalLink className="h-4 w-4 mr-2" />
                         View on HashScan
                       </Button>
                     )}
@@ -1304,66 +1405,72 @@ export default function Lending() {
 
       {/* Loan History */}
       {loans.length > 0 && (
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CreditCard className="h-5 w-5" />
+        <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+          <CardHeader className="p-8 pb-6">
+            <CardTitle className="flex items-center gap-3 text-2xl font-black text-gray-900 dark:text-white">
+              <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center">
+                <CreditCard className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              </div>
               Loan History
             </CardTitle>
-            <CardDescription>View all your loan transactions</CardDescription>
+            <CardDescription className="text-lg text-gray-600 dark:text-gray-300 font-medium">
+              View all your loan transactions
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="p-8 pt-0">
+            <div className="space-y-6">
               {loans.map((loan) => (
                 <div
                   key={loan.id}
-                  className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
+                  className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/80 dark:from-gray-900/50 dark:to-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 transform-gpu will-change-transform hover:scale-[1.02] transition-all duration-300"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-xl font-black text-gray-900 dark:text-white">
                         {formatCurrency(loan.amount)}
                       </h3>
                       <Badge
-                        variant={
+                        className={`${
                           loan.status === "active"
-                            ? "default"
+                            ? "bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300"
                             : loan.status === "completed"
-                            ? "secondary"
+                            ? "bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300"
                             : loan.status === "defaulted"
-                            ? "destructive"
-                            : "outline"
-                        }
+                            ? "bg-red-100 dark:bg-red-950/50 text-red-700 dark:text-red-300"
+                            : "bg-yellow-100 dark:bg-yellow-950/50 text-yellow-700 dark:text-yellow-300"
+                        } border-0 px-4 py-2 rounded-xl font-bold`}
                       >
                         {loan.status}
                       </Badge>
                     </div>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-base text-gray-600 dark:text-gray-400 font-medium">
                       {loan.createdAt
                         ? formatDate(new Date(loan.createdAt))
                         : "N/A"}
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-2 gap-6 text-base mb-6">
                     <div>
-                      <p className="text-gray-600 dark:text-gray-300">
+                      <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
                         Interest Rate
                       </p>
-                      <p className="font-semibold">{loan.interestRate}% APR</p>
+                      <p className="text-lg font-bold text-gray-900 dark:text-white">
+                        {loan.interestRate}% APR
+                      </p>
                     </div>
                     <div>
-                      <p className="text-gray-600 dark:text-gray-300">
+                      <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
                         Repaid Amount
                       </p>
-                      <p className="font-semibold">
+                      <p className="text-lg font-bold text-gray-900 dark:text-white">
                         {formatCurrency(loan.repaidAmount)}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600 dark:text-gray-300">
+                      <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
                         Due Date
                       </p>
-                      <p className="font-semibold">
+                      <p className="text-lg font-bold text-gray-900 dark:text-white">
                         {loan.endDate
                           ? formatDate(new Date(loan.endDate))
                           : "N/A"}
@@ -1371,16 +1478,16 @@ export default function Lending() {
                     </div>
                     {loan.blockchainLoanId && (
                       <div>
-                        <p className="text-gray-600 dark:text-gray-300">
+                        <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
                           Blockchain Loan ID
                         </p>
-                        <p className="font-semibold">
+                        <p className="text-lg font-bold text-gray-900 dark:text-white">
                           #{loan.blockchainLoanId}
                         </p>
                       </div>
                     )}
                   </div>
-                  <div className="mt-3 flex gap-2">
+                  <div className="flex gap-3">
                     {loan.status === "active" && (
                       <Dialog
                         open={repayModalOpen && activeLoan?.id === loan.id}
@@ -1399,9 +1506,9 @@ export default function Lending() {
                         <DialogTrigger asChild>
                           <Button
                             size="sm"
-                            className="bg-green-600 hover:bg-green-700"
+                            className="bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-xl shadow-green-600/30 dark:shadow-green-600/20 rounded-2xl px-6 py-3 font-semibold text-base transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                           >
-                            <DollarSign className="h-3 w-3 mr-1" />
+                            <DollarSign className="h-4 w-4 mr-2" />
                             Repay
                           </Button>
                         </DialogTrigger>
@@ -1506,8 +1613,9 @@ export default function Lending() {
                             "_blank"
                           )
                         }
+                        className="h-10 px-4 border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl font-semibold transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                       >
-                        <ExternalLink className="h-3 w-3 mr-1" />
+                        <ExternalLink className="h-4 w-4 mr-2" />
                         View on HashScan
                       </Button>
                     )}
@@ -1520,35 +1628,49 @@ export default function Lending() {
       )}
 
       {/* Info Section */}
-      <Card className="mt-8">
-        <CardContent className="pt-6">
+      <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-2xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden">
+        <CardContent className="p-8">
           <div className="text-center">
-            <h3 className="font-semibold mb-4">How It Works</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-              <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <Coins className="h-5 w-5 text-blue-600" />
-                  <span className="font-semibold">1. Tokenize</span>
+            <h3 className="text-3xl font-black text-gray-900 dark:text-white mb-8">
+              How It Works
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="p-6 bg-gradient-to-br from-blue-50/80 to-indigo-50/80 dark:from-blue-950/30 dark:to-indigo-950/30 backdrop-blur-sm rounded-2xl border border-blue-200/50 dark:border-blue-800/50 transform-gpu will-change-transform hover:scale-105 transition-all duration-300">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center">
+                    <Coins className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <span className="text-xl font-black text-gray-900 dark:text-white">
+                    1. Tokenize
+                  </span>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-base text-gray-700 dark:text-gray-300 font-medium">
                   Convert your harvest into blockchain tokens
                 </p>
               </div>
-              <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <Shield className="h-5 w-5 text-green-600" />
-                  <span className="font-semibold">2. Collateral</span>
+              <div className="p-6 bg-gradient-to-br from-green-50/80 to-emerald-50/80 dark:from-green-950/30 dark:to-emerald-950/30 backdrop-blur-sm rounded-2xl border border-green-200/50 dark:border-green-800/50 transform-gpu will-change-transform hover:scale-105 transition-all duration-300">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-green-100 dark:bg-green-950/50 flex items-center justify-center">
+                    <Shield className="h-6 w-6 text-green-600 dark:text-green-400" />
+                  </div>
+                  <span className="text-xl font-black text-gray-900 dark:text-white">
+                    2. Collateral
+                  </span>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-base text-gray-700 dark:text-gray-300 font-medium">
                   Use tokens as collateral for loans
                 </p>
               </div>
-              <div className="p-4 bg-purple-50 dark:bg-purple-950 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <DollarSign className="h-5 w-5 text-purple-600" />
-                  <span className="font-semibold">3. Access Funds</span>
+              <div className="p-6 bg-gradient-to-br from-purple-50/80 to-violet-50/80 dark:from-purple-950/30 dark:to-violet-950/30 backdrop-blur-sm rounded-2xl border border-purple-200/50 dark:border-purple-800/50 transform-gpu will-change-transform hover:scale-105 transition-all duration-300">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-950/50 flex items-center justify-center">
+                    <DollarSign className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <span className="text-xl font-black text-gray-900 dark:text-white">
+                    3. Access Funds
+                  </span>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-base text-gray-700 dark:text-gray-300 font-medium">
                   Get immediate access to capital
                 </p>
               </div>

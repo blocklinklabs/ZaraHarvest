@@ -25,11 +25,6 @@ export const users = pgTable("users", {
   additionalInfo: text("additional_info"),
   // Settings fields
   notifications: boolean("notifications").default(true),
-  badgeNotifications: boolean("badge_notifications").default(true),
-  loanNotifications: boolean("loan_notifications").default(true),
-  yieldNotifications: boolean("yield_notifications").default(true),
-  priceNotifications: boolean("price_notifications").default(true),
-  systemNotifications: boolean("system_notifications").default(true),
   darkMode: boolean("dark_mode").default(false),
   language: text("language").default("en"),
   currency: text("currency").default("USD"),
@@ -180,32 +175,6 @@ export const supplyChainEvents = pgTable("supply_chain_events", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// Notifications
-export const notifications = pgTable("notifications", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  type: text("type", {
-    enum: [
-      "badge_earned",
-      "loan_approved",
-      "loan_due",
-      "yield_prediction",
-      "price_alert",
-      "system",
-      "achievement",
-    ],
-  }).notNull(),
-  title: text("title").notNull(),
-  message: text("message").notNull(),
-  read: boolean("read").notNull().default(false),
-  actionUrl: text("action_url"), // Optional URL for action button
-  metadata: jsonb("metadata"), // Additional notification data
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  readAt: timestamp("read_at"),
-});
-
 // Define relations
 export const usersRelations = relations(users, ({ many }) => ({
   farmData: many(farmData),
@@ -213,7 +182,6 @@ export const usersRelations = relations(users, ({ many }) => ({
   loans: many(loans),
   harvestTokens: many(harvestTokens),
   badges: many(badges),
-  notifications: many(notifications),
 }));
 
 export const farmDataRelations = relations(farmData, ({ one }) => ({
@@ -276,13 +244,6 @@ export const supplyChainEventsRelations = relations(
   })
 );
 
-export const notificationsRelations = relations(notifications, ({ one }) => ({
-  user: one(users, {
-    fields: [notifications.userId],
-    references: [users.id],
-  }),
-}));
-
 // Export types
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -300,5 +261,3 @@ export type MarketPrice = typeof marketPrices.$inferSelect;
 export type NewMarketPrice = typeof marketPrices.$inferInsert;
 export type SupplyChainEvent = typeof supplyChainEvents.$inferSelect;
 export type NewSupplyChainEvent = typeof supplyChainEvents.$inferInsert;
-export type Notification = typeof notifications.$inferSelect;
-export type NewNotification = typeof notifications.$inferInsert;

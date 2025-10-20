@@ -75,7 +75,11 @@ export default function NetworkStatus() {
         <div className="flex items-center gap-2">
           <Badge
             variant={isSupportedNetwork ? "default" : "destructive"}
-            className="flex items-center gap-1"
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-semibold text-xs shadow-sm ${
+              isSupportedNetwork
+                ? "bg-green-100 dark:bg-green-950/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800"
+                : "bg-red-100 dark:bg-red-950/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800"
+            }`}
           >
             {isSupportedNetwork ? (
               <Wifi className="h-3 w-3" />
@@ -93,19 +97,20 @@ export default function NetworkStatus() {
               variant="outline"
               onClick={handleSwitchNetwork}
               disabled={isLoading}
-              className="h-6 px-2 text-xs"
+              className="h-8 px-3 text-xs font-semibold bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-950/50 hover:border-red-300 dark:hover:border-red-700 rounded-xl transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none shadow-sm hover:shadow-md"
             >
               {isLoading ? (
-                <RefreshCw className="h-3 w-3 animate-spin" />
+                <RefreshCw className="h-3 w-3 animate-spin mr-1" />
               ) : (
-                <AlertCircle className="h-3 w-3" />
+                <AlertCircle className="h-3 w-3 mr-1" />
               )}
+              Switch
             </Button>
           )}
         </div>
       </TooltipTrigger>
-      <TooltipContent>
-        <p>
+      <TooltipContent className="bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl rounded-xl p-3">
+        <p className="font-medium text-gray-900 dark:text-white">
           {isSupportedNetwork
             ? `Connected to ${currentNetwork}`
             : "Please switch to Hedera Testnet for full functionality"}

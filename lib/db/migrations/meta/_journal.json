@@ -15,6 +15,13 @@
       "when": 1760793589588,
       "tag": "0001_cuddly_ben_parker",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1760796535756,
+      "tag": "0002_wise_invaders",
+      "breakpoints": true
     }
   ]
 }
