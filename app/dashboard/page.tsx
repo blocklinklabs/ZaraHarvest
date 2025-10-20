@@ -352,15 +352,15 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-left mb-12"
+          className="text-left mb-8 md:mb-12"
         >
-          <h1 className="text-5xl lg:text-6xl xl:text-7xl font-black text-gray-900 dark:text-white mb-6 tracking-tighter leading-[1.1]">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-gray-900 dark:text-white mb-4 md:mb-6 tracking-tighter leading-[1.1]">
             Farm Dashboard
           </h1>
           {isLoadingUser ? (
-            <Skeleton className="h-6 w-96 rounded-xl" />
+            <Skeleton className="h-4 md:h-6 w-64 md:w-96 rounded-xl" />
           ) : (
-            <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl font-light leading-relaxed">
+            <p className="text-base md:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl font-light leading-relaxed">
               Welcome back{userData?.name ? `, ${userData.name}` : ""}! Here's
               your agricultural overview and real-time insights.
             </p>
@@ -491,18 +491,18 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8"
+          className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8"
         >
           <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden transform-gpu will-change-transform hover:scale-[1.02] transition-all duration-300">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-6">
-              <CardTitle className="text-sm font-semibold text-gray-600 dark:text-gray-400 tracking-wide uppercase">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 md:pb-4 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400 tracking-wide uppercase">
                 Farm Data Entries
               </CardTitle>
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-950/50 rounded-2xl flex items-center justify-center">
-                <Leaf className="h-6 w-6 text-green-600 dark:text-green-400" />
+              <div className="w-8 h-8 md:w-12 md:h-12 bg-green-100 dark:bg-green-950/50 rounded-xl md:rounded-2xl flex items-center justify-center">
+                <Leaf className="h-4 w-4 md:h-6 md:w-6 text-green-600 dark:text-green-400" />
               </div>
             </CardHeader>
-            <CardContent className="px-6 pb-6">
+            <CardContent className="px-4 md:px-6 pb-4 md:pb-6">
               {isLoadingData ? (
                 <div className="space-y-3">
                   <Skeleton className="h-12 w-20 rounded-xl" />
@@ -510,10 +510,10 @@ export default function Dashboard() {
                 </div>
               ) : (
                 <>
-                  <div className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">
+                  <div className="text-2xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-1 md:mb-2 tracking-tight">
                     {farmData.length}
                   </div>
-                  <p className="text-sm lg:text-base text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
+                  <p className="text-xs md:text-sm lg:text-base text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
                     {farmData.length > 0
                       ? `Latest: ${farmData[farmData.length - 1].cropType}${
                           userData?.farmSize
@@ -532,15 +532,15 @@ export default function Dashboard() {
           </Card>
 
           <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden transform-gpu will-change-transform hover:scale-[1.02] transition-all duration-300">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-6">
-              <CardTitle className="text-sm font-semibold text-gray-600 dark:text-gray-400 tracking-wide uppercase">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 md:pb-4 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400 tracking-wide uppercase">
                 Yield Predictions
               </CardTitle>
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-950/50 rounded-2xl flex items-center justify-center">
-                <TrendingUp className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <div className="w-8 h-8 md:w-12 md:h-12 bg-blue-100 dark:bg-blue-950/50 rounded-xl md:rounded-2xl flex items-center justify-center">
+                <TrendingUp className="h-4 w-4 md:h-6 md:w-6 text-blue-600 dark:text-blue-400" />
               </div>
             </CardHeader>
-            <CardContent className="px-6 pb-6">
+            <CardContent className="px-4 md:px-6 pb-4 md:pb-6">
               {isLoadingData ? (
                 <div className="space-y-3">
                   <Skeleton className="h-12 w-20 rounded-xl" />
@@ -548,10 +548,10 @@ export default function Dashboard() {
                 </div>
               ) : (
                 <>
-                  <div className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">
+                  <div className="text-2xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-1 md:mb-2 tracking-tight">
                     {yieldPredictions.length}
                   </div>
-                  <p className="text-sm lg:text-base text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
+                  <p className="text-xs md:text-sm lg:text-base text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
                     {yieldPredictions.length > 0
                       ? `${
                           yieldPredictions[yieldPredictions.length - 1]
@@ -565,15 +565,15 @@ export default function Dashboard() {
           </Card>
 
           <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden transform-gpu will-change-transform hover:scale-[1.02] transition-all duration-300">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-6">
-              <CardTitle className="text-sm font-semibold text-gray-600 dark:text-gray-400 tracking-wide uppercase">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 md:pb-4 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400 tracking-wide uppercase">
                 Active Loans
               </CardTitle>
-              <div className="w-12 h-12 bg-orange-100 dark:bg-orange-950/50 rounded-2xl flex items-center justify-center">
-                <DollarSign className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+              <div className="w-8 h-8 md:w-12 md:h-12 bg-orange-100 dark:bg-orange-950/50 rounded-xl md:rounded-2xl flex items-center justify-center">
+                <DollarSign className="h-4 w-4 md:h-6 md:w-6 text-orange-600 dark:text-orange-400" />
               </div>
             </CardHeader>
-            <CardContent className="px-6 pb-6">
+            <CardContent className="px-4 md:px-6 pb-4 md:pb-6">
               {isLoadingData ? (
                 <div className="space-y-3">
                   <Skeleton className="h-12 w-20 rounded-xl" />
@@ -581,10 +581,10 @@ export default function Dashboard() {
                 </div>
               ) : (
                 <>
-                  <div className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">
+                  <div className="text-2xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-1 md:mb-2 tracking-tight">
                     {loans.filter((l) => l.status === "active").length}
                   </div>
-                  <p className="text-sm lg:text-base text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
+                  <p className="text-xs md:text-sm lg:text-base text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
                     {activeLoan
                       ? formatCurrency(activeLoan.amount)
                       : "No active loans"}
@@ -595,15 +595,15 @@ export default function Dashboard() {
           </Card>
 
           <Card className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl shadow-gray-900/5 dark:shadow-black/20 rounded-3xl overflow-hidden transform-gpu will-change-transform hover:scale-[1.02] transition-all duration-300">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-6">
-              <CardTitle className="text-sm font-semibold text-gray-600 dark:text-gray-400 tracking-wide uppercase">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 md:pb-4 p-4 md:p-6">
+              <CardTitle className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400 tracking-wide uppercase">
                 Harvest Tokens
               </CardTitle>
-              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-950/50 rounded-2xl flex items-center justify-center">
-                <Award className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+              <div className="w-8 h-8 md:w-12 md:h-12 bg-purple-100 dark:bg-purple-950/50 rounded-xl md:rounded-2xl flex items-center justify-center">
+                <Award className="h-4 w-4 md:h-6 md:w-6 text-purple-600 dark:text-purple-400" />
               </div>
             </CardHeader>
-            <CardContent className="px-6 pb-6">
+            <CardContent className="px-4 md:px-6 pb-4 md:pb-6">
               {isLoadingData ? (
                 <div className="space-y-3">
                   <Skeleton className="h-12 w-20 rounded-xl" />
@@ -611,10 +611,10 @@ export default function Dashboard() {
                 </div>
               ) : (
                 <>
-                  <div className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">
+                  <div className="text-2xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-1 md:mb-2 tracking-tight">
                     {harvestTokens.length}
                   </div>
-                  <p className="text-sm lg:text-base text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
+                  <p className="text-xs md:text-sm lg:text-base text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
                     {harvestTokens.length > 0
                       ? `${
                           harvestTokens.filter((t) => t.status === "tokenized")
@@ -628,7 +628,7 @@ export default function Dashboard() {
           </Card>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
           {/* Current Yield Prediction */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -1204,16 +1204,16 @@ export default function Dashboard() {
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 1 }}
-          className="fixed bottom-20 right-6 z-40"
+          className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40"
         >
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 size="lg"
-                className="rounded-full h-16 w-16 shadow-xl shadow-green-600/30 dark:shadow-green-600/20 bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white transform-gpu will-change-transform hover:scale-105 active:scale-95 transition-all duration-300"
+                className="rounded-full h-12 w-12 md:h-16 md:w-16 shadow-xl shadow-green-600/30 dark:shadow-green-600/20 bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white transform-gpu will-change-transform hover:scale-105 active:scale-95 transition-all duration-300"
                 onClick={() => router.push("/submit-data")}
               >
-                <Plus className="h-6 w-6" />
+                <Plus className="h-5 w-5 md:h-6 md:w-6" />
               </Button>
             </TooltipTrigger>
             <TooltipContent className="bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl rounded-xl p-3">

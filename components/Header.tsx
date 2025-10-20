@@ -39,9 +39,14 @@ import {
   Wifi,
   WifiOff,
   RefreshCw,
+  Menu,
 } from "lucide-react";
 
-export default function Header() {
+interface HeaderProps {
+  onMobileMenuToggle?: () => void;
+}
+
+export default function Header({ onMobileMenuToggle }: HeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { isConnected, account, connect, setConnecting, setError } =
@@ -169,6 +174,21 @@ export default function Header() {
             !isDashboardPage ? "max-w-7xl mx-auto" : ""
           }`}
         >
+          {/* Mobile Menu Button */}
+          {isDashboardPage && (
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onMobileMenuToggle}
+                className="h-12 w-12 p-0 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+                aria-label="Toggle mobile menu"
+              >
+                <Menu className="h-6 w-6 text-gray-700 dark:text-gray-300" />
+              </Button>
+            </div>
+          )}
+
           {/* Logo and Brand */}
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-6 group">
@@ -179,7 +199,7 @@ export default function Header() {
                   className="w-12 h-12 object-contain"
                 />
               </div>
-              <h1 className="text-3xl font-black bg-gradient-to-r from-green-700 via-emerald-700 to-green-700 dark:from-green-400 dark:via-emerald-400 dark:to-green-400 bg-clip-text text-transparent tracking-tight">
+              <h1 className="text-2xl md:text-3xl font-black bg-gradient-to-r from-green-700 via-emerald-700 to-green-700 dark:from-green-400 dark:via-emerald-400 dark:to-green-400 bg-clip-text text-transparent tracking-tight">
                 ZaraHarvest
               </h1>
             </div>
@@ -197,7 +217,7 @@ export default function Header() {
           </div>
 
           {/* Right side actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             {/* Theme Toggle */}
             <Tooltip>
               <TooltipTrigger asChild>
@@ -205,13 +225,13 @@ export default function Header() {
                   variant="ghost"
                   size="sm"
                   onClick={toggleTheme}
-                  className="h-14 w-14 p-0 rounded-2xl bg-gray-50/50 dark:bg-gray-900/50 hover:bg-gradient-to-br hover:from-gray-100 hover:to-gray-50 dark:hover:from-gray-800 dark:hover:to-gray-900 border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 transform-gpu will-change-transform hover:scale-110 active:scale-95 shadow-sm hover:shadow-xl"
+                  className="h-10 w-10 md:h-14 md:w-14 p-0 rounded-xl md:rounded-2xl bg-gray-50/50 dark:bg-gray-900/50 hover:bg-gradient-to-br hover:from-gray-100 hover:to-gray-50 dark:hover:from-gray-800 dark:hover:to-gray-900 border border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 transform-gpu will-change-transform hover:scale-110 active:scale-95 shadow-sm hover:shadow-xl"
                   aria-label="Toggle theme"
                 >
                   {isDarkMode ? (
-                    <Sun className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+                    <Sun className="h-4 w-4 md:h-6 md:w-6 text-amber-600 dark:text-amber-400" />
                   ) : (
-                    <Moon className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+                    <Moon className="h-4 w-4 md:h-6 md:w-6 text-indigo-600 dark:text-indigo-400" />
                   )}
                 </Button>
               </TooltipTrigger>
@@ -230,7 +250,7 @@ export default function Header() {
               <div className="flex items-center gap-3">
                 <Badge
                   variant="default"
-                  className="flex items-center gap-3 bg-green-100 dark:bg-green-950/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800 px-4 py-2 rounded-full font-bold text-base shadow-sm"
+                  className="hidden sm:flex items-center gap-3 bg-green-100 dark:bg-green-950/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800 px-4 py-2 rounded-full font-bold text-base shadow-sm"
                 >
                   <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
                   <Wallet className="h-5 w-5" />
@@ -239,18 +259,21 @@ export default function Header() {
                   </span>
                 </Badge>
 
+                {/* Mobile wallet indicator */}
+                <div className="sm:hidden w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+
                 {/* User Menu */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="h-14 w-14 p-0 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
+                      className="h-10 w-10 md:h-14 md:w-14 p-0 rounded-xl md:rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 transform-gpu will-change-transform hover:scale-105 active:scale-95"
                       aria-label="User menu"
                     >
-                      <Avatar className="h-12 w-12 shadow-md">
+                      <Avatar className="h-8 w-8 md:h-12 md:w-12 shadow-md">
                         <AvatarImage src="" alt="User" />
-                        <AvatarFallback className="bg-gradient-to-br from-green-500 to-green-600 text-white font-bold text-lg">
-                          <User className="h-5 w-5" />
+                        <AvatarFallback className="bg-gradient-to-br from-green-500 to-green-600 text-white font-bold text-sm md:text-lg">
+                          <User className="h-4 w-4 md:h-5 md:w-5" />
                         </AvatarFallback>
                       </Avatar>
                     </Button>
