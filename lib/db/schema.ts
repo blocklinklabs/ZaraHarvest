@@ -159,6 +159,22 @@ export const marketPrices = pgTable("market_prices", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Notifications
+export const notifications = pgTable("notifications", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  type: text("type").notNull(), // e.g. 'badge_earned', 'loan_approved', etc.
+  title: text("title").notNull(),
+  message: text("message").notNull(),
+  read: boolean("read").notNull().default(false),
+  actionUrl: text("action_url"),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  readAt: timestamp("read_at"),
+});
+
 // Supply chain tracking
 export const supplyChainEvents = pgTable("supply_chain_events", {
   id: uuid("id").primaryKey().defaultRandom(),
