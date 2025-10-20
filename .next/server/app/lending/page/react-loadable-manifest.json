@@ -1,8 +1,9 @@
 {
-  "13289": {
-    "id": 13289,
+  "[project]/components/ui/sonner.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/components/ui/sonner.tsx [app-client] (ecmascript, next/dynamic entry)",
     "files": [
-      "static/chunks/8c730fb52d143caa.js"
+      "static/chunks/_bea7767a._.js",
+      "static/chunks/components_ui_sonner_tsx_c2933e04._.js"
     ]
   }
 }

@@ -1,23 +1,26 @@
 {
   "pages": {
     "/tracker/page": [
-      "static/chunks/841e7ed0ff0b2ba5.js",
-      "static/chunks/2473c16c0c2f6b5f.css",
-      "static/chunks/dbf3b059335df31f.css",
-      "static/chunks/9dc5ea79fb6cf30d.js",
-      "static/chunks/57768eba8f8e7152.js",
-      "static/chunks/221369a3937bcd4f.js",
-      "static/chunks/33f8e2c7bf9c635f.js",
-      "static/chunks/e70a3cfd45335cf1.js",
-      "static/chunks/94dc81562d17633c.js",
-      "static/chunks/1a88608f6ac8f293.js",
-      "static/chunks/a952c523d738c9bb.js",
-      "static/chunks/7c6cd1e59a511a75.js",
-      "static/chunks/3144bdec32b0daba.js",
-      "static/chunks/91adb7bdb9870c6a.js",
-      "static/chunks/6474cc251bb71d6e.js",
-      "static/chunks/75a3f12660976f11.js",
-      "static/chunks/turbopack-41c87fd00a6d8954.js"
+      "static/chunks/node_modules_next_dist_8db7fb1f._.js",
+      "static/chunks/app_favicon_ico_mjs_e98bdb63._.js",
+      "static/chunks/[root-of-the-server]__28bc9c2a._.css",
+      "static/chunks/components_ui_sonner_tsx_b62a8599._.js",
+      "static/chunks/_be184740._.js",
+      "static/chunks/node_modules_119c65dc._.js",
+      "static/chunks/app_layout_tsx_0a548d63._.js",
+      "static/chunks/node_modules_next_dist_client_components_builtin_global-error_bf262537.js",
+      "static/chunks/_3a80f5b5._.js",
+      "static/chunks/node_modules_1465cd9a._.js",
+      "static/chunks/app_tracker_page_tsx_bf262537._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_57d40746._.js",
+      "static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js",
+      "static/chunks/node_modules_next_dist_compiled_next-devtools_index_a9cb0712.js",
+      "static/chunks/node_modules_next_dist_compiled_5150ccfd._.js",
+      "static/chunks/node_modules_next_dist_client_cf1d9188._.js",
+      "static/chunks/node_modules_next_dist_b0daae9a._.js",
+      "static/chunks/node_modules_@swc_helpers_cjs_b3dc30d6._.js",
+      "static/chunks/_a0ff3932._.js",
+      "static/chunks/turbopack-_cdba956c._.js"
     ]
   }
 }
