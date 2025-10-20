@@ -4,7 +4,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -56,6 +56,8 @@ import {
 
 export default function Dashboard() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const allowGuest = searchParams?.get("guest") === "1";
   const { isConnected, account } = useWalletStore();
 
   // User data state
@@ -197,10 +199,10 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!isConnected) {
+    if (!isConnected && !allowGuest) {
       router.push("/");
     }
-  }, [isConnected, router]);
+  }, [isConnected, allowGuest, router]);
 
   // Fetch user data from database
   useEffect(() => {
@@ -340,7 +342,7 @@ export default function Dashboard() {
   const earnedBadges = badges.filter((badge) => badge.earned);
   const recentTokens = harvestTokens.slice(-3);
 
-  if (!isConnected) {
+  if (!isConnected && !allowGuest) {
     return null;
   }
 
