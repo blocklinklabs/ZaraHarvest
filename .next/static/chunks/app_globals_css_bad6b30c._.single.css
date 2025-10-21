@@ -338,6 +338,7 @@
     --blur-md: 12px;
     --blur-xl: 24px;
     --blur-2xl: 40px;
+    --aspect-video: 16 / 9;
     --default-transition-duration: .15s;
     --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
     --default-font-family: var(--font-geist-sans);
@@ -1011,6 +1012,10 @@
     right: calc(var(--spacing) * -1);
   }
 
+  .-right-4 {
+    right: calc(var(--spacing) * -4);
+  }
+
   .-right-8 {
     right: calc(var(--spacing) * -8);
   }
@@ -1035,6 +1040,10 @@
     right: calc(var(--spacing) * 8);
   }
 
+  .-bottom-4 {
+    bottom: calc(var(--spacing) * -4);
+  }
+
   .-bottom-8 {
     bottom: calc(var(--spacing) * -8);
   }
@@ -1053,6 +1062,10 @@
 
   .-left-2 {
     left: calc(var(--spacing) * -2);
+  }
+
+  .-left-4 {
+    left: calc(var(--spacing) * -4);
   }
 
   .-left-8 {
@@ -1180,6 +1193,10 @@
     margin-top: calc(var(--spacing) * 8);
   }
 
+  .mt-12 {
+    margin-top: calc(var(--spacing) * 12);
+  }
+
   .mt-16 {
     margin-top: calc(var(--spacing) * 16);
   }
@@ -1232,6 +1249,10 @@
     margin-bottom: calc(var(--spacing) * 12);
   }
 
+  .mb-16 {
+    margin-bottom: calc(var(--spacing) * 16);
+  }
+
   .mb-20 {
     margin-bottom: calc(var(--spacing) * 20);
   }
@@ -1278,6 +1299,10 @@
     display: block;
   }
 
+  .contents {
+    display: contents;
+  }
+
   .flex {
     display: flex;
   }
@@ -1308,6 +1333,10 @@
 
   .aspect-square {
     aspect-ratio: 1;
+  }
+
+  .aspect-video {
+    aspect-ratio: var(--aspect-video);
   }
 
   .size-2\.5 {
@@ -1933,6 +1962,10 @@
     overflow-y: auto;
   }
 
+  .rounded {
+    border-radius: .25rem;
+  }
+
   .rounded-2xl {
     border-radius: var(--radius-2xl);
   }
@@ -2312,6 +2345,10 @@
 
   .bg-emerald-100 {
     background-color: var(--color-emerald-100);
+  }
+
+  .bg-emerald-500 {
+    background-color: var(--color-emerald-500);
   }
 
   .bg-emerald-600 {
@@ -3945,6 +3982,16 @@
     }
   }
 
+  .shadow-gray-900\/20 {
+    --tw-shadow-color: rgba(16, 24, 40, .2);
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .shadow-gray-900\/20 {
+      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-gray-900) 20%, transparent) var(--tw-shadow-alpha), transparent);
+    }
+  }
+
   .shadow-green-500\/20 {
     --tw-shadow-color: rgba(0, 199, 88, .2);
   }
@@ -4106,6 +4153,10 @@
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
 
+  .delay-1000 {
+    transition-delay: 1s;
+  }
+
   .duration-200 {
     --tw-duration: .2s;
     transition-duration: .2s;
@@ -4138,6 +4189,11 @@
 
   .will-change-transform {
     will-change: transform;
+  }
+
+  .delay-1000 {
+    --tw-animation-delay: 1s;
+    animation-delay: 1s;
   }
 
   .fade-in-0 {

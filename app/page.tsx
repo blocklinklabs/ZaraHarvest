@@ -792,6 +792,55 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Demo Video Section */}
+      <section className="py-24 lg:py-32 bg-gradient-to-br from-gray-50/80 to-emerald-50/80 dark:from-gray-900 dark:to-emerald-950/20">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <Badge className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-0 px-5 py-2.5 text-sm font-semibold rounded-full mb-6">
+              SEE IT IN ACTION
+            </Badge>
+            <h2 className="text-4xl lg:text-6xl xl:text-7xl font-black text-gray-900 dark:text-white tracking-tighter leading-[1.1] mb-6">
+              Watch ZaraHarvest
+              <span className="block text-emerald-600 dark:text-emerald-400 mt-2">
+                Transform Farming
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              See how Irene from Ghana uses ZaraHarvest to help her mom's okro
+              farm. From AI predictions to blockchain loans—real results, real
+              impact.
+            </p>
+          </div>
+
+          <div className="relative max-w-4xl mx-auto">
+            <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl shadow-gray-900/20 dark:shadow-black/40">
+              <iframe
+                src="https://www.youtube.com/embed/El_fcDWuibo"
+                title="ZaraHarvest Demo - Transforming African Agriculture"
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+
+            {/* Video Overlay Elements */}
+            <div className="absolute -top-4 -right-4 w-8 h-8 bg-emerald-500 rounded-full animate-pulse" />
+            <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-blue-500 rounded-full animate-pulse delay-1000" />
+          </div>
+
+          <div className="text-center mt-12">
+            <Button
+              size="lg"
+              onClick={handleGetStarted}
+              className="bg-emerald-600 dark:bg-emerald-500 hover:bg-emerald-700 dark:hover:bg-emerald-600 text-white text-lg font-semibold rounded-full px-10 py-6 shadow-xl shadow-emerald-600/25 dark:shadow-emerald-500/25 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            >
+              Try ZaraHarvest Now
+              <ArrowRight className="h-5 w-5 ml-2" />
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Impact Story Section */}
       {/* <section
         id="solution"
