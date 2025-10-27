@@ -22,3 +22,9 @@ export default function WalletInitializer() {
   // This component doesn't render anything visible
   return null;
 }
+
+
+
+
+
+
